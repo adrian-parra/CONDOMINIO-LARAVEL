@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\JWTController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +15,30 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});*/
+
+Route::apiResource('user',UsersController::class);
+
+/**
+* ! PRUEBAS CON RUTAS DE LA API
+* Route::post('generate-token', [JWTController::class,'generateToken']);
+* Route::post('validate-token', [JWTController::class,'validateToken']);
+* Route::post('user/login', [JWTController::class,'login']); 
+*/
+
+
+/**
+ * MIDDLEWARE PARA AUTENTICACION DE TOKEN DE ACCESO JWT
+ * PARA RUTAS PROTEGIDAS
+ */
+Route::middleware(['jwt.auth'])->group(function () {
+    // Protected routes
+   
+
 });
+
+
+
