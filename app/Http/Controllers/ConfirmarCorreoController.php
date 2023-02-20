@@ -11,6 +11,53 @@ use Illuminate\Support\Facades\Validator;
 
 class ConfirmarCorreoController extends Controller
 {
+
+    public function checkTokenRegistroFraccionamiento(Request $request)
+    {
+        $mensaje = new mensaje();
+        if (!$request->token) {
+            $mensaje->icon = "error";
+            $mensaje->title = "Solicitud no valida";
+            return response()->json([$mensaje], 401);
+        }
+
+        $confirmarCorreo = confirmar_correo::where('token', '=', $request->token)->first();
+        if ($confirmarCorreo === null) {
+            $mensaje->icon = "error";
+            $mensaje->title = "Esta solicitud no fue encontrada";
+            return response()->json([$mensaje], 422);
+        }
+
+        try {
+
+            $jwt = new JWTController();
+            $decodeToken = $jwt->decodeTokenActivarCuenta("9999999" . $request->token);
+            $now = time();
+            if ($now > $decodeToken->exp) {
+                $mensaje->icon = "error";
+                $mensaje->title = "Esta solicitud ya no es valida";
+                return response()->json([$mensaje], 422);
+            }
+
+            $mensaje->title = "";
+            $mensaje->icon = "success";
+            return response()->json([$mensaje], 200);
+        } catch (\Exception $e) {
+            $mensaje->icon = "error";
+            $mensaje->body = $e->getMessage();
+            $mensaje->title = "Ocurrio un proble con su solicitud";
+            return response()->json([$mensaje], 422);
+        }
+
+
+
+
+
+
+
+    }
+
+
     /**
      * ? METODO ENCARGADO DE CONFIRMAR EL REGISTRO DE LA CUENTA DEL USUARIO ,
      * ? EL USUARIO RECIBIRA INDICACIONES POR CORREO PARA FINALIZAR SU REGISTRO
@@ -43,7 +90,7 @@ class ConfirmarCorreoController extends Controller
         }
 
         $jwt = new JWTController();
-        $token = $jwt->generateTokenRegistroFraccionamiento($request);
+        $token = $jwt->generateTokenActivarCuenta($request);
 
 
         $appUrl = env('APP_URL');

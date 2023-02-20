@@ -42,8 +42,8 @@ Route::middleware(['jwt.auth'])->group(function () {
 
 });
 
-    Route::post('usuario/confirmar-registro-fraccionamiento' ,[ConfirmarCorreoController::class ,'confirmarRegistroFraccionamiento']);
-    Route::post("usuario/check-token-registro" , [JWTController::class ,'checkTokenRegistroFraccionamiento']);
-
+Route::post('usuario/confirmar-registro' ,[ConfirmarCorreoController::class ,'confirmarRegistroFraccionamiento']);
+Route::post("usuario/confirmar-registro/check-token" , [ConfirmarCorreoController::class ,'checkTokenRegistroFraccionamiento']);
+Route::post("usuario/registro" ,[UsuarioController::class ,'store']);
 
 

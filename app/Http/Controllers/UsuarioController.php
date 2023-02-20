@@ -53,7 +53,7 @@ class UsuarioController extends Controller
         $aut = new JWTController();
 
         try {
-            $tokenDecode = $aut->decodeToken($request->header('Authorization'));
+            $tokenDecode = $aut->decodeTokenActivarCuenta("9999999".$request->token);
 
 
             $idConfirmCorreo = confirmar_correo::where('correo', $tokenDecode->correo)->pluck('id')->first();
@@ -78,24 +78,36 @@ class UsuarioController extends Controller
             $usuario->id_fraccionamiento = $fraccionamiento->id;
             $usuario->save();
 
-            
-
-
+        
             $mensaje->icon = "success";
             $mensaje->title = "Su cuenta se ha creado con exito";
 
 
 
-        } catch (\Exception $e) {
+        }catch (\Firebase\JWT\SignatureInvalidException $e) {
+            $mensaje->title = "Firma de token no válida";
+            $mensaje->icon = "error";
+            // Handle the error
+            return response()->json([$mensaje], 401);
+        } catch (\Firebase\JWT\BeforeValidException $e) {
+            $mensaje->title = "Token aún no válido";
+            $mensaje->icon = "error";
+            return response()->json([$mensaje], 401);
+        } catch (\Firebase\JWT\ExpiredException $e) {
+            $mensaje->title = "El token ha caducado";
+            $mensaje->icon = "error";
+            return response()->json([$mensaje], 401);
+        } 
+        catch (\Exception $e) {
             $mensaje->icon = "error";
             $mensaje->title = "Esta peticion no fue autorizada";
             $mensaje->body = $e->getMessage();
-            return response()->json($mensaje);
+            return response()->json([$mensaje] ,401);
         }
 
 
 
-        return response()->json($mensaje, 200);
+        return response()->json([$mensaje], 200);
 
     }
 

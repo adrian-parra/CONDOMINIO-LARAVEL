@@ -7,77 +7,29 @@ use App\Models\mensaje;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+
 class JWTController extends Controller
 {
+    private $secretKey;
+    private $secretKeyConfimCuenta;
 
-    
-
-    public function decodeToken($token){
-        $secretKey = env('JWT_SECRET');
-        $tkn = substr($token, 7, strlen($token));
-        $jwtDecode = JWT::decode($tkn,new key($secretKey ,'HS256'));
-        return $jwtDecode;
-    }
-    //
-    public function generateToken(Request $request)
+    public function __construct()
     {
-        $payload = [
-            'iss' => "laravel",
-            'sub' => $request->email,
-            'iat' => time(),
-            'exp' => time() + 60*60
-        ];
-
-        $secretKey = env('JWT_SECRET');
-
- $jwt = JWT::encode($payload, $secretKey ,'HS256');
-
-        return response()->json(['token' => $jwt]);
+        $this->secretKey = env('JWT_SECRET');
+        $this->secretKeyConfimCuenta = env('JWT_SECRET_CONFIRM_CUENTA');
     }
 
-    public function checkTokenRegistroFraccionamiento(Request $request){
-        $mensaje = new mensaje();
-        if (!$request->token) {
-            $mensaje->icon = "error";
-            $mensaje->title = "Solicitud no valida";
-            return response()->json([$mensaje], 401);
-        }
-
-        $confirmarCorreo = confirmar_correo::where('token', '=', $request->token)->first();
-        if($confirmarCorreo === null){
-            $mensaje->icon = "error";
-            $mensaje->title = "Esta solicitud no fue encontrada";
-            return response()->json([$mensaje],422);
-        }
-
-        try{
-            $decodeToken = $this->decodeToken("9999999".$request->token);
-            $now = time();
-            if($now > $decodeToken->exp){
-                $mensaje->icon = "error";
-                $mensaje->title = "Esta solicitud ya no es valida";
-                return response()->json([$mensaje],422);
-            }
-
-            $mensaje->title = "";
-            $mensaje->icon = "success";
-            return response()->json([$mensaje],200);
-        }catch(\Exception $e){
-            $mensaje->icon = "error";
-            $mensaje->body = $e->getMessage();
-            $mensaje->title = "Ocurrio un proble con su solicitud";
-            return response()->json([$mensaje],422);
-        }
-       
-
-        
-
-
-
-
-    }
-
-    public function generateTokenRegistroFraccionamiento(Request $request){
+    /**
+     * ! METODOS PARA EL PROCESO DE REGISTRO DE USUARIO
+     */
+    /**
+     * ? GENERA TOKEN QUE SE LE ENVIA POR CORREO
+     * ? AL USUARIO AL REGISTRARSE EN EL SISTEMA.
+     * ? EL TOKEN CONTIENE TODOS SUS DATOS DE REGISTRO EN SU
+     * ? PAYLOAD 
+     */
+    public function generateTokenActivarCuenta(Request $request)
+    {
         $payload = [
             'nombre' => $request->nombre,
             'apellidos' => $request->apellidos,
@@ -85,18 +37,50 @@ class JWTController extends Controller
             'nombre_fraccionamiento' => $request->nombre_fraccionamiento,
             'codigo_postal' => $request->codigo_postal,
             'iat' => time(),
-            'exp' => time() + 30*60 //VALIDO DURANTE 30 MINUTOS
+            'exp' => time() + 30 * 60 //VALIDO DURANTE 30 MINUTOS
         ];
 
-        $secretKey = env('JWT_SECRET');
-
-        $jwt = JWT::encode($payload, $secretKey ,'HS256');
-
+        $jwt = JWT::encode($payload, $this->secretKeyConfimCuenta, 'HS256');
         return $jwt;
     }
 
+    /**
+     * ? SE ENCARGA DE OBTENER LOS DATOS QUE EL TOKEN TIENE EN SU PAYLOAD
+     * ? EN ESTE CASO TIENE LOS DATOS DE REGISTRO DEL USUARIO
+     */
+    public function decodeTokenActivarCuenta($token)
+    {
+        $tkn = substr($token, 7, strlen($token));
+        $jwtDecode = JWT::decode($tkn, new key($this->secretKeyConfimCuenta, 'HS256'));
+        return $jwtDecode;
+    }
+
+    /**
+     * ! AQUI TERMINA LOS METODOS PARA EL PROCESO DE REGISTRO DE USUARIO
+     */
+    //
+    public function generateToken(Request $request)
+    {
+        $payload = [
+            'iss' => "laravel",
+            'sub' => $request->email,
+            'iat' => time(),
+            'exp' => time() + 60 * 60
+        ];
+
+        //$secretKey = env('JWT_SECRET');
+
+        $jwt = JWT::encode($payload, $this->secretKey, 'HS256');
+
+        return response()->json(['token' => $jwt]);
+    }
+
+
+   
+   
+
     public function validateToken(Request $request)
-    {   
+    {
         $jwt = $request->header("authorization");
 
         $secretKey = env('JWT_SECRET');
@@ -105,12 +89,12 @@ class JWTController extends Controller
 
         try {
             $tkn = substr($jwt, 7, strlen($jwt));
-            $decoded = JWT::decode($tkn , new key($secretKey,'HS256'));
+            $decoded = JWT::decode($tkn, new key($secretKey, 'HS256'));
 
-            return response()->json(['status' => 'valid' ,'data'=>$decoded]);
+            return response()->json(['status' => 'valid', 'data' => $decoded]);
         } catch (Exception $e) {
             return response()->json(['status' => 'invalid']);
-        }catch (\Firebase\JWT\SignatureInvalidException $e) {
+        } catch (\Firebase\JWT\SignatureInvalidException $e) {
             // Handle the error
             return response()->json(['error' => 'Firma de token no válida'], 401);
         }
