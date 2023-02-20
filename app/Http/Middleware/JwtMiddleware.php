@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\mensaje;
 use Closure;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
@@ -20,9 +21,13 @@ class JwtMiddleware
     {
         // Get the token from the request header
     $token = $request->header('Authorization');
+
+    $mensaje = new mensaje();
     // Check if the token is present
     if (!$token) {
-        return response()->json(['error' => 'Token no proporcionado'], 401);
+        $mensaje->title = "Token no proporcionado";
+        $mensaje->icon = "error";
+        return response()->json([$mensaje], 401);
     }
 
     try {
@@ -32,14 +37,22 @@ class JwtMiddleware
 
         // Do something with the decoded data
     } catch (\Firebase\JWT\SignatureInvalidException $e) {
+        $mensaje->title = "Firma de token no válida";
+        $mensaje->icon = "error";
         // Handle the error
-        return response()->json(['error' => 'Firma de token no válida'], 401);
+        return response()->json([$mensaje], 401);
     } catch (\Firebase\JWT\BeforeValidException $e) {
-        return response()->json(['error' => 'Token aún no válido'], 401);
+        $mensaje->title = "Token aún no válido";
+        $mensaje->icon = "error";
+        return response()->json([$mensaje], 401);
     } catch (\Firebase\JWT\ExpiredException $e) {
-        return response()->json(['error' => 'El token ha caducado'], 401);
+        $mensaje->title = "El token ha caducado";
+        $mensaje->icon = "error";
+        return response()->json([$mensaje], 401);
     }catch(\Exception $e){
-        return response()->json(['error' => 'El token no fue autorizado'], 401);        
+        $mensaje->title = "El token no fue autorizado";
+        $mensaje->icon = "error";
+        return response()->json([$mensaje], 401);        
     }
     
         return $next($request);
