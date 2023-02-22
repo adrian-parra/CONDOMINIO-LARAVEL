@@ -9,8 +9,10 @@ use App\Models\usuario;
 use Firebase\JWT\JWK;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cookie;
 
 class UsuarioController extends Controller
 {
@@ -23,6 +25,64 @@ class UsuarioController extends Controller
     {
         //
         return usuario::all();
+    }
+
+    public function iniciarSesion(Request $request){
+        $mensaje = new mensaje();
+
+        $validation = Validator::make($request->all(), [
+            'password' => 'required|min:8' ,
+            'correo' => 'required|email'
+        ]);
+
+        if ($validation->fails()) {
+            $mensaje->body = $validation->errors();
+            $mensaje->title = "error";
+            $mensaje->icon = "error";
+            return response()->json([$mensaje], 422);
+        }
+
+        $user = usuario::where('correo', $request->correo)->first();
+
+        if ($user && Hash::check($request->password, $user->password)) {
+            // Las credenciales son válidas, inicia sesión en el usuario y redirige a la página de inicio
+           
+            //GENERAR TOKEN DE AUTORIZACION PARA RUTAS PROTEGIDAS
+            $aut = new JWTController();
+            $token = $aut->generateToken($request->correo ,$user->id);
+           
+                    
+            //ENCRIPTAR TOKEN
+            //$iv_personalizado = random_bytes(16);
+            /*
+            $encrypted_token = encrypt($token ,[
+                'key' => env('APP_KEY'),
+                'iv' => $iv_personalizado,
+                 'cipher' => 'AES-256-CBC'
+            ]);*/
+
+            // Para poder descifrar el texto cifrado, necesitas utilizar el mismo IV que se usó para cifrarlo.
+           /*
+            $decripted_token = Crypt::decrypt($encrypted_token, [
+                'key' => env('APP_KEY'),
+                'iv' => $iv_personalizado,
+                'cipher' => 'AES-256-CBC'
+            ]);*/
+
+            $mensaje->icon = "success";
+            $mensaje->title = "Credenciales correctas";
+           
+            $mensaje->estatus = 200;
+            return response()->json([$mensaje],$mensaje->estatus)->withCookie(Cookie::make('token', $token, 60, null, null, false, true, false, 'strict'));
+        } else {
+            // Las credenciales son inválidas, muestra un mensaje de error
+            $mensaje->icon = "error";
+            $mensaje->title = "Credenciales incorrectas";
+            $mensaje->estatus = 401;
+            return response()->json([$mensaje],$mensaje->estatus);
+        }
+
+        
     }
 
     /**

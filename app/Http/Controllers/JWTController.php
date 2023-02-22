@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\confirmar_correo;
 use App\Models\mensaje;
+use App\Models\usuario;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -59,20 +60,19 @@ class JWTController extends Controller
      * ! AQUI TERMINA LOS METODOS PARA EL PROCESO DE REGISTRO DE USUARIO
      */
     //
-    public function generateToken(Request $request)
+    public function generateToken($correo ,$id)
     {
+
         $payload = [
-            'iss' => "laravel",
-            'sub' => $request->email,
+            'userId' => $id,
+            'correo' => $correo,
             'iat' => time(),
             'exp' => time() + 60 * 60
         ];
 
-        //$secretKey = env('JWT_SECRET');
-
         $jwt = JWT::encode($payload, $this->secretKey, 'HS256');
 
-        return response()->json(['token' => $jwt]);
+        return $jwt;
     }
 
 
