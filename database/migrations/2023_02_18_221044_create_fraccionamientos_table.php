@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('fraccionamientos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre' ,50);
-            $table->bigInteger('codigo_postal')->unique();
+            $table->string('codigo_postal')->unique();
             $table->timestamps();
         });
     }
