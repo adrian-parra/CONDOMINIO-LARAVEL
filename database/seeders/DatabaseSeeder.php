@@ -20,5 +20,13 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        $this->call(
+            FraccionamientoSeeder::class,
+        );
+
+        $this->call(PropietarioSeeder::class);
+
+        $this->call(PropiedadSeeder::class);
     }
 }
