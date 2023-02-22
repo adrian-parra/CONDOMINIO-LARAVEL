@@ -12,6 +12,7 @@ class mensaje extends Model
     protected $fillable = [
         'icon',
         'title',
-        'body'
+        'body' ,
+        'estatus'
     ];
 }
