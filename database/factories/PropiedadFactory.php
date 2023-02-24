@@ -19,12 +19,10 @@ class PropiedadFactory extends Factory
     public function definition()
     {
         $fracc = fraccionamiento::pluck('id')->toArray();
-        $propietario = Propietario::pluck('id')->toArray();
+        $propietario = Propietario::where('is_inquilino', false)->pluck('id')->toArray();
 
-        // $type = $this->faker->randomElement(['CASA', 'DEPARTAMENTO', 'LOTE', 'OTRO']);
-
-        $inquilino = Propietario::where('is_inquilino', '1')->pluck('id')->toArray();
-
+        $inquilino = Propietario::where('is_inquilino', true)->pluck('id')->toArray();
+    
         return [
             'tipo_propiedad_id' => $this->faker->randomElement([0, 1, 2, 3]),
             'clave_catastral' =>  $this->faker->postCode(),

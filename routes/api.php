@@ -45,7 +45,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'm
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     // Debug Routes
     Route::apiResource('propietario', PropietarioController::class);
-    Route::apiResource('propiedad', Propiedad::class);
+    Route::apiResource('propiedad', PropiedadController::class);
 });
 
 Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);

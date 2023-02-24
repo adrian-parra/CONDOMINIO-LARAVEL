@@ -18,7 +18,7 @@ class Propietario extends Model
         'telefono_fijo',
         'identificacion_url',
         'is_inquilino',
-        'fracc_id',
+        'fraccionamiento_id',
         'clave_interfon',
         'clave_interfon_alt'
     ];
