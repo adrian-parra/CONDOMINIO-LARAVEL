@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V1;
+namespace App\Http\Resources\V1\Propiedad;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PropietarioCollection extends ResourceCollection
+class PropiedadCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

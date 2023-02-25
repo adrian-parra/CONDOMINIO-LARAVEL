@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('propiedads', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tipo_propiedad_id')->nullable();
+            $table->unsignedInteger('tipo_propiedad_id')->nullable();
             $table->string('clave_catastral', 40);
             $table->string('predial_url');
             $table->string('descripcion');
             $table->float('superficie');
             $table->float('balance');
-            $table->boolean('estatus_id');
+            $table->unsignedInteger('estatus_id');
             $table->string('razon_de_rechazo')->nullable();
             $table->unsignedBigInteger('propietario_id')->nullable();
             $table->unsignedBigInteger('inquilino_id')->nullable();

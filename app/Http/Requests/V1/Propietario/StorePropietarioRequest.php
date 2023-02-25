@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1;
+namespace App\Http\Requests\V1\Propietario;
 
 use App\Models\fraccionamiento;
 use Illuminate\Foundation\Http\FormRequest;

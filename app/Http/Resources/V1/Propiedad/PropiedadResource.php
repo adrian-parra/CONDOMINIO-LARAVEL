@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources\V1;
+namespace App\Http\Resources\V1\Propiedad;
 
+use App\Http\Resources\V1\Propietario\PropietarioResource;
 use App\Models\Propietario;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -32,15 +33,25 @@ class PropiedadResource extends JsonResource
         $propietario = Propietario::where('id', $this->propietario_id)->first();
         $inquilino = Propietario::where('id', $this->inquilino_id)->first();
 
+        $objTipoPropiedad = [
+            'id' => $this->propietario_id,
+            'descripcion' => $tipoPropiedad[$this->tipo_propiedad_id]
+        ];
+
+        $objTipoEstatus = [
+            'id' => $this->estatus_id,
+            'descripcion' => $tipoEstatus[$this->estatus_id]
+        ];
+
         return [
             'id' => $this->id,
-            'tipoPropiedad' => $tipoPropiedad[$this->tipo_propiedad_id],
+            'tipoPropiedad' => $objTipoPropiedad,
             'claveCatastral' =>  $this->clave_catastral,
             'predialUrl' => $this->predial_url,
             'descripcion' => $this->descripcion,
             'superficie' => $this->superficie,
             'balance' => $this->balance,
-            'estatusId' => $tipoEstatus[$this->estatus_id],
+            'estatusId' => $objTipoEstatus,
             'razonDeRechazo' => $this->razon_de_rechazo,
             'propietario' => new PropietarioResource($propietario),
             'inquilino' => new PropietarioResource($inquilino),

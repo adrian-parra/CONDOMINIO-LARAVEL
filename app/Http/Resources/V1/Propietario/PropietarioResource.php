@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources\V1;
+namespace App\Http\Resources\V1\Propietario;
 
+use App\Http\Resources\V1\Propiedad\PropiedadPropietarioResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PropietarioResource extends JsonResource

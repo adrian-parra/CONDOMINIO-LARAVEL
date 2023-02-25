@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1;
+namespace App\Http\Requests\V1\Propiedad;
 
 use App\Models\fraccionamiento;
 use App\Models\Propiedad;
