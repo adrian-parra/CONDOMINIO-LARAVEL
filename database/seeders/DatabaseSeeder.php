@@ -28,5 +28,9 @@ class DatabaseSeeder extends Seeder
         $this->call(PropietarioSeeder::class);
 
         $this->call(PropiedadSeeder::class);
+
+        $this->call(ProveedorSeeder::class);
+
+        $this->call(ProductoSeeder::class);
     }
 }

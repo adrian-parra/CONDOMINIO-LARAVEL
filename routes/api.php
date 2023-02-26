@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\ConfirmarCorreoController;
+use App\Http\Controllers\Api\V1\ProductoController;
+use App\Http\Controllers\Api\V1\ProveedorController;
 use App\Http\Controllers\Api\V1\UsuarioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,8 +46,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'm
 
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     // Debug Routes
-    Route::apiResource('propietario', PropietarioController::class);
-    Route::apiResource('propiedad', PropiedadController::class);
+    Route::apiResource('propietarios', PropietarioController::class);
+    Route::apiResource('propiedades', PropiedadController::class);
+    Route::apiResource('proveedores', ProveedorController::class);
+    Route::apiResource('productos', ProductoController::class);
 });
 
 Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
