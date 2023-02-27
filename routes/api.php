@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ConfigurarPagosController;
 use App\Http\Controllers\Api\V1\ConfirmarCorreoController;
 use App\Http\Controllers\Api\V1\UsuarioController;
 use Illuminate\Http\Request;
@@ -36,19 +37,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  */
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'middleware' => 'jwt.auth'], function () {
     // Protected routes
-    Route::apiResource('usuario', UsuarioController::class);
+   //Route::apiResource('usuario', UsuarioController::class);
+    Route::apiResource('configurar-pagos' ,ConfigurarPagosController::class);
     // Route::apiResource('propietario', PropietarioController::class);
     // Route::apiResource('propiedad', Propiedad::class);
 
 });
 
+
+
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     // Debug Routes
+   
     Route::apiResource('propietario', PropietarioController::class);
     Route::apiResource('propiedad', PropiedadController::class);
+   
 });
 
 Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
-Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoControllereoController::class, 'checkTokenRegistroFraccionamiento']);
-Route::post("usuario/registrar", [UsuarioController::class, 'store']);
+Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
+Route::post("usuario/registro", [UsuarioController::class, 'store']);
 Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
