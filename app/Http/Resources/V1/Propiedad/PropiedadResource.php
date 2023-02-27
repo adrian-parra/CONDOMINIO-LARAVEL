@@ -34,7 +34,7 @@ class PropiedadResource extends JsonResource
         $inquilino = Propietario::where('id', $this->inquilino_id)->first();
 
         $objTipoPropiedad = [
-            'id' => $this->propietario_id,
+            'id' => $this->tipo_propiedad_id,
             'descripcion' => $tipoPropiedad[$this->tipo_propiedad_id]
         ];
 
