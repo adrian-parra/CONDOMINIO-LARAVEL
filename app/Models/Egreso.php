@@ -18,4 +18,9 @@ class Egreso extends Model
         'comprobante_url',
         'fraccionamiento_id'
     ];
+
+    public function detalleEgreso()
+    {
+        return $this->hasMany(DetalleEgreso::class);
+    }
 }

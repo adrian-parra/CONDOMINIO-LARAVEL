@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\V1\Egreso;
 
+use App\Http\Resources\V1\Egreso\Detalle\DetalleEgresoCollection;
+use App\Http\Resources\V1\Egreso\Detalle\DetalleEgresoResource;
 use App\Models\TipoDeEgreso;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -42,6 +44,9 @@ class EgresoResource extends JsonResource
             'comprobanteUrl' => $this->comprobante_url,
             'tipoEgreso' => new TipoEgresoResource($tipo_egreso),
             'fraccionamientoId' => $this->fraccionamiento_id,
+            'detalleEgreso' => DetalleEgresoResource::collection(
+                $this->whenLoaded('detalleEgreso')
+            )
         ];
     }
 }

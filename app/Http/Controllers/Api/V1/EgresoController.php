@@ -23,8 +23,13 @@ class EgresoController extends Controller
         $filter = new EgresoFilter();
 
         $filterItems = $filter->transform($request);
+        $incluirDetalles = $request->query('incluirDetalles');
 
         $egresos = Egreso::where($filterItems);
+
+        if ($incluirDetalles) {
+            $egresos = $egresos->with('detalleEgreso');
+        }
 
         return new EgresoCollection(
             $egresos
@@ -77,6 +82,12 @@ class EgresoController extends Controller
      */
     public function show(Egreso $egreso)
     {
+        $incluirDetalles = request()->query('incluirDetalles');
+
+        if ($incluirDetalles) {
+            return new EgresoResource($egreso->loadMissing('detalleEgreso'));
+        }
+
         return new EgresoResource($egreso);
     }
 
