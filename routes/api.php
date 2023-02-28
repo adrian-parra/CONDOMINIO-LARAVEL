@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\Api\V1\ConfigurarPagosController;
 use App\Http\Controllers\Api\V1\ConfirmarCorreoController;
+use App\Http\Controllers\Api\V1\DetalleEgresoController;
+use App\Http\Controllers\Api\V1\EgresoController;
 use App\Http\Controllers\Api\V1\ProductoController;
 use App\Http\Controllers\Api\V1\ProveedorController;
+use App\Http\Controllers\Api\V1\TipoDeEgresoController;
 use App\Http\Controllers\Api\V1\UsuarioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +57,17 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('propietarios', PropietarioController::class);
     Route::apiResource('propiedades', PropiedadController::class);
     Route::apiResource('productos', ProductoController::class);
+    Route::apiResource('egresos', EgresoController::class);
+    Route::apiResource('tipoEgresos', TipoDeEgresoController::class);
+    Route::post(
+        'detalleEgresos',
+        [DetalleEgresoController::class, 'store']
+    );
+    Route::match(
+        ['PUT', 'DELETE', 'PATCH'],
+        'detalleEgresos/{id_egreso}/{id_producto}',
+        [DetalleEgresoController::class, 'update_or_delete']
+    );
 });
 
 Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);

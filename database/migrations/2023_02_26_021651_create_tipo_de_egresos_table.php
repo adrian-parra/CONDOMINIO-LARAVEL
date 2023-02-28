@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('proveedors', function (Blueprint $table) {
+        Schema::create('tipo_de_egresos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 100);
-            $table->string('rfc', 13);
-            $table->string('nombre_contacto', 80);
-            $table->string('correo_contacto', 40);
-            $table->string('notas', 200);
-            $table->unsignedInteger('metodo_de_pago_id');
-            $table->unsignedBigInteger('fraccionamiento_id');
+            $table->string('descripcion', 100);
+            $table->boolean('status');
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('proveedors');
+        Schema::dropIfExists('tipo_de_egresos');
     }
 };
