@@ -19,12 +19,22 @@ class ConfigurarPagosController extends Controller
     {
         //
         $mensaje = new mensaje();
-        $ConfigurarPagos = ConfigurarPagos::where('tipo_pago', $request->tipo_pago)->get();
+        //VERIFICAR SI TIPO_PAGO ES IGUAL A (ALL)
+        //SI ES ASI RETORNAR PAGOS ORDINARIO Y EXTRAORDINARIOS
+        $ConfigurarPagos = null;
+        if($request->tipo_pago == "ALL"){
+            $ConfigurarPagos = ConfigurarPagos::where('id_fraccionamiento',$request->id_fraccionamiento)->get();
+        }else{
+            $ConfigurarPagos = ConfigurarPagos::where('tipo_pago', $request->tipo_pago)
+            ->where('id_fraccionamiento',$request->id_fraccionamiento)->get();
+        }
+        
+      
         $mensaje->title = "Configuracion de pagos obtenidos";
         $mensaje->icon = "success";
         $mensaje->body = $ConfigurarPagos;
         
-        return response()->json($mensaje, 422);
+        return response()->json($mensaje, 200);
 
     
 
@@ -88,13 +98,13 @@ class ConfigurarPagosController extends Controller
         try{
             
             $configurarPagos = $configurarPagos::find(request()->configurar_pago);
-            $mensaje->title = "Configuracion de pago almacenado";
+            $mensaje->title = "Configuracion de pago obtenida";
             $mensaje->icon = "success";
             $mensaje->body = $configurarPagos;
             return response()->json($mensaje, 200);
         }catch(\Exception $e){
             $mensaje->title = "Esta peticion no se pudo completar";
-            $mensaje->icon = "success";
+            $mensaje->icon = "error";
             return response()->json($mensaje, 422);
             
         }
