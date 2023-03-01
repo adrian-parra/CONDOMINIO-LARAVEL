@@ -17,7 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('descripcion', 100);
             $table->boolean('status');
+            $table->unsignedBigInteger('fraccionamiento_id');
             $table->timestamps();
+
+            $table->foreign('fraccionamiento_id')->references('id')
+                ->on('fraccionamientos')->onDelete('cascade');
         });
     }
 

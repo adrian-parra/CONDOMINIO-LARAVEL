@@ -8,6 +8,7 @@ use App\Http\Requests\V1\Egreso\UpdateEgresoRequest;
 use App\Http\Resources\V1\Egreso\EgresoCollection;
 use App\Http\Resources\V1\Egreso\EgresoResource;
 use App\Models\Egreso;
+use App\Models\fraccionamiento;
 use App\Utils\AlmacenarArchivo;
 use Illuminate\Http\Request;
 
@@ -40,16 +41,6 @@ class EgresoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreEgresoRequest  $request
@@ -71,7 +62,19 @@ class EgresoController extends Controller
 
         $data['comprobante_url'] = $almacen->storeFile();
 
-        return new EgresoResource(Egreso::create($data));
+        $egreso = Egreso::create($data);
+
+        if ($egreso->isVerified()) {
+            $id = $egreso->getFraccionamiento(); //get fraccionamiento id from egreso
+
+            $fraccionamiento = fraccionamiento::find($id);
+
+            if (!$fraccionamiento->getEgresosNeedToBeAuthorize()) {
+                $fraccionamiento->sendEmailToUser();
+            }
+        }
+
+        return new EgresoResource($egreso);
     }
 
     /**
@@ -89,17 +92,6 @@ class EgresoController extends Controller
         }
 
         return new EgresoResource($egreso);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Egreso  $egreso
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Egreso $egreso)
-    {
-        //
     }
 
     /**
