@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\V1\ProductoController;
 use App\Http\Controllers\Api\V1\ProveedorController;
 use App\Http\Controllers\Api\V1\TipoDeEgresoController;
 use App\Http\Controllers\Api\V1\UsuarioController;
+use App\Http\Controllers\Api\V1\VehiculoController;
+use App\Utils\ObtenerArchivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,23 +29,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });*/
 
 
-
 /**
- * ! PRUEBAS CON RUTAS DE LA API
- * Route::post('generate-token', [JWTController::class,'generateToken']);
- * Route::post('validate-token', [JWTController::class,'validateToken']);
- * Route::post('user/login', [JWTController::class,'login']); 
- */
-
-
-/**
- * MIDDLEWARE PARA AUTENTICACION DE TOKEN DE ACCESO JWT
- * PARA RUTAS PROTEGIDAS
+ * ! MIDDLEWARE PARA AUTENTICACION DE TOKEN DE ACCESO JWT
+ * ! PARA RUTAS PROTEGIDAS
  */
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'middleware' => 'jwt.auth'], function () {
     // Protected routes
    //Route::apiResource('usuario', UsuarioController::class);
-    Route::apiResource('configurar-pagos' ,ConfigurarPagosController::class);
+   
     // Route::apiResource('propietario', PropietarioController::class);
     // Route::apiResource('propiedad', Propiedad::class);
 
@@ -57,6 +50,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('propietarios', PropietarioController::class);
     Route::apiResource('propiedades', PropiedadController::class);
     Route::apiResource('productos', ProductoController::class);
+    Route::apiResource('vehiculos' ,VehiculoController::class);
+    Route::get('vehiculo/estados-de-mexico' ,[VehiculoController::class ,'getEstadosMexico']);
+    Route::get('vehiculo/tipos-de-vehiculos' ,[VehiculoController::class ,'getTiposVehiculos']);
+    Route::apiResource('configurar-pagos' ,ConfigurarPagosController::class);
+    Route::get('/private-files/{foldername}/{filename}' ,[ObtenerArchivo::class ,'getFile']);
+  
     Route::apiResource('egresos', EgresoController::class);
     Route::apiResource('tipoEgresos', TipoDeEgresoController::class);
     Route::post(
@@ -69,6 +68,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
         [DetalleEgresoController::class, 'update_or_delete']
     );
 });
+
+
 
 Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
 Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
