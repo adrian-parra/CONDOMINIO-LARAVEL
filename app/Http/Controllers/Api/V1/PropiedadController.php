@@ -70,8 +70,10 @@ class PropiedadController extends Controller
      * @param  \App\Models\Propiedad  $propiedad
      * @return \Illuminate\Http\Response
      */
-    public function show(Propiedad $propiedad)
+    public function show($id)
     {
+        $propiedad = Propiedad::find($id);
+
         return new PropiedadResource($propiedad);
     }
 
@@ -93,8 +95,10 @@ class PropiedadController extends Controller
      * @param  \App\Models\Propiedad  $propiedad
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePropiedadRequest $request, Propiedad $propiedad)
+    public function update(UpdatePropiedadRequest $request, $id)
     {
+        $propiedad = Propiedad::find($id);
+
         // Obtener el archivo cargado del request
         $file = $request->file('archivoPredial');
 
