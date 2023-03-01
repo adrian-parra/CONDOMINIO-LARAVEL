@@ -22,7 +22,6 @@ return new class extends Migration
             $table->float('superficie');
             $table->float('balance');
             $table->unsignedInteger('estatus_id');
-            $table->string('razon_de_rechazo')->nullable();
             $table->unsignedBigInteger('propietario_id')->nullable();
             $table->unsignedBigInteger('inquilino_id')->nullable();
             $table->unsignedBigInteger('fraccionamiento_id');

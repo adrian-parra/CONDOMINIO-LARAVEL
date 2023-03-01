@@ -31,7 +31,6 @@ class PropiedadFactory extends Factory
             'superficie' => $this->faker->randomFloat(4, 1000, 10000),
             'balance' => $this->faker->randomFloat(2, -15000, 10000),
             'estatus_id' => $this->faker->randomElement([0, 1, 2, 3]),
-            'razon_de_rechazo' => $this->faker->randomLetter(),
             'propietario_id' => $this->faker->randomElement($propietario),
             'inquilino_id' => optional($this->faker->randomElement([null, 1]))->randomElement($inquilino),
             'fraccionamiento_id' => $this->faker->randomElement($fracc),

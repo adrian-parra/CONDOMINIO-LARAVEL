@@ -43,7 +43,6 @@ class UpdatePropiedadRequest extends FormRequest
                 'superficie' => ['required', 'numeric'],
                 'balance' => ['required', 'numeric'],
                 'estatusId' => ['required', Rule::in([0, 1, 2, 3])],
-                'razonDeRechazo' => ['required'],
                 'propietarioId' => ['required', 'numeric', Rule::in($propietario)],
                 'inquilinoId' => ['required', 'numeric', Rule::in($inquilino)],
                 'fraccionamientoId' => ['required', 'numeric', Rule::in($fracc)],
@@ -57,7 +56,6 @@ class UpdatePropiedadRequest extends FormRequest
                 'superficie' => ['sometimes', 'required', 'numeric'],
                 'balance' => ['sometimes', 'required', 'numeric'],
                 'estatusId' => ['sometimes', 'required', Rule::in([0, 1, 2, 3])],
-                'razonDeRechazo' => ['sometimes'],
                 'propietarioId' => ['sometimes', 'required', 'numeric', Rule::in($propietario)],
                 'inquilinoId' => ['sometimes', 'required', 'numeric', Rule::in($inquilino)],
                 'fraccionamientoId' => ['sometimes', 'required', 'numeric', Rule::in($fracc)],
@@ -72,7 +70,6 @@ class UpdatePropiedadRequest extends FormRequest
         $dataToMerge['tipo_propiedad_id'] = $this->tipoPropiedadId ?? null;
         $dataToMerge['clave_catastral'] = $this->claveCatastral ?? null;
         $dataToMerge['estatus_id'] = $this->estatusId ?? null;
-        $dataToMerge['razon_de_rechazo'] = $this->razonDeRechazo ?? null;
         $dataToMerge['propietario_id'] = $this->propietarioId ?? null;
         $dataToMerge['inquilino_id'] = $this->inquilinoId ?? null;
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;

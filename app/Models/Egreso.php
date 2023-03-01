@@ -23,4 +23,14 @@ class Egreso extends Model
     {
         return $this->hasMany(DetalleEgreso::class);
     }
+
+    public function isVerified()
+    {
+        return $this->is_verified;
+    }
+
+    public function getFraccionamiento()
+    {
+        return $this->fraccionamiento_id;
+    }
 }

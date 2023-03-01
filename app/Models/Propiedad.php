@@ -17,7 +17,6 @@ class Propiedad extends Model
         'superficie',
         'balance',
         'estatus_id',
-        'razon_de_rechazo',
         'propietario_id',
         'inquilino_id',
         'fraccionamiento_id',
