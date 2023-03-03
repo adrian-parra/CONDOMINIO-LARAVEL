@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+return $request->user();
 });*/
 
 
@@ -35,41 +35,36 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  */
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'middleware' => 'jwt.auth'], function () {
     // Protected routes
-   //Route::apiResource('usuario', UsuarioController::class);
-   
-    // Route::apiResource('propietario', PropietarioController::class);
-    // Route::apiResource('propiedad', Propiedad::class);
+    Route::get('vehiculo/estados-de-mexico', [VehiculoController::class, 'getEstadosMexico'])
+        ->middleware('role:ADMIN GENERAL,ADMIN FRACCIONAMIENTO');
 
 });
 
-    Route::apiResource('proveedores', ProveedorController::class);
+
 
 
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     // Debug Routes
+    Route::apiResource('proveedores', ProveedorController::class);
     Route::apiResource('propietarios', PropietarioController::class);
     Route::apiResource('propiedades', PropiedadController::class);
     Route::apiResource('productos', ProductoController::class);
-    Route::apiResource('vehiculos' ,VehiculoController::class);
-    Route::get('vehiculo/estados-de-mexico' ,[VehiculoController::class ,'getEstadosMexico']);
-    Route::get('vehiculo/tipos-de-vehiculos' ,[VehiculoController::class ,'getTiposVehiculos']);
-    Route::apiResource('configurar-pagos' ,ConfigurarPagosController::class);
-    Route::get('/private-files/{foldername}/{filename}' ,[ObtenerArchivo::class ,'getFile']);
-  
+    Route::apiResource('vehiculos', VehiculoController::class);
+    Route::get('vehiculo/tipos-de-vehiculos', [VehiculoController::class, 'getTiposVehiculos']);
+    Route::apiResource('configurar-pagos', ConfigurarPagosController::class);
+    Route::get('/private-files/{foldername}/{filename}', [ObtenerArchivo::class, 'getFile']);
     Route::apiResource('egresos', EgresoController::class);
     Route::apiResource('tipoEgresos', TipoDeEgresoController::class);
     Route::post(
         'detalleEgresos',
         [DetalleEgresoController::class, 'store']
     );
-    Route::match(
+    Route::match (
         ['PUT', 'DELETE', 'PATCH'],
         'detalleEgresos/{id_egreso}/{id_producto}',
         [DetalleEgresoController::class, 'update_or_delete']
     );
 });
-
-
 
 Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
 Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
