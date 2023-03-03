@@ -27,4 +27,9 @@ class Propietario extends Model
     {
         return $this->hasMany(Propiedad::class);
     }
+
+    public function vehiculos()
+    {
+        return $this->hasMany(Vehiculo::class);
+    }
 }

@@ -16,19 +16,24 @@ return new class extends Migration
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_propiedad');
-            $table->foreign('id_propiedad')->references('id')->on('propiedads');
             $table->unsignedBigInteger('id_fraccionamiento');
-            $table->foreign('id_fraccionamiento')->references('id')->on('fraccionamientos');
             $table->unsignedBigInteger('id_estado')->comment('ESTADO DE MEXICO EMISOR DE LAS PLACAS');
-            $table->foreign('id_estado')->references('id')->on('estados');
             $table->unsignedBigInteger('id_tipo_vehiculo');
-            $table->foreign('id_tipo_vehiculo')->references('id')->on('tipo_vehiculo');
+            $table->unsignedBigInteger('propietario_id')->nullable();
             $table->string('marca');
-            $table->string('patch_tarjeta_circulacion')->nullable()->comment("RUTA DEL ARCHIVO DE TARGETA DE CIRCULACION");
+            $table->string('path_tarjeta_circulacion')->nullable()->comment("RUTA DEL ARCHIVO DE TARGETA DE CIRCULACION");
             $table->string('color');
             $table->string('placas');
-            $table->boolean('estatus');
+            $table->boolean('estatus')->default(true);
+
             $table->timestamps();
+
+            $table->foreign('id_propiedad')->references('id')->on('propiedads');
+            $table->foreign('id_fraccionamiento')->references('id')->on('fraccionamientos');
+            $table->foreign('id_estado')->references('id')->on('estados');
+            $table->foreign('id_tipo_vehiculo')->references('id')->on('tipo_vehiculo');
+            $table->foreign('propietario_id')->references('id')
+                ->on('propietarios')->onDelete('set null');
         });
     }
 

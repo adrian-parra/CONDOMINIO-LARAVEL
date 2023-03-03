@@ -3,6 +3,8 @@
 namespace App\Http\Resources\V1\Propietario;
 
 use App\Http\Resources\V1\Propiedad\PropiedadPropietarioResource;
+use App\Http\Resources\V1\Vehiculo\VehiculoResource;
+use App\Models\Vehiculo;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PropietarioResource extends JsonResource
@@ -29,6 +31,7 @@ class PropietarioResource extends JsonResource
             'claveInterfon' => $this->clave_interfon,
             'claveInterfonAlt' => $this->clave_interfon_alt,
             'propiedad' => PropiedadPropietarioResource::collection($this->whenLoaded('propiedad')),
+            'vehiculos' => VehiculoResource::collection($this->whenLoaded('vehiculos')),
         ];
     }
 }

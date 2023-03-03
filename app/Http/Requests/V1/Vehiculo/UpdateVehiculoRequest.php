@@ -24,15 +24,16 @@ class UpdateVehiculoRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-             $mensaje = new mensaje();
-            $mensaje->body = $validator->errors();
-            $mensaje->title = "error";
-            $mensaje->icon = "error";
-        
+        $mensaje = new mensaje();
+        $mensaje->body = $validator->errors();
+        $mensaje->title = "error";
+        $mensaje->icon = "error";
+
         throw new HttpResponseException(
             new JsonResponse(
-               $mensaje
-            , 422)
+                $mensaje,
+                422
+            )
         );
     }
 
@@ -47,9 +48,10 @@ class UpdateVehiculoRequest extends FormRequest
             //
             'id_tipo_vehiculo' => 'required',
             'id_estado_emisor_placas' => 'required',
-            'marca'=>'required',
+            'marca' => 'required',
             'color' => 'required',
             'placas' => 'required',
+            'propietario_id' => 'required',
         ];
     }
 }
