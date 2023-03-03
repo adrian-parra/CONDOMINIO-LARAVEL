@@ -25,15 +25,16 @@ class StoreVehiculoRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-             $mensaje = new mensaje();
-            $mensaje->body = $validator->errors();
-            $mensaje->title = "error";
-            $mensaje->icon = "error";
-        
+        $mensaje = new mensaje();
+        $mensaje->body = $validator->errors();
+        $mensaje->title = "error";
+        $mensaje->icon = "error";
+
         throw new HttpResponseException(
             new JsonResponse(
-               $mensaje
-            , 422)
+                $mensaje,
+                422
+            )
         );
     }
 
@@ -45,14 +46,15 @@ class StoreVehiculoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
             'id_fraccionamiento' => 'required',
             'id_propiedad' => 'required',
             'id_tipo_vehiculo' => 'required',
-            'id_estado_emisor_placas' => 'required',
-            'marca'=>'required',
+            'id_estado' => 'required',
+            'propietario_id' => 'required',
+            'marca' => 'required',
             'color' => 'required',
             'placas' => 'required',
+            'tarjeta_circulacion' => 'sometimes',
         ];
     }
 }

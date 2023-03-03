@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\DetalleEgreso;
+use App\Models\TipoVehiculo;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -53,6 +54,14 @@ class DatabaseSeeder extends Seeder
 
         $this->call(
             DetalleEgresoSeeder::class
+        );
+
+        $this->call(
+            EstadosSeeder::class
+        );
+
+        $this->call(
+            TipoVehiculoSeeder::class
         );
     }
 }

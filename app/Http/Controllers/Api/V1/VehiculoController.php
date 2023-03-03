@@ -27,7 +27,7 @@ class VehiculoController extends Controller
         $mensaje->title = "Configuracion de pagos obtenidos";
         $mensaje->icon = "success";
         $mensaje->body = $ConfigurarPagos;
-        
+
         return response()->json($mensaje, 200);
     }
 
@@ -41,20 +41,22 @@ class VehiculoController extends Controller
         //
     }
 
-    public function getEstadosMexico(){
+    public function getEstadosMexico()
+    {
         $estados = EstadosDeMexico::all();
 
         return response()->json([
             'estados' => $estados
-        ] ,200);
+        ], 200);
     }
 
-    public function getTiposVehiculos(){
+    public function getTiposVehiculos()
+    {
         $estados = TipoVehiculo::all();
 
         return response()->json([
             'tipos_vehiculos' => $estados
-        ] ,200);
+        ], 200);
     }
 
     /**
@@ -67,41 +69,39 @@ class VehiculoController extends Controller
     {
         $mensaje = new mensaje();
 
-         //GUARDAR DATOS DEL VEHICULO
-         $vehiculo = new Vehiculo();
-         $vehiculo->id_propiedad = $request->id_propiedad;
-         $vehiculo->id_fraccionamiento = $request->id_fraccionamiento;
-         $vehiculo->id_tipo_vehiculo = $request->id_tipo_vehiculo;
-         $vehiculo->id_estado = $request->id_estado_emisor_placas;
-         $vehiculo->marca = $request->marca;
-         $vehiculo->color = $request->color;
-         $vehiculo->placas = $request->placas;
-         $vehiculo->estatus = true;
+        //GUARDAR DATOS DEL VEHICULO
+        $vehiculo = new Vehiculo();
+        $vehiculo->id_propiedad = $request->id_propiedad;
+        $vehiculo->id_fraccionamiento = $request->id_fraccionamiento;
+        $vehiculo->id_tipo_vehiculo = $request->id_tipo_vehiculo;
+        $vehiculo->id_estado = $request->id_estado;
+        $vehiculo->propietario_id = $request->propietario_id;
+        $vehiculo->marca = $request->marca;
+        $vehiculo->color = $request->color;
+        $vehiculo->placas = $request->placas;
+        $vehiculo->estatus = true;
 
         /**
          * ? VERIFICAR SI ARCHIVO TARJETA DE CIRCULACION SE HA RECIBIDO
          */
-        if($request->hasFile('tarjeta_circulacion')){
+        if ($request->hasFile('tarjeta_circulacion')) {
             $file = $request->file('tarjeta_circulacion');
 
             //ALMACENO ARCHIVO EN RUTA PRIVATE
-            $almacenarArchivo = new AlmacenarArchivo($file ,'private/tarjetasCirculacion');
+            $almacenarArchivo = new AlmacenarArchivo($file, 'private/tarjetasCirculacion');
             $path = $almacenarArchivo->storeFile();
 
             //REGISTRO PATCH DE DONDE SE GUARDO EL ARCHIVO
-            $vehiculo->patch_tarjeta_circulacion = $path;
-
-        }else{
-            $vehiculo->patch_tarjeta_circulacion = null;
+            $vehiculo->path_tarjeta_circulacion = $path;
+        } else {
+            $vehiculo->path_tarjeta_circulacion = null;
         }
 
         $vehiculo->save();
 
-        $mensaje->title ="Datos almacenados";
-        $mensaje->icon ="success";
-        return response()->json($mensaje ,200);
-
-
+        $mensaje->title = "Datos almacenados";
+        $mensaje->icon = "success";
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -120,13 +120,11 @@ class VehiculoController extends Controller
             $mensaje->icon = "success";
             $mensaje->body = $vehiculo;
             return response()->json($mensaje, 200);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $mensaje->title = "Esta peticion no se pudo completar";
             $mensaje->icon = "error";
             return response()->json($mensaje, 422);
-         
         }
-
     }
 
     /**
@@ -156,22 +154,23 @@ class VehiculoController extends Controller
         $vehiculo->id_tipo_vehiculo = $request->id_tipo_vehiculo;
         $vehiculo->id_estado = $request->id_estado_emisor_placas;
         $vehiculo->marca = $request->marca;
-        $vehiculo->color =$request->color;
-        $vehiculo->placas =$request->placas;
+        $vehiculo->color = $request->color;
+        $vehiculo->propietario_id = $request->propietario_id;
+        $vehiculo->placas = $request->placas;
 
-        if($request->hasFile('tarjeta_circulacion')){
+        if ($request->hasFile('tarjeta_circulacion')) {
             //SI RECIBO UN ARCHIVO EN TARJETA DE CIRCULACION
             //ELIMINO EL ARCHIVO ANTERIOR SI EXISTE ALGUNO
 
-            if($vehiculo->patch_tarjeta_circulacion !== null){
+            if ($vehiculo->patch_tarjeta_circulacion !== null) {
                 $deleteFile = new EliminarArchivo($vehiculo->patch_tarjeta_circulacion);
                 $deleteFile->deletePrivateFile();
             }
-            
+
             $file = $request->file('tarjeta_circulacion');
 
             //ALMACENO ARCHIVO EN RUTA PRIVATE
-            $almacenarArchivo = new AlmacenarArchivo($file ,'private/tarjetasCirculacion');
+            $almacenarArchivo = new AlmacenarArchivo($file, 'private/tarjetasCirculacion');
             $path = $almacenarArchivo->storeFile();
 
             //REGISTRO PATCH DE DONDE SE GUARDO EL ARCHIVO
@@ -180,11 +179,9 @@ class VehiculoController extends Controller
 
         $vehiculo->update();
 
-        $mensaje->title ="Datos actualizados";
-        $mensaje->icon ="success";
-        return response()->json($mensaje ,200);
-        
-
+        $mensaje->title = "Datos actualizados";
+        $mensaje->icon = "success";
+        return response()->json($mensaje, 200);
     }
 
     /**

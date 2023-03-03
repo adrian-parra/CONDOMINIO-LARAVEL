@@ -24,6 +24,7 @@ class PropietarioController extends Controller
         $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
 
         $incluirPropiedades = $request->query('incluirPropiedades');
+        $incluirVehiculos = $request->query('incluirVehiculos');
 
         $propietarios = Propietario::where($filterItems);
 
@@ -31,18 +32,11 @@ class PropietarioController extends Controller
             $propietarios = $propietarios->with('propiedad');
         }
 
+        if ($incluirVehiculos) {
+            $propietarios = $propietarios->with('vehiculos');
+        }
+
         return new PropietarioCollection($propietarios->orderByDesc('id')->paginate()->appends($request->query()));
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -79,23 +73,20 @@ class PropietarioController extends Controller
     public function show(Propietario $propietario)
     {
         $incluirPropiedades = request()->query('incluirPropiedades');
+        $incluirVehiculos = request()->query('incluirVehiculos');
+
+        if ($incluirPropiedades && $incluirVehiculos) {
+            return new PropietarioResource($propietario->loadMissing(['propiedad', 'vehiculos']));
+        }
 
         if ($incluirPropiedades) {
             return new PropietarioResource($propietario->loadMissing('propiedad'));
         }
 
+        if ($incluirVehiculos) {
+            return new PropietarioResource($propietario->loadMissing('vehiculos'));
+        }
         return new PropietarioResource($propietario);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Propietario  $propietario
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Propietario $propietario)
-    {
-        //
     }
 
     /**

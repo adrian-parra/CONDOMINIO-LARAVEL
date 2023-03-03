@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Vehiculo extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'propietario_id'
+    ];
+
+    public function propietario()
+    {
+        return $this->belongsTo(Propietario::class);
+    }
 }
