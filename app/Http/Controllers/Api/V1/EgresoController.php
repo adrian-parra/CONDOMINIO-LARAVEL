@@ -64,15 +64,7 @@ class EgresoController extends Controller
 
         $egreso = Egreso::create($data);
 
-        if ($egreso->isVerified()) {
-            $id = $egreso->getFraccionamiento(); //get fraccionamiento id from egreso
-
-            $fraccionamiento = fraccionamiento::find($id);
-
-            if (!$fraccionamiento->getEgresosNeedToBeAuthorize()) {
-                $fraccionamiento->sendEmailToUser();
-            }
-        }
+        $egreso->isVerified($request->method);
 
         return new EgresoResource($egreso);
     }
@@ -115,7 +107,10 @@ class EgresoController extends Controller
             $data['comprobante_url'] = $almacen->storeFile();
         }
 
+
         $egreso->update($data);
+
+        $egreso->isVerified($request->getMethod());
 
         return new EgresoResource($egreso);
     }

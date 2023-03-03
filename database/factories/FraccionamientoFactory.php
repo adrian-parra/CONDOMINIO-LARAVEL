@@ -19,6 +19,7 @@ class FraccionamientoFactory extends Factory
         return [
             'nombre' => $this->faker->domainName(),
             'codigo_postal' => $this->faker->postCode(),
+            'egresos_authorized' => true,
             'created_at' => $this->faker->date(),
             'updated_at' => null,
         ];
