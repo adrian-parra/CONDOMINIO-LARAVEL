@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class usuario extends Model
 {
     use HasFactory;
+
+    public function roles()
+    {
+        return $this->belongsToMany(Rol::class, 'rol_por_usuario' ,'id_usuario','id_rol');
+    }
 }

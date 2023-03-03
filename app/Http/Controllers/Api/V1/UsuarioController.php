@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\confirmar_correo;
 use App\Models\fraccionamiento;
 use App\Models\mensaje;
+use App\Models\RolPorUsuario;
 use App\Models\usuario;
 use Firebase\JWT\JWK;
 use Illuminate\Http\Request;
@@ -138,6 +139,11 @@ class UsuarioController extends Controller
             $usuario->id_fraccionamiento = $fraccionamiento->id;
             $usuario->save();
 
+            //REGISTRAR ROL DE TIPO ADMIN DE FRACCIONAMEINTO
+            $rolPorUsuario = new RolPorUsuario;
+            $rolPorUsuario->id_usuario = $usuario->id;
+            $rolPorUsuario->id_rol = 2; //id 2 = ADMINISTRADOR DE FRACCIONAMIENTO
+            $rolPorUsuario->save();
         
             $mensaje->icon = "success";
             $mensaje->title = "Su cuenta se ha creado con exito";
