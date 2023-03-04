@@ -9,7 +9,6 @@ use App\Http\Requests\V1\Egreso\UpdateEgresoRequest;
 use App\Http\Resources\V1\Egreso\EgresoCollection;
 use App\Http\Resources\V1\Egreso\EgresoResource;
 use App\Models\Egreso;
-use App\Models\fraccionamiento;
 use App\Utils\AlmacenarArchivo;
 use Illuminate\Http\Request;
 
