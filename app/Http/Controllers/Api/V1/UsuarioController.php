@@ -107,7 +107,7 @@ class UsuarioController extends Controller
             $mensaje->body = $validation->errors();
             $mensaje->title = "error";
             $mensaje->icon = "error";
-            return response()->json([$mensaje], 422);
+            return response()->json($mensaje, 422);
         }
 
 
@@ -154,26 +154,26 @@ class UsuarioController extends Controller
             $mensaje->title = "Firma de token no válida";
             $mensaje->icon = "error";
             // Handle the error
-            return response()->json([$mensaje], 401);
+            return response()->json($mensaje, 401);
         } catch (\Firebase\JWT\BeforeValidException $e) {
             $mensaje->title = "Token aún no válido";
             $mensaje->icon = "error";
-            return response()->json([$mensaje], 401);
+            return response()->json($mensaje, 401);
         } catch (\Firebase\JWT\ExpiredException $e) {
             $mensaje->title = "El token ha caducado";
             $mensaje->icon = "error";
-            return response()->json([$mensaje], 401);
+            return response()->json($mensaje, 401);
         } 
         catch (\Exception $e) {
             $mensaje->icon = "error";
             $mensaje->title = "Esta peticion no fue autorizada";
             $mensaje->body = $e->getMessage();
-            return response()->json([$mensaje] ,401);
+            return response()->json($mensaje ,401);
         }
 
 
 
-        return response()->json([$mensaje], 200);
+        return response()->json($mensaje, 201);
 
     }
 

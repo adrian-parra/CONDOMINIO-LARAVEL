@@ -59,14 +59,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
         'detalleEgresos',
         [DetalleEgresoController::class, 'store']
     );
-    Route::match (
+    Route::match(
         ['PUT', 'DELETE', 'PATCH'],
         'detalleEgresos/{id_egreso}/{id_producto}',
         [DetalleEgresoController::class, 'update_or_delete']
     );
-});
 
-Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
-Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
-Route::post("usuario/registro", [UsuarioController::class, 'store']);
-Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+    Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
+    Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
+    Route::post("usuario/registro", [UsuarioController::class, 'store']);
+    Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+});
