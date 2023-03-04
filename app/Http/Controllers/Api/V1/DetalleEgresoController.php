@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\Controller;
-use App\Http\Requests\StoreDetalleEgresoRequest;
-use App\Http\Requests\UpdateDetalleEgresoRequest;
+use App\Http\Requests\V1\Egreso\Detalle\StoreDetalleEgresoRequest;
+use App\Http\Requests\V1\Egreso\Detalle\UpdateDetalleEgresoRequest;
 use App\Models\DetalleEgreso;
 
 class DetalleEgresoController extends Controller
