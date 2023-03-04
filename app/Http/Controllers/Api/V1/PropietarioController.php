@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\Propietario;
 use Illuminate\Http\Request;
 use App\Filters\V1\PropietarioFilter;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Propietario\StorePropietarioRequest;
 use App\Http\Requests\V1\Propietario\UpdatePropietarioRequest;
 use App\Http\Resources\V1\Propietario\PropietarioCollection;

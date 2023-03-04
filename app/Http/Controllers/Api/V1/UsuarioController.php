@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Api\Controller;
 use App\Models\confirmar_correo;
 use App\Models\fraccionamiento;
 use App\Models\mensaje;
 use App\Models\RolPorUsuario;
 use App\Models\usuario;
-use Firebase\JWT\JWK;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cookie;

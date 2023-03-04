@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Filters\V1\PropiedadFilter;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Propiedad\StorePropiedadRequest;
 use App\Http\Requests\V1\Propiedad\UpdatePropiedadRequest;
 use App\Http\Resources\V1\Propiedad\PropiedadCollection;

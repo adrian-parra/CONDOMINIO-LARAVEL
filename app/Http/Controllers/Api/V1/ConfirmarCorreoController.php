@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Mail\confirmarRegistroFraccionamiento;
+use App\Http\Controllers\Api\Controller;
 use App\Models\confirmar_correo;
 use App\Models\mensaje;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ConfirmarCorreoController extends Controller

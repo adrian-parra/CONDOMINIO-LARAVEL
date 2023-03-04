@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Vehiculo\StoreVehiculoRequest;
 use App\Http\Requests\V1\Vehiculo\UpdateVehiculoRequest;
 use App\Models\EstadosDeMexico;

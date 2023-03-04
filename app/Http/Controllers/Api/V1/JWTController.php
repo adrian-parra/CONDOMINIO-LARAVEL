@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\confirmar_correo;
-use App\Models\mensaje;
-use App\Models\usuario;
+use App\Http\Controllers\Api\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
