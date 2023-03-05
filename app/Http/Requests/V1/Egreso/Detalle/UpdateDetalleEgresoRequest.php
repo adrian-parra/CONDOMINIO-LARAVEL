@@ -4,8 +4,12 @@ namespace App\Http\Requests\V1\Egreso\Detalle;
 
 use App\Models\Egreso;
 use App\Models\fraccionamiento;
+use App\Models\mensaje;
 use App\Models\Producto;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 
 class UpdateDetalleEgresoRequest extends FormRequest
@@ -18,6 +22,21 @@ class UpdateDetalleEgresoRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $mensaje = new mensaje();
+        $mensaje->body = $validator->errors();
+        $mensaje->title = "error";
+        $mensaje->icon = "error";
+
+        throw new HttpResponseException(
+            new JsonResponse(
+                $mensaje,
+                422
+            )
+        );
     }
 
     /**

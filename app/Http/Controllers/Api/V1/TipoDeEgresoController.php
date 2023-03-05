@@ -8,6 +8,7 @@ use App\Http\Requests\V1\TipoDeEgreso\StoreTipoDeEgresoRequest;
 use App\Http\Requests\V1\TipoDeEgreso\UpdateTipoDeEgresoRequest;
 use App\Http\Resources\V1\Egreso\TipoEgresoCollection;
 use App\Http\Resources\V1\Egreso\TipoEgresoResource;
+use App\Models\mensaje;
 use App\Models\TipoDeEgreso;
 use Illuminate\Http\Request;
 
@@ -20,28 +21,22 @@ class TipoDeEgresoController extends Controller
      */
     public function index(Request $request)
     {
+        $mensaje = new mensaje();
         $filter = new TipoEgresoFilter();
 
         $filterItems = $filter->transform($request);
 
         $egresos = TipoDeEgreso::where($filterItems);
 
-        return new TipoEgresoCollection(
+        $mensaje->title = "Tipos de egreso conseguidos exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new TipoEgresoCollection(
             $egresos
                 ->orderByDesc('id')
-                ->paginate()
-                ->appends($request->query())
+                ->get()
         );
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -52,7 +47,15 @@ class TipoDeEgresoController extends Controller
      */
     public function store(StoreTipoDeEgresoRequest $request)
     {
-        return new TipoEgresoResource(TipoDeEgreso::create($request->all()));
+        $mensaje = new mensaje();
+
+        $mensaje->title = "Tipo de egreso registrado exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new TipoEgresoResource(
+            TipoDeEgreso::create($request->all())
+        );
+
+        return response()->json($mensaje, 201);
     }
 
     /**
@@ -63,24 +66,19 @@ class TipoDeEgresoController extends Controller
      */
     public function show($id)
     {
+        $mensaje = new mensaje();
         $tipoEgreso = TipoDeEgreso::find($id);
 
         if (!$tipoEgreso) {
-            return response()->json(['message' => 'Tipo de egreso no encontrado'], 404);
+            $mensaje->title = "Tipo de egreso no encontrado";
+            $mensaje->icon = "error";
+            return response()->json($mensaje, 404);
         }
+        $mensaje->title = "Tipo de egreso conseguido exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new TipoEgresoResource($tipoEgreso);
 
-        return new TipoEgresoResource($tipoEgreso);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\TipoDeEgreso  $tipoDeEgreso
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(TipoDeEgreso $tipoDeEgreso)
-    {
-        //
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -92,15 +90,21 @@ class TipoDeEgresoController extends Controller
      */
     public function update(UpdateTipoDeEgresoRequest $request, $id)
     {
+        $mensaje = new mensaje();
         $tipoEgreso = TipoDeEgreso::find($id);
 
         if (!$tipoEgreso) {
-            return response()->json(['message' => 'Tipo de egreso no encontrado'], 404);
+            $mensaje->title = "Tipo de egreso no encontrado";
+            $mensaje->icon = "error";
+            return response()->json($mensaje, 404);
         }
 
         $tipoEgreso->update($request->all());
 
-        return new TipoEgresoResource($tipoEgreso);
+        $mensaje->title = "Tipo de egreso actualizado exitosamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 204);
     }
 
     /**

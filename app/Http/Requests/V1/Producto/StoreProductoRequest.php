@@ -3,8 +3,12 @@
 namespace App\Http\Requests\V1\Producto;
 
 use App\Models\fraccionamiento;
+use App\Models\mensaje;
 use App\Models\Proveedor;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 
 class StoreProductoRequest extends FormRequest
@@ -17,6 +21,21 @@ class StoreProductoRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $mensaje = new mensaje();
+        $mensaje->body = $validator->errors();
+        $mensaje->title = "error";
+        $mensaje->icon = "error";
+
+        throw new HttpResponseException(
+            new JsonResponse(
+                $mensaje,
+                422
+            )
+        );
     }
 
     /**

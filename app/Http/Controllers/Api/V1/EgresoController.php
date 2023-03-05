@@ -9,11 +9,13 @@ use App\Http\Requests\V1\Egreso\UpdateEgresoRequest;
 use App\Http\Resources\V1\Egreso\EgresoCollection;
 use App\Http\Resources\V1\Egreso\EgresoResource;
 use App\Models\Egreso;
+use App\Models\mensaje;
 use App\Utils\AlmacenarArchivo;
 use Illuminate\Http\Request;
 
 class EgresoController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -21,6 +23,7 @@ class EgresoController extends Controller
      */
     public function index(Request $request)
     {
+        $mensaje = new mensaje();
         $filter = new EgresoFilter();
 
         $filterItems = $filter->transform($request);
@@ -32,12 +35,15 @@ class EgresoController extends Controller
             $egresos = $egresos->with('detalleEgreso');
         }
 
-        return new EgresoCollection(
+        $mensaje->title = "Egresos conseguidos con éxito";
+        $mensaje->icon = "success";
+        $mensaje->body = new EgresoCollection(
             $egresos
                 ->orderByDesc('id')
-                ->paginate()
-                ->appends($request->query())
+                ->get()
         );
+
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -48,6 +54,7 @@ class EgresoController extends Controller
      */
     public function store(StoreEgresoRequest $request)
     {
+        $mensaje = new mensaje();
         // Obtener el archivo cargado del request
         $file = $request->file('archivoComprobante');
 
@@ -66,7 +73,11 @@ class EgresoController extends Controller
 
         $egreso->isVerified($request->method);
 
-        return new EgresoResource($egreso);
+        $mensaje->title = "Egreso registrado exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new EgresoResource($egreso);
+
+        return response()->json($mensaje, 201);
     }
 
     /**
@@ -77,13 +88,19 @@ class EgresoController extends Controller
      */
     public function show(Egreso $egreso)
     {
+        $mensaje = new mensaje();
         $incluirDetalles = request()->query('incluirDetalles');
 
+        $mensaje->title = "Egreso conseguido con éxito";
+        $mensaje->icon = "success";
+
         if ($incluirDetalles) {
-            return new EgresoResource($egreso->loadMissing('detalleEgreso'));
+            $mensaje->body = new EgresoResource($egreso->loadMissing('detalleEgreso'));
+        } else {
+            $mensaje->body = new EgresoResource($egreso);
         }
 
-        return new EgresoResource($egreso);
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -95,6 +112,7 @@ class EgresoController extends Controller
      */
     public function update(UpdateEgresoRequest $request, Egreso $egreso)
     {
+        $mensaje = new mensaje();
         // Obtener el archivo cargado del request
         $file = $request->file('archivoComprobante');
 
@@ -112,7 +130,10 @@ class EgresoController extends Controller
 
         $egreso->isVerified($request->getMethod());
 
-        return new EgresoResource($egreso);
+        $mensaje->title = "Egreso actualizado exitosamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 204);
     }
 
     /**

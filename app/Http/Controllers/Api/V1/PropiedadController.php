@@ -29,23 +29,15 @@ class PropiedadController extends Controller
 
         $mensaje = new mensaje();
 
-        $mensaje->title = "Propiedades obtenidas exitosamente";
+        $mensaje->title = "Propiedades conseguidas exitosamente";
         $mensaje->icon = "success";
         $mensaje->body = new PropiedadCollection(
-            $propiedades->orderByDesc('id')->paginate()->appends($request->query())
-        );;
+            $propiedades
+                ->orderByDesc('id')
+                ->get()
+        );
 
         return response()->json($mensaje, 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -77,7 +69,7 @@ class PropiedadController extends Controller
 
         $data['predial_url'] = $almacen->storeFile();
 
-        $mensaje->title = "Propiedade creada exitosamente";
+        $mensaje->title = "Propiedad creada exitosamente";
         $mensaje->icon = "success";
         $mensaje->body = new PropiedadResource($propiedad);
 
@@ -96,22 +88,11 @@ class PropiedadController extends Controller
 
         $mensaje = new mensaje();
 
-        $mensaje->title = "Propiedad obtenida exitosamente";
+        $mensaje->title = "Propiedad conseguida exitosamente";
         $mensaje->icon = "success";
         $mensaje->body = new PropiedadResource($propiedad);
 
         return response()->json($mensaje, 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Propiedad  $propiedad
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Propiedad $propiedad)
-    {
-        //
     }
 
     /**
@@ -143,9 +124,8 @@ class PropiedadController extends Controller
 
         $mensaje->title = "Propiedad actualizada exitosamente";
         $mensaje->icon = "success";
-        $mensaje->body = new PropiedadResource($propiedad);
 
-        return response()->json($mensaje, 200);
+        return response()->json($mensaje, 204);
     }
 
     /**

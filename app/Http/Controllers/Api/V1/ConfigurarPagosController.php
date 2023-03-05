@@ -36,9 +36,6 @@ class ConfigurarPagosController extends Controller
         $mensaje->body = $ConfigurarPagos;
         
         return response()->json($mensaje, 200);
-
-    
-
     }
 
     /**

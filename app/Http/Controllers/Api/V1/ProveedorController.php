@@ -8,6 +8,7 @@ use App\Http\Requests\V1\Proveedor\StoreProveedorRequest;
 use App\Http\Requests\V1\Proveedor\UpdateProveedorRequest;
 use App\Http\Resources\V1\Proveedor\ProveedorCollection;
 use App\Http\Resources\V1\Proveedor\ProveedorResource;
+use App\Models\mensaje;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 
@@ -20,28 +21,22 @@ class ProveedorController extends Controller
      */
     public function index(Request $request)
     {
+        $mensaje = new mensaje();
         $filter = new ProveedorFilter();
 
         $filterItems = $filter->transform($request);
 
         $provedores = Proveedor::where($filterItems);
 
-        return new ProveedorCollection(
+        $mensaje->title = "Proveedores conseguidos exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new ProveedorCollection(
             $provedores
                 ->orderByDesc('id')
-                ->paginate()
-                ->appends($request->query())
+                ->get()
         );
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -52,7 +47,15 @@ class ProveedorController extends Controller
      */
     public function store(StoreProveedorRequest $request)
     {
-        return new ProveedorResource(Proveedor::create($request->all()));
+        $mensaje = new mensaje();
+
+        $mensaje->title = "Proveedor registrado exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new ProveedorResource(
+            Proveedor::create($request->all())
+        );
+
+        return response()->json($mensaje, 201);
     }
 
     /**
@@ -63,24 +66,20 @@ class ProveedorController extends Controller
      */
     public function show($id)
     {
+        $mensaje = new mensaje();
         $proveedor = Proveedor::find($id);
 
         if (!$proveedor) {
-            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+            $mensaje->title = "Proveedor no encontrado";
+            $mensaje->icon = "error";
+            return response()->json($mensaje, 404);
         }
 
-        return new ProveedorResource($proveedor);
-    }
+        $mensaje->title = "Proveedor conseguido exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new ProveedorResource($proveedor);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Proveedor  $proveedor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Proveedor $proveedor)
-    {
-        //
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -92,15 +91,22 @@ class ProveedorController extends Controller
      */
     public function update(UpdateProveedorRequest $request, $id)
     {
+        $mensaje = new mensaje();
 
         $proveedor = Proveedor::find($id);
 
         if (!$proveedor) {
-            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+            $mensaje->title = "Proveedor no encontrado";
+            $mensaje->icon = "error";
+            return response()->json($mensaje, 404);
         }
 
         $proveedor->update($request->all());
-        return new ProveedorResource($proveedor);
+
+        $mensaje->title = "Proveedor actualizado exitosamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 204);
     }
 
     /**
