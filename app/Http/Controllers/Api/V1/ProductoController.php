@@ -8,11 +8,14 @@ use App\Http\Requests\V1\Producto\StoreProductoRequest;
 use App\Http\Requests\V1\Producto\UpdateProductoRequest;
 use App\Http\Resources\V1\Producto\ProductoCollection;
 use App\Http\Resources\V1\Producto\ProductoResource;
+use App\Models\mensaje;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -20,28 +23,22 @@ class ProductoController extends Controller
      */
     public function index(Request $request)
     {
+        $mensaje = new mensaje();
         $filter = new ProductoFilter();
 
         $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
 
-        $provedores = Producto::where($filterItems);
+        $productos = Producto::where($filterItems);
 
-        return new ProductoCollection(
-            $provedores
+        $mensaje->title = "Productos conseguidos con exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new ProductoCollection(
+            $productos
                 ->orderByDesc('id')
-                ->paginate()
-                ->appends($request->query())
+                ->get()
         );
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -52,7 +49,14 @@ class ProductoController extends Controller
      */
     public function store(StoreProductoRequest $request)
     {
-        return new ProductoResource(Producto::create($request->all()));
+        $mensaje = new mensaje();
+        $producto = Producto::create($request->all());
+
+        $mensaje->title = "Producto registrado exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new ProductoResource($producto);
+
+        return response()->json($mensaje, 201);
     }
 
     /**
@@ -63,18 +67,13 @@ class ProductoController extends Controller
      */
     public function show(Producto $producto)
     {
-        return new ProductoResource($producto);
-    }
+        $mensaje = new mensaje();
+        $mensaje->title = "Producto conseguido con éxito";
+        $mensaje->icon = "success";
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Producto  $producto
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Producto $producto)
-    {
-        //
+        $mensaje->body = new ProductoResource($producto);
+
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -86,9 +85,13 @@ class ProductoController extends Controller
      */
     public function update(UpdateProductoRequest $request, Producto $producto)
     {
+        $mensaje = new mensaje();
         $producto->update($request->all());
 
-        return new ProductoResource($producto);
+        $mensaje->title = "Producto actualizado exitosamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 204);
     }
 
     /**

@@ -23,15 +23,16 @@ class UpdateConfigurarPagosRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-             $mensaje = new mensaje();
-            $mensaje->body = $validator->errors();
-            $mensaje->title = "error";
-            $mensaje->icon = "error";
-        
+        $mensaje = new mensaje();
+        $mensaje->body = $validator->errors();
+        $mensaje->title = "error";
+        $mensaje->icon = "error";
+
         throw new HttpResponseException(
             new JsonResponse(
-               $mensaje
-            , 422)
+                $mensaje,
+                422
+            )
         );
     }
 
@@ -47,10 +48,10 @@ class UpdateConfigurarPagosRequest extends FormRequest
             //'configurar_pago' => 'exists:ConfigurarPagos,configurar_pago',
             //'id_configuracion_pago' => 'required',
             'descripcion' => 'required',
-            'tipo_pago' => ['required' ,Rule::in(['ORDINARIO','EXTRAORDINARIO'])],
+            'tipo_pago' => ['required', Rule::in(['ORDINARIO', 'EXTRAORDINARIO'])],
             'monto' => 'required',
             'fecha_inicial' => 'required|date',
-            'periodo' => ['required',Rule::in(['UNICO','SEMANAL' ,'MENSUAL', 'ANUAL'])],
+            'periodo' => ['required', Rule::in(['UNICO', 'SEMANAL', 'MENSUAL', 'ANUAL'])],
             'dias_max_pago' => 'required',
             'dias_max_descuento' => 'required',
             'porcentaje_penalizacion' => 'required',

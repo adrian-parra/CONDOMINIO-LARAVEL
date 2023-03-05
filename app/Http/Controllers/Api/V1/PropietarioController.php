@@ -10,10 +10,12 @@ use App\Http\Requests\V1\Propietario\StorePropietarioRequest;
 use App\Http\Requests\V1\Propietario\UpdatePropietarioRequest;
 use App\Http\Resources\V1\Propietario\PropietarioCollection;
 use App\Http\Resources\V1\Propietario\PropietarioResource;
+use App\Models\mensaje;
 use App\Utils\AlmacenarArchivo;
 
 class PropietarioController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -21,6 +23,7 @@ class PropietarioController extends Controller
      */
     public function index(Request $request)
     {
+        $mensaje = new mensaje();
         $filter = new PropietarioFilter();
         $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
 
@@ -37,7 +40,15 @@ class PropietarioController extends Controller
             $propietarios = $propietarios->with('vehiculos');
         }
 
-        return new PropietarioCollection($propietarios->orderByDesc('id')->paginate()->appends($request->query()));
+        $mensaje->title = "Propietarios conseguidos exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropietarioCollection(
+            $propietarios
+                ->orderByDesc('id')
+                ->get()
+        );
+
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -48,12 +59,16 @@ class PropietarioController extends Controller
      */
     public function store(StorePropietarioRequest $request)
     {
+        $mensaje = new mensaje();
         // Obtener el archivo cargado del request
         $file = $request->file('archivoIdentificacion');
 
         // Verificar si se cargó un archivo
         if (!$file) {
-            return response()->json(['error' => 'No se ha cargado un archivo'], 400);
+            $mensaje->title = "No se ha cargado un archivo";
+            $mensaje->icon = "error";
+
+            return response()->json($mensaje, 400);
         }
 
         $almacen = new AlmacenarArchivo($file, 'identificacion');
@@ -62,7 +77,13 @@ class PropietarioController extends Controller
 
         $data['identificacion_url'] = $almacen->storeFile();
 
-        return new PropietarioResource(Propietario::create($data));
+        $mensaje->title = "Propietario registrado exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropietarioResource(
+            Propietario::create($data)
+        );
+
+        return response()->json($mensaje, 201);
     }
 
     /**
@@ -73,21 +94,24 @@ class PropietarioController extends Controller
      */
     public function show(Propietario $propietario)
     {
+        $mensaje = new mensaje();
         $incluirPropiedades = request()->query('incluirPropiedades');
         $incluirVehiculos = request()->query('incluirVehiculos');
 
-        if ($incluirPropiedades && $incluirVehiculos) {
-            return new PropietarioResource($propietario->loadMissing(['propiedad', 'vehiculos']));
-        }
 
         if ($incluirPropiedades) {
-            return new PropietarioResource($propietario->loadMissing('propiedad'));
+            $propietario->loadMissing('propiedad');
         }
 
         if ($incluirVehiculos) {
-            return new PropietarioResource($propietario->loadMissing('vehiculos'));
+            $propietario->loadMissing('vehiculos');
         }
-        return new PropietarioResource($propietario);
+
+        $mensaje->title = "Propietario conseguido exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropietarioResource($propietario);
+
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -99,6 +123,7 @@ class PropietarioController extends Controller
      */
     public function update(UpdatePropietarioRequest $request, Propietario $propietario)
     {
+        $mensaje = new mensaje();
         // Obtener el archivo cargado del request
         $file = $request->file('archivoIdentificacion');
 
@@ -113,7 +138,10 @@ class PropietarioController extends Controller
 
         $propietario->update($data);
 
-        return new PropietarioResource($propietario);
+        $mensaje->title = "Propietario actualizado exitosamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 204);
     }
 
     /**

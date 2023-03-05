@@ -3,8 +3,12 @@
 namespace App\Http\Requests\V1\Egreso;
 
 use App\Models\fraccionamiento;
+use App\Models\mensaje;
 use App\Models\TipoDeEgreso;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 
 class StoreEgresoRequest extends FormRequest
@@ -19,6 +23,20 @@ class StoreEgresoRequest extends FormRequest
         return true;
     }
 
+    protected function failedValidation(Validator $validator)
+    {
+        $mensaje = new mensaje();
+        $mensaje->body = $validator->errors();
+        $mensaje->title = "error";
+        $mensaje->icon = "error";
+
+        throw new HttpResponseException(
+            new JsonResponse(
+                $mensaje,
+                422
+            )
+        );
+    }
     /**
      * Get the validation rules that apply to the request.
      *

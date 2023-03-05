@@ -21,18 +21,23 @@ class ReciboController extends Controller
      */
     public function index(Request $request)
     {
+        $mensaje = new mensaje();
         $filter = new ReciboFilter();
 
         $filterItems = $filter->transform($request);
 
         $recibos = Recibo::where($filterItems);
 
-        return new ReciboCollection(
+        $mensaje->title = "Recibos conseguidos exitosamente";
+        $mensaje->icon = "success";
+
+        $mensaje->body = new ReciboCollection(
             $recibos
                 ->orderByDesc('id')
-                ->paginate()
-                ->appends($request->query())
+                ->get()
         );
+
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -43,7 +48,13 @@ class ReciboController extends Controller
      */
     public function show(Recibo $recibo)
     {
-        return new ReciboResource($recibo);
+        $mensaje = new mensaje();
+
+        $mensaje->title = "Recibo conseguido exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new ReciboResource($recibo);
+
+        return response()->json($mensaje, 200);
     }
 
     public function generar_recibos(GenerarReciboRequest $request)

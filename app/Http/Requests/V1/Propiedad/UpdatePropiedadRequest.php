@@ -3,9 +3,13 @@
 namespace App\Http\Requests\V1\Propiedad;
 
 use App\Models\fraccionamiento;
+use App\Models\mensaje;
 use App\Models\Propiedad;
 use App\Models\Propietario;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 
 class UpdatePropiedadRequest extends FormRequest
@@ -18,6 +22,21 @@ class UpdatePropiedadRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $mensaje = new mensaje();
+        $mensaje->body = $validator->errors();
+        $mensaje->title = "error";
+        $mensaje->icon = "error";
+
+        throw new HttpResponseException(
+            new JsonResponse(
+                $mensaje,
+                422
+            )
+        );
     }
 
     /**
