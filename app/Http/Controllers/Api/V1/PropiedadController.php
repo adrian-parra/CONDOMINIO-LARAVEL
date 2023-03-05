@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Filters\V1\PropiedadFilter;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Propiedad\StorePropiedadRequest;
 use App\Http\Requests\V1\Propiedad\UpdatePropiedadRequest;
 use App\Http\Resources\V1\Propiedad\PropiedadCollection;
@@ -26,7 +27,15 @@ class PropiedadController extends Controller
 
         $propiedades = Propiedad::where($filterItems);
 
-        return new PropiedadCollection($propiedades->orderByDesc('id')->paginate()->appends($request->query()));
+        $mensaje = new mensaje();
+
+        $mensaje->title = "Propiedades obtenidas exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropiedadCollection(
+            $propiedades->orderByDesc('id')->paginate()->appends($request->query())
+        );;
+
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -47,21 +56,32 @@ class PropiedadController extends Controller
      */
     public function store(StorePropiedadRequest $request)
     {
+        $mensaje = new mensaje();
         // Obtener el archivo cargado del request
         $file = $request->file('archivoPredial');
 
         // Verificar si se cargó un archivo
         if (!$file) {
-            return response()->json(['error' => 'No se ha cargado un archivo'], 400);
+            $mensaje->title = "Propiedades obtenidas exitosamente";
+            $mensaje->icon = "error";
+            $mensaje->body = 'No se ha cargado un archivo';
+
+            return response()->json($mensaje, 422);
         }
 
         $almacen = new AlmacenarArchivo($file, 'predial');
 
         $data = $request->all();
 
+        $propiedad  = Propiedad::create($data);
+
         $data['predial_url'] = $almacen->storeFile();
 
-        return new PropiedadResource(Propiedad::create($data));
+        $mensaje->title = "Propiedade creada exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropiedadResource($propiedad);
+
+        return response()->json($mensaje, 201);
     }
 
     /**
@@ -74,7 +94,13 @@ class PropiedadController extends Controller
     {
         $propiedad = Propiedad::find($id);
 
-        return new PropiedadResource($propiedad);
+        $mensaje = new mensaje();
+
+        $mensaje->title = "Propiedad obtenida exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropiedadResource($propiedad);
+
+        return response()->json($mensaje, 200);
     }
 
     /**
@@ -111,9 +137,15 @@ class PropiedadController extends Controller
             $data['predial_url'] = $almacen->storeFile();
         }
 
+        $mensaje = new mensaje();
+
         $propiedad->update($data);
 
-        return new PropiedadResource($propiedad);
+        $mensaje->title = "Propiedad actualizada exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropiedadResource($propiedad);
+
+        return response()->json($mensaje, 200);
     }
 
     /**

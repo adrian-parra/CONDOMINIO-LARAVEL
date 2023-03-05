@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\ConfigurarPagos\StoreConfigurarPagosRequest;
 use App\Http\Requests\v1\ConfigurarPagos\UpdateConfigurarPagosRequest;
 use App\Models\ConfigurarPagos;

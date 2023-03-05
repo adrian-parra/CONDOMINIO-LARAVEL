@@ -2,18 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Filters\V1\DetalleEgresoFilter;
-use App\Http\Requests\StoreDetalleEgresoRequest;
-use App\Http\Requests\UpdateDetalleEgresoRequest;
-use App\Http\Resources\V1\Egreso\Detalle\DetalleEgresoCollection;
-use App\Http\Resources\V1\Egreso\Detalle\DetalleEgresoResource;
-use App\Http\Resources\V1\Egreso\EgresoResource;
+use App\Http\Controllers\Api\Controller;
+use App\Http\Requests\V1\Egreso\Detalle\StoreDetalleEgresoRequest;
+use App\Http\Requests\V1\Egreso\Detalle\UpdateDetalleEgresoRequest;
 use App\Models\DetalleEgreso;
-use App\Models\Egreso;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-
-use function GuzzleHttp\Promise\all;
 
 class DetalleEgresoController extends Controller
 {

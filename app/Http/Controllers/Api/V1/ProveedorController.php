@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Filters\V1\ProveedorFilter;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Proveedor\StoreProveedorRequest;
 use App\Http\Requests\V1\Proveedor\UpdateProveedorRequest;
 use App\Http\Resources\V1\Proveedor\ProveedorCollection;

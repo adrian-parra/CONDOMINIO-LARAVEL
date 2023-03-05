@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Filters\V1\EgresoFilter;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Egreso\StoreEgresoRequest;
 use App\Http\Requests\V1\Egreso\UpdateEgresoRequest;
 use App\Http\Resources\V1\Egreso\EgresoCollection;
 use App\Http\Resources\V1\Egreso\EgresoResource;
 use App\Models\Egreso;
-use App\Models\fraccionamiento;
 use App\Utils\AlmacenarArchivo;
 use Illuminate\Http\Request;
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\DetalleEgresoController;
 use App\Http\Controllers\Api\V1\EgresoController;
 use App\Http\Controllers\Api\V1\ProductoController;
 use App\Http\Controllers\Api\V1\ProveedorController;
+use App\Http\Controllers\Api\V1\ReciboController;
 use App\Http\Controllers\Api\V1\TipoDeEgresoController;
 use App\Http\Controllers\Api\V1\UsuarioController;
 use App\Http\Controllers\Api\V1\VehiculoController;
@@ -37,7 +38,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'm
     // Protected routes
     Route::get('vehiculo/estados-de-mexico', [VehiculoController::class, 'getEstadosMexico'])
         ->middleware('role:ADMIN GENERAL,ADMIN FRACCIONAMIENTO');
-
 });
 
 
@@ -64,9 +64,15 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
         'detalleEgresos/{id_egreso}/{id_producto}',
         [DetalleEgresoController::class, 'update_or_delete']
     );
-
-    Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
-    Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
-    Route::post("usuario/registro", [UsuarioController::class, 'store']);
-    Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+    Route::apiResource('recibos', ReciboController::class);
+    Route::post(
+        'generarRecibos',
+        [ReciboController::class, 'generar_recibos']
+    );
 });
+
+Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
+Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
+Route::post("usuario/registro", [UsuarioController::class, 'store']);
+Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+

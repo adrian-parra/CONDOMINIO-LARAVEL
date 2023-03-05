@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Filters\V1\TipoEgresoFilter;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\TipoDeEgreso\StoreTipoDeEgresoRequest;
 use App\Http\Requests\V1\TipoDeEgreso\UpdateTipoDeEgresoRequest;
 use App\Http\Resources\V1\Egreso\TipoEgresoCollection;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Filters\V1\ProductoFilter;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Producto\StoreProductoRequest;
 use App\Http\Requests\V1\Producto\UpdateProductoRequest;
 use App\Http\Resources\V1\Producto\ProductoCollection;
