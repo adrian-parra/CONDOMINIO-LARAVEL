@@ -32,15 +32,25 @@ class PropiedadPropietarioResource extends JsonResource
 
         $inquilino = Propietario::where('id', $this->inquilino_id)->first();
 
+        $objTipoPropiedad = [
+            'id' => $this->tipo_propiedad_id,
+            'descripcion' => $tipoPropiedad[$this->tipo_propiedad_id]
+        ];
+
+        $objTipoEstatus = [
+            'id' => $this->estatus_id,
+            'descripcion' => $tipoEstatus[$this->estatus_id]
+        ];
+
         return [
             'id' => $this->id,
-            'tipoPropiedad' => $tipoPropiedad[$this->tipo_propiedad_id],
+            'tipoPropiedad' => $objTipoPropiedad,
             'claveCatastral' =>  $this->clave_catastral,
             'predialUrl' => $this->predial_url,
             'descripcion' => $this->descripcion,
             'superficie' => $this->superficie,
             'balance' => $this->balance,
-            'estatusId' => $tipoEstatus[$this->estatus_id],
+            'estatus' => $objTipoEstatus,
             'inquilino' => new PropietarioResource($inquilino),
             'fraccionamientoId' => $this->fraccionamiento_id,
         ];

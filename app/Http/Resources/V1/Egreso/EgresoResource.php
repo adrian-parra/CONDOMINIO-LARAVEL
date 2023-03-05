@@ -39,7 +39,7 @@ class EgresoResource extends JsonResource
             'id' => $this->id,
             'descripcion' => $this->descripcion,
             'isVerified' => $this->is_verified,
-            'estatusEgresoId' => $objEstatusEgreso,
+            'estatusEgreso' => $objEstatusEgreso,
             'montoTotal' => $this->monto_total,
             'comprobanteUrl' => $this->comprobante_url,
             'tipoEgreso' => new TipoEgresoResource($tipo_egreso),

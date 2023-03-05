@@ -14,6 +14,16 @@ class ProveedorResource extends JsonResource
      */
     public function toArray($request)
     {
+        $METODO_PAGO = [
+            'TRANSFERENCIA',
+            'CHEQUE'
+        ];
+
+        $objMetodoPago = [
+            'id' => $this->metodo_de_pago_id,
+            'descripcion' => $METODO_PAGO[$this->metodo_de_pago_id]
+        ];
+
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
@@ -21,7 +31,7 @@ class ProveedorResource extends JsonResource
             'nombreContacto' => $this->nombre_contacto,
             'correoContacto' => $this->correo_contacto,
             'notas' => $this->notas,
-            'metodoDePagoId' => $this->metodo_de_pago_id,
+            'metodoDePago' => $objMetodoPago,
             'fraccionamientoId' => $this->fraccionamiento_id,
         ];
     }

@@ -51,7 +51,7 @@ class PropiedadResource extends JsonResource
             'descripcion' => $this->descripcion,
             'superficie' => $this->superficie,
             'balance' => $this->balance,
-            'estatusId' => $objTipoEstatus,
+            'estatus' => $objTipoEstatus,
             'propietario' => new PropietarioResource($propietario),
             'inquilino' => new PropietarioResource($inquilino),
             'fraccionamientoId' => $this->fraccionamiento_id,
