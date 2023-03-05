@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\confirmar_correo;
 use App\Models\fraccionamiento;
 use App\Models\mensaje;
+use App\Models\Rol;
 use App\Models\RolPorUsuario;
 use App\Models\usuario;
 use Firebase\JWT\JWK;
@@ -40,7 +41,7 @@ class UsuarioController extends Controller
             $mensaje->body = $validation->errors();
             $mensaje->title = "error";
             $mensaje->icon = "error";
-            return response()->json([$mensaje], 422);
+            return response()->json($mensaje, 422);
         }
 
         $user = usuario::where('correo', $request->correo)->first();
@@ -51,6 +52,28 @@ class UsuarioController extends Controller
             //GENERAR TOKEN DE AUTORIZACION PARA RUTAS PROTEGIDAS
             $aut = new JWTController();
             $token = $aut->generateToken($request->correo ,$user->id);
+
+             //OBTENGO LA DESCRIPCION DE LO ROLES ASIGNADOS A DICHO USUARIO
+            //QUE INTENTA ACCEDER A LA RUTA
+            $userId = $user->id;
+            $roles = "";
+            $userRoles = Rol::whereHas('users', function ($query) use ($userId) {
+                $query->where('id', $userId);
+            })
+            ->select('descripcion')
+            ->get(); //RETORNO UN ARRAY DE OBJETOS DESCRIPCION DE ROLES
+
+            //VERIFICAR SI USUARIO TIENE MAS DE UN ROL
+            if(count($userRoles) > 1){
+                foreach ($userRoles as $DescripcionRol) { //RECORRE LOS ROLES ENCONTRADOS
+                    $roles = $roles. $DescripcionRol->descripcion.','; //ALMACENO SOLO LA DESCRIPCION DEL ROL
+                    }
+    
+             }else{
+                //USUARIO SOLO TIENE UN ROL
+                $roles = $userRoles[0]->descripcion;
+            }
+
            
                     
             //ENCRIPTAR TOKEN
@@ -71,16 +94,19 @@ class UsuarioController extends Controller
             ]);*/
 
             $mensaje->icon = "success";
-            $mensaje->title = "Credenciales correctas";
+            $mensaje->title = "";
+            $mensaje->body = ["token"=> $token ,"rol"=>$roles];
            
             $mensaje->estatus = 200;
-            return response()->json([$mensaje],$mensaje->estatus)->withCookie(Cookie::make('token', $token, 60, null, null, false, true, false, 'strict'));
+            //return response()->json($mensaje,$mensaje->estatus)->withCookie(Cookie::make('token', $token, 60, null, null, false, true, false, 'strict'));
+            //return response()->json($mensaje,$mensaje->estatus)->withCookie(Cookie::make('token', $token, 60 ,'/','localhost', false, true));
+            return response()->json($mensaje,$mensaje->estatus);
         } else {
             // Las credenciales son inválidas, muestra un mensaje de error
             $mensaje->icon = "error";
             $mensaje->title = "Credenciales incorrectas";
             $mensaje->estatus = 401;
-            return response()->json([$mensaje],$mensaje->estatus);
+            return response()->json($mensaje,$mensaje->estatus);
         }
 
         
