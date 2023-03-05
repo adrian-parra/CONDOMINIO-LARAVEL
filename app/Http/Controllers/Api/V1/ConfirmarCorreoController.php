@@ -17,14 +17,14 @@ class ConfirmarCorreoController extends Controller
         if (!$request->token) {
             $mensaje->icon = "error";
             $mensaje->title = "Solicitud no valida";
-            return response()->json([$mensaje], 401);
+            return response()->json($mensaje, 401);
         }
 
         $confirmarCorreo = confirmar_correo::where('token', '=', $request->token)->first();
         if ($confirmarCorreo === null) {
             $mensaje->icon = "error";
             $mensaje->title = "Esta solicitud no fue encontrada";
-            return response()->json([$mensaje], 422);
+            return response()->json($mensaje, 401);
         }
 
         try {
@@ -35,17 +35,17 @@ class ConfirmarCorreoController extends Controller
             if ($now > $decodeToken->exp) {
                 $mensaje->icon = "error";
                 $mensaje->title = "Esta solicitud ya no es valida";
-                return response()->json([$mensaje], 422);
+                return response()->json($mensaje, 401);
             }
 
             $mensaje->title = "";
             $mensaje->icon = "success";
-            return response()->json([$mensaje], 200);
+            return response()->json($mensaje, 204);
         } catch (\Exception $e) {
-            $mensaje->icon = "error";
-            $mensaje->body = $e->getMessage();
-            $mensaje->title = "Ocurrio un proble con su solicitud";
-            return response()->json([$mensaje], 422);
+            $mensaje->title = "Ha ocurrido un problema interno en el sistema ,por favor informe a los administradores";
+            $mensaje->body = ["error" => $e->getMessage()];
+            $mensaje->icon = "info";
+            return response()->json($mensaje, 500);
         }
 
 
@@ -85,7 +85,7 @@ class ConfirmarCorreoController extends Controller
             $mensaje->body = $validation->errors();
             $mensaje->title = "error";
             $mensaje->icon = "error";
-            return response()->json([$mensaje], 422);
+            return response()->json($mensaje, 422);
         }
 
         $jwt = new JWTController();
@@ -98,7 +98,7 @@ class ConfirmarCorreoController extends Controller
             $puerto = ":4200/";
         }
         //LINK ENCARGADO DE REDIRECCIONAR A UNA VISTA PARA REALIZAR CONFIRMACION DE CUENTA
-        $linkConfirmarRegistro = $appUrl . $puerto . '#/usuario/confirmar-registro?token=' . $token;
+        $linkConfirmarRegistro = $appUrl . $puerto . 'registros/registro/acptContrsAdmnFracc?token=' . $token;
 
         //ENVIAR CORREO CON TOKEN PARA SEGUIR CON EL PROCESO DE REGISTRO
 
@@ -110,10 +110,10 @@ class ConfirmarCorreoController extends Controller
 
         //ENVIAR CORREO
         try {
-            // Mail::to($request->correo)->send(new confirmarRegistroFraccionamiento($data));
+            Mail::to($request->correo)->send(new confirmarRegistroFraccionamiento($data));
             $mensaje->title = "Se le envio un correo con los pasos para finalizar su proceso de registro de su fraccionamiento";
             $mensaje->icon = "info";
-            $mensaje->body = ['token' => $token];
+            //$mensaje->body = ['token' => $token];
 
 
             $id = confirmar_correo::where('correo', $request->correo)->pluck('id')->first();
@@ -139,11 +139,14 @@ class ConfirmarCorreoController extends Controller
 
 
         } catch (\Exception $e) {
-            $mensaje->title = $e->getMessage();
-            $mensaje->icon = "error";
+            $mensaje->title = "Ha ocurrido un problema interno en el sistema ,por favor informe a los administradores";
+            $mensaje->body = ["error" => $e->getMessage()];
+            $mensaje->icon = "info";
+            return response()->json($mensaje, 500);
+
         }
 
-        return response()->json([$mensaje], 201);
+        return response()->json($mensaje, 201);
 
     }
 

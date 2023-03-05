@@ -75,3 +75,4 @@ Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'co
 Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
 Route::post("usuario/registro", [UsuarioController::class, 'store']);
 Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+
