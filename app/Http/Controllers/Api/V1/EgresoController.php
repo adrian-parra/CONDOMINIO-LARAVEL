@@ -63,7 +63,7 @@ class EgresoController extends Controller
             return response()->json(['error' => 'No se ha cargado un archivo'], 400);
         }
 
-        $almacen = new AlmacenarArchivo($file, 'egresos');
+        $almacen = new AlmacenarArchivo($file, 'private/egresos');
 
         $data = $request->all();
 
@@ -120,7 +120,7 @@ class EgresoController extends Controller
 
         // Verificar si se cargó un archivo
         if ($file) {
-            $almacen = new AlmacenarArchivo($file, 'egresos');
+            $almacen = new AlmacenarArchivo($file, 'private/egresos');
 
             $data['comprobante_url'] = $almacen->storeFile();
         }
