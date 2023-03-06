@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\ConfirmarCorreoController;
 use App\Http\Controllers\Api\V1\DetalleEgresoController;
 use App\Http\Controllers\Api\V1\EgresoController;
 use App\Http\Controllers\Api\V1\ProductoController;
+use App\Http\Controllers\Api\V1\PropiedadController;
 use App\Http\Controllers\Api\V1\ProveedorController;
 use App\Http\Controllers\Api\V1\ReciboController;
 use App\Http\Controllers\Api\V1\TipoDeEgresoController;
@@ -72,9 +73,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
         'generarRecibos',
         [ReciboController::class, 'generar_recibos']
     );
-
-    Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
-    Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
-    Route::post("usuario/registro", [UsuarioController::class, 'store']);
-    Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+    Route::get(
+        'balances/generales',
+        [PropiedadController::class, 'setBalancesGenerales']
+    );
 });
+
+Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
+Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
+Route::post("usuario/registro", [UsuarioController::class, 'store']);
+Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+

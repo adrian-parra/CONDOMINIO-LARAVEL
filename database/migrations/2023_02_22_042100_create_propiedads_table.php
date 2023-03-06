@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('predial_url');
             $table->string('descripcion');
             $table->float('superficie');
-            $table->float('balance');
+            $table->float('balance')->default(0);
             $table->unsignedInteger('estatus_id');
             $table->unsignedBigInteger('propietario_id')->nullable();
             $table->unsignedBigInteger('inquilino_id')->nullable();

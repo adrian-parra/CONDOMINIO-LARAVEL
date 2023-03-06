@@ -61,7 +61,7 @@ class PropiedadController extends Controller
             return response()->json($mensaje, 422);
         }
 
-        $almacen = new AlmacenarArchivo($file, 'predial');
+        $almacen = new AlmacenarArchivo($file, 'private/predial');
 
         $data = $request->all();
 
@@ -113,7 +113,7 @@ class PropiedadController extends Controller
 
         // Verificar si se cargó un archivo
         if ($file) {
-            $almacen = new AlmacenarArchivo($file, 'predial');
+            $almacen = new AlmacenarArchivo($file, 'private/predial');
 
             $data['predial_url'] = $almacen->storeFile();
         }
@@ -137,5 +137,12 @@ class PropiedadController extends Controller
     public function destroy(Propiedad $propiedad)
     {
         //
+    }
+
+    public function setBalancesGenerales()
+    {
+        Propiedad::setGeneralBalances();
+
+        return response()->json('a', 204);
     }
 }

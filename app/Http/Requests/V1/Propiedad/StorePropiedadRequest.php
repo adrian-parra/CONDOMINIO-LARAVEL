@@ -57,7 +57,7 @@ class StorePropiedadRequest extends FormRequest
             'claveCatastral' =>  ['required', 'max:40'],
             'descripcion' => ['required'],
             'superficie' => ['required', 'numeric'],
-            'balance' => ['required', 'numeric'],
+            'balance' => ['sometimes', 'numeric'],
             'estatusId' => ['required', Rule::in([0, 1, 2, 3])],
             'propietarioId' => ['required', 'integer', Rule::in($propietario)],
             'inquilinoId' => ['sometimes', 'integer', Rule::in($inquilino)],

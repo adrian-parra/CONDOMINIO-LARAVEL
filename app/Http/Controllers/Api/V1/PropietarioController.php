@@ -71,7 +71,7 @@ class PropietarioController extends Controller
             return response()->json($mensaje, 400);
         }
 
-        $almacen = new AlmacenarArchivo($file, 'identificacion');
+        $almacen = new AlmacenarArchivo($file, 'private/identificacion');
 
         $data = $request->all();
 
@@ -131,7 +131,7 @@ class PropietarioController extends Controller
 
         // Verificar si se cargó un archivo
         if ($file) {
-            $almacen = new AlmacenarArchivo($file, 'identificacion');
+            $almacen = new AlmacenarArchivo($file, 'private/identificacion');
 
             $data['identificacion_url'] = $almacen->storeFile();
         }
