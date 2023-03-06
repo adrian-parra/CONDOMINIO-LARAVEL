@@ -138,4 +138,11 @@ class PropiedadController extends Controller
     {
         //
     }
+
+    public function setBalancesGenerales()
+    {
+        Propiedad::setGeneralBalances();
+
+        return response()->json('a', 204);
+    }
 }
