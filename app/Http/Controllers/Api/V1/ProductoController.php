@@ -91,7 +91,7 @@ class ProductoController extends Controller
         $mensaje->title = "Producto actualizado exitosamente";
         $mensaje->icon = "success";
 
-        return response()->json($mensaje, 204);
+        return response()->json($mensaje, 200);
     }
 
     /**

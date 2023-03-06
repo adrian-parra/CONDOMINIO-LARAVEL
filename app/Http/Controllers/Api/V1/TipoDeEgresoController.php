@@ -104,7 +104,7 @@ class TipoDeEgresoController extends Controller
         $mensaje->title = "Tipo de egreso actualizado exitosamente";
         $mensaje->icon = "success";
 
-        return response()->json($mensaje, 204);
+        return response()->json($mensaje, 200);
     }
 
     /**

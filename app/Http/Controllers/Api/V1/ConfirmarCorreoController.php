@@ -40,7 +40,7 @@ class ConfirmarCorreoController extends Controller
 
             $mensaje->title = "";
             $mensaje->icon = "success";
-            return response()->json($mensaje, 204);
+            return response()->json($mensaje, 200);
         } catch (\Exception $e) {
             $mensaje->title = "Ha ocurrido un problema interno en el sistema ,por favor informe a los administradores";
             $mensaje->body = ["error" => $e->getMessage()];
