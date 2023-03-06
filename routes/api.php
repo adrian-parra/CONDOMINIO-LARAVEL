@@ -36,7 +36,10 @@ return $request->user();
  */
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'middleware' => 'jwt.auth'], function () {
     // Protected routes
-    Route::get('vehiculo/estados-de-mexico', [VehiculoController::class, 'getEstadosMexico'])
+   
+
+        Route::apiResource('vehiculos', VehiculoController::class);
+        Route::get('vehiculo/estados-de-mexico', [VehiculoController::class, 'getEstadosMexico'])
         ->middleware('role:ADMIN GENERAL,ADMIN FRACCIONAMIENTO');
 });
 
@@ -44,12 +47,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'm
 
 
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
+    
     // Debug Routes
     Route::apiResource('proveedores', ProveedorController::class);
     Route::apiResource('propietarios', PropietarioController::class);
     Route::apiResource('propiedades', PropiedadController::class);
     Route::apiResource('productos', ProductoController::class);
-    Route::apiResource('vehiculos', VehiculoController::class);
+    
     Route::get('vehiculo/tipos-de-vehiculos', [VehiculoController::class, 'getTiposVehiculos']);
     Route::apiResource('configurar-pagos', ConfigurarPagosController::class);
     Route::get('/private-files/{foldername}/{filename}', [ObtenerArchivo::class, 'getFile']);
@@ -79,3 +83,4 @@ Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'co
 Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
 Route::post("usuario/registro", [UsuarioController::class, 'store']);
 Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+

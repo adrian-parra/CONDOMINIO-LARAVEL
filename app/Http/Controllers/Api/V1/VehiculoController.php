@@ -24,8 +24,9 @@ class VehiculoController extends Controller
     {
         //
         $mensaje = new mensaje();
-        $ConfigurarPagos = Vehiculo::where('id_fraccionamiento', $request->id_fraccionamiento)->get();
-        $mensaje->title = "Configuracion de pagos obtenidos";
+        $ConfigurarPagos = Vehiculo::where('id_fraccionamiento', $request->id_fraccionamiento)->
+        where('estatus',1)->get();
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = $ConfigurarPagos;
 
@@ -44,20 +45,39 @@ class VehiculoController extends Controller
 
     public function getEstadosMexico()
     {
-        $estados = EstadosDeMexico::all();
 
-        return response()->json([
-            'estados' => $estados
-        ], 200);
+        $mensaje = new mensaje();
+        try{
+            $estados = EstadosDeMexico::all();
+            $mensaje->title = "";
+            $mensaje->icon ="success";
+            $mensaje->body = $estados;
+            return response()->json($mensaje, 200);
+        }catch(\Exception $e){
+            $mensaje->title = $e->getMessage();
+            $mensaje->icon = "error";
+            return response()->json($mensaje ,500);
+        }
+      
+
+      
     }
 
     public function getTiposVehiculos()
     {
-        $estados = TipoVehiculo::all();
-
-        return response()->json([
-            'tipos_vehiculos' => $estados
-        ], 200);
+        $mensaje = new mensaje();
+        try{
+            
+            $tiposVehiculos = TipoVehiculo::all();
+            $mensaje->title = "";
+            $mensaje->icon ="success";
+            $mensaje->body = $tiposVehiculos;
+            return response()->json($mensaje, 200);
+        }catch(\Exception $e){
+            $mensaje->title = $e->getMessage();
+            $mensaje->icon = "error";
+            return response()->json($mensaje ,500);
+        }
     }
 
     /**

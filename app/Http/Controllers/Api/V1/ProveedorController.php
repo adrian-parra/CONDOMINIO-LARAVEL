@@ -106,7 +106,7 @@ class ProveedorController extends Controller
         $mensaje->title = "Proveedor actualizado exitosamente";
         $mensaje->icon = "success";
 
-        return response()->json($mensaje, 204);
+        return response()->json($mensaje, 200);
     }
 
     /**

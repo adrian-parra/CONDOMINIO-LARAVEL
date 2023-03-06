@@ -125,7 +125,7 @@ class PropiedadController extends Controller
         $mensaje->title = "Propiedad actualizada exitosamente";
         $mensaje->icon = "success";
 
-        return response()->json($mensaje, 204);
+        return response()->json($mensaje, 200);
     }
 
     /**

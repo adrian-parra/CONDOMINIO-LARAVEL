@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\Controller;
+use App\Mail\confirmarRegistroFraccionamiento;
 use App\Models\confirmar_correo;
 use App\Models\mensaje;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ConfirmarCorreoController extends Controller
@@ -40,7 +42,7 @@ class ConfirmarCorreoController extends Controller
 
             $mensaje->title = "";
             $mensaje->icon = "success";
-            return response()->json($mensaje, 204);
+            return response()->json($mensaje, 200);
         } catch (\Exception $e) {
             $mensaje->title = "Ha ocurrido un problema interno en el sistema ,por favor informe a los administradores";
             $mensaje->body = ["error" => $e->getMessage()];

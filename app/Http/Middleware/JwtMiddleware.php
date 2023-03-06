@@ -27,7 +27,7 @@ class JwtMiddleware
     if (!$token) {
         $mensaje->title = "Token no proporcionado";
         $mensaje->icon = "error";
-        return response()->json([$mensaje], 401);
+        return response()->json($mensaje, 401);
     }
 
     try {
@@ -40,19 +40,19 @@ class JwtMiddleware
         $mensaje->title = "Firma de token no válida";
         $mensaje->icon = "error";
         // Handle the error
-        return response()->json([$mensaje], 401);
+        return response()->json($mensaje, 401);
     } catch (\Firebase\JWT\BeforeValidException $e) {
         $mensaje->title = "Token aún no válido";
         $mensaje->icon = "error";
-        return response()->json([$mensaje], 401);
+        return response()->json($mensaje, 401);
     } catch (\Firebase\JWT\ExpiredException $e) {
         $mensaje->title = "El token ha caducado";
         $mensaje->icon = "error";
-        return response()->json([$mensaje], 401);
+        return response()->json($mensaje, 401);
     }catch(\Exception $e){
         $mensaje->title = "El token no fue autorizado";
         $mensaje->icon = "error";
-        return response()->json([$mensaje], 401);        
+        return response()->json($mensaje, 401);        
     }
     
         return $next($request);

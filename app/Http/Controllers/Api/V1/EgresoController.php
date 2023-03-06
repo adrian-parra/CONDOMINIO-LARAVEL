@@ -133,7 +133,7 @@ class EgresoController extends Controller
         $mensaje->title = "Egreso actualizado exitosamente";
         $mensaje->icon = "success";
 
-        return response()->json($mensaje, 204);
+        return response()->json($mensaje, 200);
     }
 
     /**

@@ -53,7 +53,7 @@ class DetalleEgresoController extends Controller
             $mensaje->title = "Borrado con éxito";
             $mensaje->icon = "success";
 
-            return response()->json($mensaje, 204);
+            return response()->json($mensaje, 200);
         }
 
         $detalleEgreso->update($request->all());
@@ -61,6 +61,6 @@ class DetalleEgresoController extends Controller
         $mensaje->title = "Actualizado con éxito";
         $mensaje->icon = "success";
 
-        return response()->json($mensaje, 204);
+        return response()->json($mensaje, 200);
     }
 }
