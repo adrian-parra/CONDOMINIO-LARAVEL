@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\V1\Recibo;
 
-use App\Http\Resources\V1\Propietario\PropietarioResource;
-use App\Models\Propietario;
+use App\Http\Resources\V1\Propiedad\PropiedadResource;
+use App\Models\Propiedad;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReciboResource extends JsonResource
@@ -16,8 +16,7 @@ class ReciboResource extends JsonResource
      */
     public function toArray($request)
     {
-        $propietario = Propietario::find($this->propietario_id);
-        $inquilino = Propietario::find($this->inquilino_id);
+        $propiedad = Propiedad::find($this->propiedad_id);
 
         return [
             'id' => $this->id,
@@ -27,8 +26,7 @@ class ReciboResource extends JsonResource
             'montoPenalizacion' => $this->monto_penalizacion,
             'montoDescuento' => $this->monto_descuento,
             'estatus' => $this->estatus,
-            'propietarioId' => new PropietarioResource($propietario),
-            'inquilinoId' => new PropietarioResource($inquilino),
+            'propiedad' => new PropiedadResource($propiedad),
             'fraccionamientoId' => $this->fraccionamiento_id,
         ];
     }

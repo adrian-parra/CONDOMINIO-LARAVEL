@@ -32,7 +32,7 @@ class ConfigurarPagos extends Model
             $this->id
         )->orderByDesc('id')->first();
 
-        if ($ultimoRecibo && $fechaInicio < $ultimoRecibo->fecha_vencimiento) {
+        if ($ultimoRecibo && $fechaInicio && $fechaInicio < $ultimoRecibo->fecha_vencimiento) {
             $mensaje->title = "Error al crear recibos";
             $mensaje->icon = "error";
             $mensaje->body = "La fecha a iniciar es menor que la ultima generada";
@@ -56,12 +56,13 @@ class ConfigurarPagos extends Model
             foreach ($propiedades as $propiedad) {
                 $recibo = [
                     'fraccionamiento_id' => $propiedad->fraccionamiento_id,
-                    'propietario_id' => $propiedad->propietario_id,
+                    'propiedad_id' => $propiedad->id,
                     'configuracion_id' => $this->id,
-                    'inquilino_id' => $propiedad->inquilino_id,
                     'fecha_vencimiento' => $fecha_pago,
                     'monto' => $this->monto,
-                    'estatus' => 'POR_PAGAR'
+                    // TODO: remove this status when finsh to test
+                    'estatus' => 'VENCIDO'
+                    // 'estatus' => 'POR_PAGAR'
                 ];
 
                 $recibos[] = $recibo;

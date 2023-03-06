@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('recibos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('fraccionamiento_id');
-            $table->unsignedBigInteger('propietario_id');
+            $table->unsignedBigInteger('propiedad_id');
+            // $table->unsignedBigInteger('propietario_id');
             $table->unsignedBigInteger('configuracion_id');
-            $table->unsignedBigInteger('inquilino_id')->nullable()->default(null);
+            // $table->unsignedBigInteger('inquilino_id')->nullable()->default(null);
             $table->date('fecha_pago')->nullable()->default(null);
             $table->date('fecha_vencimiento');
             $table->unsignedDecimal('monto');
@@ -31,13 +32,13 @@ return new class extends Migration
                 ->references('id')
                 ->on('fraccionamientos');
 
-            $table->foreign('propietario_id')
+            $table->foreign('propiedad_id')
                 ->references('id')
-                ->on('propietarios');
+                ->on('propiedads');
 
-            $table->foreign('inquilino_id')
-                ->references('id')
-                ->on('propietarios');
+            // $table->foreign('inquilino_id')
+            //     ->references('id')
+            //     ->on('propietarios');
 
             $table->foreign('configuracion_id')
                 ->references('id')

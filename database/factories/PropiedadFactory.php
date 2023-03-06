@@ -22,14 +22,13 @@ class PropiedadFactory extends Factory
         $propietario = Propietario::where('is_inquilino', false)->pluck('id')->toArray();
 
         $inquilino = Propietario::where('is_inquilino', true)->pluck('id')->toArray();
-    
+
         return [
             'tipo_propiedad_id' => $this->faker->randomElement([0, 1, 2, 3]),
             'clave_catastral' =>  $this->faker->postCode(),
             'predial_url' => $this->faker->filePath(),
-            'descripcion' => $this->faker->randomLetter(),
+            'descripcion' => $this->faker->realText(150),
             'superficie' => $this->faker->randomFloat(4, 1000, 10000),
-            'balance' => $this->faker->randomFloat(2, -15000, 10000),
             'estatus_id' => $this->faker->randomElement([0, 1, 2, 3]),
             'propietario_id' => $this->faker->randomElement($propietario),
             'inquilino_id' => optional($this->faker->randomElement([null, 1]))->randomElement($inquilino),

@@ -11,8 +11,7 @@ class Recibo extends Model
 
     protected $fillable = [
         'fraccionamiento_id',
-        'propietario_id',
-        'inquilino_id',
+        'propiedad_id',
         'fecha_pago',
         'fecha_vencimiento',
         'monto',
