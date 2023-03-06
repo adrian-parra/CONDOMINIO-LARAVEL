@@ -30,7 +30,7 @@ class ProductoController extends Controller
 
         $productos = Producto::where($filterItems);
 
-        $mensaje->title = "Productos conseguidos con exitosamente";
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = new ProductoCollection(
             $productos

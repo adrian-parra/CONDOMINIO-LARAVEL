@@ -28,7 +28,7 @@ class ProveedorController extends Controller
 
         $provedores = Proveedor::where($filterItems);
 
-        $mensaje->title = "Proveedores conseguidos exitosamente";
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = new ProveedorCollection(
             $provedores

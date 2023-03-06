@@ -28,7 +28,7 @@ class ReciboController extends Controller
 
         $recibos = Recibo::where($filterItems);
 
-        $mensaje->title = "Recibos conseguidos exitosamente";
+        $mensaje->title = "";
         $mensaje->icon = "success";
 
         $mensaje->body = new ReciboCollection(

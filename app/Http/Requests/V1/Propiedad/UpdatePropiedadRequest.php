@@ -56,7 +56,7 @@ class UpdatePropiedadRequest extends FormRequest
         if ($method == 'PUT') {
             return [
                 'tipoPropiedadId' => ['required', 'numeric', Rule::in([0, 1, 2, 3])],
-                'archivoPredial' => ['required', 'file'],
+                'archivoPredial' => ['sometimes', 'file'],
                 'claveCatastral' =>  ['required', 'max:40'],
                 'descripcion' => ['required'],
                 'superficie' => ['required', 'numeric'],

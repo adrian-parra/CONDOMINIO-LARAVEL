@@ -28,7 +28,7 @@ class TipoDeEgresoController extends Controller
 
         $egresos = TipoDeEgreso::where($filterItems);
 
-        $mensaje->title = "Tipos de egreso conseguidos exitosamente";
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = new TipoEgresoCollection(
             $egresos

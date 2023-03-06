@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\V1\TipoDeEgresoController;
 use App\Http\Controllers\Api\V1\UsuarioController;
 use App\Http\Controllers\Api\V1\VehiculoController;
 use App\Utils\ObtenerArchivo;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -35,7 +35,7 @@ class EgresoController extends Controller
             $egresos = $egresos->with('detalleEgreso');
         }
 
-        $mensaje->title = "Egresos conseguidos con éxito";
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = new EgresoCollection(
             $egresos

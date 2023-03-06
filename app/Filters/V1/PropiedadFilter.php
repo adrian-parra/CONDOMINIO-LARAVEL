@@ -7,11 +7,11 @@ use App\Filters\ApiFilter;
 class PropiedadFilter extends ApiFilter
 {
     protected $safeParams = [
-        'tipoPropiedadId' => ['eq','ne'],
-        'claveCatastral' =>  ['eq'],
+        'tipoPropiedadId' => ['eq', 'ne'],
+        'claveCatastral' =>  ['eq', 'lk'],
         'superficie' => ['eq', 'lt', 'lte', 'gt', 'gte'],
         'balance' => ['eq', 'lt', 'lte', 'gt', 'gte'],
-        'estatusId' => ['eq','ne'],
+        'estatusId' => ['eq', 'ne'],
         'propietarioId' => ['eq'],
         'inquilinoId' => ['eq'],
         'fraccionamientoId' => ['eq'],
@@ -32,6 +32,7 @@ class PropiedadFilter extends ApiFilter
         'lte' => '<=',
         'gt' => '>',
         'gte' => '>=',
-        'ne' => '!='
+        'ne' => '!=',
+        'lk' => 'LIKE'
     ];
 }

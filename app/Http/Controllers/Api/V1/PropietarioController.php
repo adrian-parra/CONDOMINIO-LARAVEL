@@ -40,7 +40,7 @@ class PropietarioController extends Controller
             $propietarios = $propietarios->with('vehiculos');
         }
 
-        $mensaje->title = "Propietarios conseguidos exitosamente";
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = new PropietarioCollection(
             $propietarios
