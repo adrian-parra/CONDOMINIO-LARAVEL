@@ -49,9 +49,7 @@ class StorePropiedadRequest extends FormRequest
         $fracc = fraccionamiento::pluck('id')->toArray();
         $propietario = Propietario::where('is_inquilino', false)->pluck('id')->toArray();
 
-        if ($this->inquilinoId) {
-            $inquilino = Propietario::where('is_inquilino', true)->pluck('id')->toArray();
-        }
+        $inquilino = Propietario::where('is_inquilino', true)->pluck('id')->toArray();
 
         return [
             'tipoPropiedadId' => ['required', 'integer', Rule::in([0, 1, 2, 3])],
@@ -62,7 +60,7 @@ class StorePropiedadRequest extends FormRequest
             'balance' => ['required', 'numeric'],
             'estatusId' => ['required', Rule::in([0, 1, 2, 3])],
             'propietarioId' => ['required', 'integer', Rule::in($propietario)],
-            'inquilinoId' => ['integer', Rule::in($inquilino)],
+            'inquilinoId' => ['sometimes', 'integer', Rule::in($inquilino)],
             'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
         ];
     }
