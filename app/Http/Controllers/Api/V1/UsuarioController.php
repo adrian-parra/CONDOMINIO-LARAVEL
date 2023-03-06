@@ -93,7 +93,7 @@ class UsuarioController extends Controller
 
             $mensaje->icon = "success";
             $mensaje->title = "";
-            $mensaje->body = ["token"=> $token ,"rol"=>$roles];
+            $mensaje->body = ["token"=> $token ,"rol"=>$roles ,'id_fraccionamiento'=>$user->id_fraccionamiento];
            
             $mensaje->estatus = 200;
             //return response()->json($mensaje,$mensaje->estatus)->withCookie(Cookie::make('token', $token, 60, null, null, false, true, false, 'strict'));
