@@ -137,7 +137,7 @@ class VehiculoController extends Controller
         $mensaje = new mensaje();
         try {
             //$vehiculo =$vehiculo::find(request()->vehiculo);
-            $mensaje->title = "Vehiculo obtenido";
+            $mensaje->title = "";
             $mensaje->icon = "success";
             $mensaje->body = $vehiculo;
             return response()->json($mensaje, 200);
@@ -173,18 +173,18 @@ class VehiculoController extends Controller
 
 
         $vehiculo->id_tipo_vehiculo = $request->id_tipo_vehiculo;
-        $vehiculo->id_estado = $request->id_estado_emisor_placas;
+        $vehiculo->id_estado = $request->id_estado;
         $vehiculo->marca = $request->marca;
         $vehiculo->color = $request->color;
-        $vehiculo->propietario_id = $request->propietario_id;
+        //$vehiculo->propietario_id = $request->propietario_id;
         $vehiculo->placas = $request->placas;
 
         if ($request->hasFile('tarjeta_circulacion')) {
             //SI RECIBO UN ARCHIVO EN TARJETA DE CIRCULACION
             //ELIMINO EL ARCHIVO ANTERIOR SI EXISTE ALGUNO
 
-            if ($vehiculo->patch_tarjeta_circulacion !== null) {
-                $deleteFile = new EliminarArchivo($vehiculo->patch_tarjeta_circulacion);
+            if ($vehiculo->path_tarjeta_circulacion !== null) {
+                $deleteFile = new EliminarArchivo($vehiculo->path_tarjeta_circulacion);
                 $deleteFile->deletePrivateFile();
             }
 
@@ -195,7 +195,7 @@ class VehiculoController extends Controller
             $path = $almacenarArchivo->storeFile();
 
             //REGISTRO PATCH DE DONDE SE GUARDO EL ARCHIVO
-            $vehiculo->patch_tarjeta_circulacion = $path;
+            $vehiculo->path_tarjeta_circulacion = $path;
         }
 
         $vehiculo->update();
@@ -214,5 +214,20 @@ class VehiculoController extends Controller
     public function destroy(Vehiculo $vehiculo)
     {
         //
+        $mensaje = new mensaje();
+
+        try{
+            $vehiculo->estatus = 0;
+            $vehiculo->update();
+
+            $mensaje->title = "El vehiculo fue dado de baja";
+            $mensaje->icon = "success";
+            return response()->json($mensaje,201);
+        }catch(\Exception $e){
+            $mensaje->title = $e->getMessage();
+            $mensaje->icon = "info";
+            return response()->json($mensaje,500);
+        }
+        
     }
 }
