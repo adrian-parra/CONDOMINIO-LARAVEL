@@ -38,7 +38,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'm
     // Protected routes
    
 
-        Route::apiResource('vehiculos', VehiculoController::class);
+       
         Route::get('vehiculo/estados-de-mexico', [VehiculoController::class, 'getEstadosMexico'])
         ->middleware('role:ADMIN GENERAL,ADMIN FRACCIONAMIENTO');
 });
@@ -47,7 +47,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'm
 
 
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
-    
+    Route::apiResource('vehiculos', VehiculoController::class);
     // Debug Routes
     Route::apiResource('proveedores', ProveedorController::class);
     Route::apiResource('propietarios', PropietarioController::class);
@@ -56,7 +56,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     
     Route::get('vehiculo/tipos-de-vehiculos', [VehiculoController::class, 'getTiposVehiculos']);
     Route::apiResource('configurar-pagos', ConfigurarPagosController::class);
-    Route::get('/private-files/{foldername}/{filename}', [ObtenerArchivo::class, 'getFile']);
+    Route::get('/private-files/{foldertype}/{foldername}/{filename}', [ObtenerArchivo::class, 'getFile']);
     Route::apiResource('egresos', EgresoController::class);
     Route::apiResource('tipoEgresos', TipoDeEgresoController::class);
     Route::post(
