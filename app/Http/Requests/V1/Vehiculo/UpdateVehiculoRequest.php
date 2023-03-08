@@ -47,11 +47,11 @@ class UpdateVehiculoRequest extends FormRequest
         return [
             //
             'id_tipo_vehiculo' => 'required',
-            'id_estado_emisor_placas' => 'required',
+            'id_estado' => 'required',
             'marca' => 'required',
             'color' => 'required',
             'placas' => 'required',
-            'propietario_id' => 'required',
+            //'propietario_id' => 'required',
         ];
     }
 }
