@@ -15,7 +15,6 @@ class PropiedadFilter extends ApiFilter
         'propietarioId' => ['eq'],
         'inquilinoId' => ['eq'],
         'fraccionamientoId' => ['eq'],
-        'is_inquilino' => ['eq'],
     ];
 
     protected $columnMap = [
@@ -25,7 +24,6 @@ class PropiedadFilter extends ApiFilter
         'propietarioId' => 'propietario_id',
         'inquilinoId' => 'inquilino_id',
         'fraccionamientoId' => 'fraccionamiento_id',
-        'isInquilino' => 'is_inquilino',
     ];
 
     protected $operatorMap = [

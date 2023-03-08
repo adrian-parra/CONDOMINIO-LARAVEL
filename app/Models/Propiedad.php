@@ -57,7 +57,7 @@ class Propiedad extends Model
             ->get()
             ->each(function ($select) {
                 $propiedad = Propiedad::find($select->id);
-                $propiedad->balance -= $select->sumatoria;
+                $propiedad->balance = $select->sumatoria;
                 $propiedad->save();
             });
     }

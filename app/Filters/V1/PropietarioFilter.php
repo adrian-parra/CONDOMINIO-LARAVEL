@@ -16,6 +16,7 @@ class PropietarioFilter extends ApiFilter
         'fraccionamientoId' => ['eq'],
         'claveInterfon' => ['eq'],
         'claveInterfonAlt' => ['eq'],
+        'isInquilino' => ['eq'],
     ];
 
     protected $columnMap = [
@@ -24,6 +25,7 @@ class PropietarioFilter extends ApiFilter
         'fraccionamientoId' => 'fraccionamiento_id',
         'claveInterfon' => 'clave_interfon',
         'claveInterfonAlt' => 'clave_interfon_alt',
+        'isInquilino' => 'is_inquilino',
     ];
 
     protected $operatorMap = [
