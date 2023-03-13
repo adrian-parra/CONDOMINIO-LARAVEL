@@ -12,6 +12,7 @@ use App\Models\mensaje;
 use App\Models\Propiedad;
 use App\Utils\AlmacenarArchivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PropiedadController extends Controller
 {
@@ -54,9 +55,8 @@ class PropiedadController extends Controller
 
         // Verificar si se cargó un archivo
         if (!$file) {
-            $mensaje->title = "Propiedades obtenidas exitosamente";
+            $mensaje->title = "No se ha cargado un archivo";
             $mensaje->icon = "error";
-            $mensaje->body = 'No se ha cargado un archivo';
 
             return response()->json($mensaje, 422);
         }
@@ -65,9 +65,9 @@ class PropiedadController extends Controller
 
         $data = $request->all();
 
-        $propiedad  = Propiedad::create($data);
-
         $data['predial_url'] = $almacen->storeFile();
+
+        $propiedad  = Propiedad::create($data);
 
         $mensaje->title = "Propiedad creada exitosamente";
         $mensaje->icon = "success";
@@ -108,8 +108,10 @@ class PropiedadController extends Controller
 
         // Obtener el archivo cargado del request
         $file = $request->file('archivoPredial');
+        Log::debug($propiedad);
 
         $data = $request->all();
+        Log::info($data);
 
         // Verificar si se cargó un archivo
         if ($file) {
@@ -121,6 +123,7 @@ class PropiedadController extends Controller
         $mensaje = new mensaje();
 
         $propiedad->update($data);
+        Log::info($propiedad);
 
         $mensaje->title = "Propiedad actualizada exitosamente";
         $mensaje->icon = "success";
@@ -128,15 +131,33 @@ class PropiedadController extends Controller
         return response()->json($mensaje, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Propiedad  $propiedad
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Propiedad $propiedad)
+    public function delete_relacion_propietario(Request $request, $id)
     {
-        //
+        Log::debug($id);
+
+        $propiedad = Propiedad::find($id);
+
+        $mensaje = new mensaje();
+        $propietario = $request->query('propietario');
+
+        if (!$propietario) {
+            $act = [
+                "inquilino_id" => null
+            ];
+            $tipo = "Inquilino";
+        } else {
+            $act = [
+                "propietario_id" => null
+            ];
+            $tipo = "Propietario";
+        }
+
+        $propiedad->update($act);
+
+        $mensaje->title = $tipo . " eliminado exitosamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 200);
     }
 
     public function setBalancesGenerales()

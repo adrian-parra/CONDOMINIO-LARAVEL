@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class AlmacenarArchivo
 {
@@ -27,5 +28,17 @@ class AlmacenarArchivo
         $ruta = $file->storeAs($this->dir, $fileName);
 
         return $ruta;
+    }
+
+    public function deletePrivateFile()
+    {
+        $file = storage_path('app/' . $this->dir);
+
+        if (!File::exists($file)) { //VERIFICA SI EXISTE RUTA DEL ARCHIVO
+            abort(404);
+        }
+
+        unlink($file); //ELIMINACION DEL ARCHIVO
+
     }
 }

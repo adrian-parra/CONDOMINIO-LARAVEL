@@ -48,7 +48,7 @@ class Propiedad extends Model
 
     public static function setGeneralBalances()
     {
-        // TODO: hacer la sumatoria de la propiedad con la tabla recibos
+        // TODO: verificar el group by fraccionamiento.
 
         Recibo::join('propiedads', 'recibos.propiedad_id', '=', 'propiedads.id')
             ->where('recibos.estatus', '=', 'VENCIDO')
