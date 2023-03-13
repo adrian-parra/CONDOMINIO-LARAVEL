@@ -36,6 +36,7 @@ class JWTController extends Controller
             'correo' => $request->correo,
             'nombre_fraccionamiento' => $request->nombre_fraccionamiento,
             'codigo_postal' => $request->codigo_postal,
+            'rol' => $request->rol,
             'iat' => time(),
             'exp' => time() + 30 * 60 //VALIDO DURANTE 30 MINUTOS
         ];
