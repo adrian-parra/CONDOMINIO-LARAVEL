@@ -72,6 +72,9 @@ class UsuarioController extends Controller
                 $roles = $userRoles[0]->descripcion;
             }
 
+            //! OBTENER EL NOMBRE DEL FRACCIONAMIENTO Y CODIGO POSTAL
+            $fraccionamiento = fraccionamiento::find($user->id_fraccionamiento);
+
            
                     
             //ENCRIPTAR TOKEN
@@ -93,7 +96,10 @@ class UsuarioController extends Controller
 
             $mensaje->icon = "success";
             $mensaje->title = "";
-            $mensaje->body = ["token"=> $token ,"rol"=>$roles ,'id_fraccionamiento'=>$user->id_fraccionamiento];
+            $mensaje->body = ["token"=> $token ,"rol"=>$roles ,
+            'id_fraccionamiento'=>$user->id_fraccionamiento ,
+            'nombre_fraccionamiento'=>$fraccionamiento->nombre ,
+            'codigo_postal_fraccionamiento'=>$fraccionamiento->codigo_postal];
            
             $mensaje->estatus = 200;
             //return response()->json($mensaje,$mensaje->estatus)->withCookie(Cookie::make('token', $token, 60, null, null, false, true, false, 'strict'));
@@ -138,21 +144,30 @@ class UsuarioController extends Controller
         $aut = new JWTController();
 
         try {
+
+            //! DECODIFICO EL TOKEN PARA OBTENER LOS ATRIBUTOS QUE SE REQUIEREN
             $tokenDecode = $aut->decodeTokenActivarCuenta("9999999".$request->token);
 
-
+            //! OBTENGO EL ID DEL REGISTRO CONFIRM CORREO 
             $idConfirmCorreo = confirmar_correo::where('correo', $tokenDecode->correo)->pluck('id')->first();
 
+            //! BUSCO EL REGISTRO CONFIRM CORREO EN BASE AL ID
             $confirmCorreo = confirmar_correo::find($idConfirmCorreo);
             $confirmCorreo->estado = "CONFIRMADO";
             $confirmCorreo->token = null;
-            $confirmCorreo->save();
+            $confirmCorreo->save();//? GUARDO LOS CAMBIOS EN EL REGISTRO
 
-            $fraccionamiento = new fraccionamiento();
-            $fraccionamiento->nombre = $tokenDecode->nombre_fraccionamiento;
-            $fraccionamiento->codigo_postal = $tokenDecode->codigo_postal;
-            $fraccionamiento->save();
-
+            // TODO: VALIDAMOS QUE ROL SEA IGUAL A (ADMIN FRACCIONAMIENTO)
+            // TODO: PARA REGISTRAR UN NUEVO FRACCIONAMIENTO
+            $fraccionamiento = new fraccionamiento(); //INSTANCIA DEL MODEL FRACCIONAMIENTO
+            if($tokenDecode->rol == "ADMIN FRACCIONAMIENTO"){   
+                //! CREO UN NUEVO FRACCIONAMIENTO
+                $fraccionamiento->nombre = $tokenDecode->nombre_fraccionamiento;
+                $fraccionamiento->codigo_postal = $tokenDecode->codigo_postal;
+                $fraccionamiento->save();
+            }
+           
+            //! CREO UN NUEVO REGISTRO PARA EL USUARIO
             $usuario = new usuario;
             $usuario->nombre = $tokenDecode->nombre;
             $usuario->apellido = $tokenDecode->apellidos;
@@ -160,17 +175,28 @@ class UsuarioController extends Controller
             $usuario->password = Hash::make($request->password);
             $usuario->token = null;
             $usuario->id_confirmar_correo = $idConfirmCorreo;
-            $usuario->id_fraccionamiento = $fraccionamiento->id;
-            $usuario->save();
 
-            //REGISTRAR ROL DE TIPO ADMIN DE FRACCIONAMEINTO
+            // TODO: VALIDAMOS QUE ROL SEA DIFERENTE A (ADMIN FRACCIONAMIENTO)
+            // TODO: Y OBTENEMOS EL ID DEL FRACCIONAMIENTO EN BASE A SU NOMBRE
+            if($tokenDecode->rol != "ADMIN FRACCIONAMIENTO"){
+                $idFraccionamiento = fraccionamiento::where('nombre', $tokenDecode->nombre_fraccionamiento)->pluck('id')->first();
+                $usuario->id_fraccionamiento = $idFraccionamiento;
+            }else{
+                $usuario->id_fraccionamiento = $fraccionamiento->id;
+            }
+            $usuario->save(); //SE GUARDA EL NUEVO USUARIO
+
+            //! REGISTRAR ROL DE TIPO ADMIN DE FRACCIONAMEINTO
             $rolPorUsuario = new RolPorUsuario;
             $rolPorUsuario->id_usuario = $usuario->id;
-            $rolPorUsuario->id_rol = 2; //id 2 = ADMINISTRADOR DE FRACCIONAMIENTO
+
+            // TODO: OBTENER EL ID DEL ROL EN BASE A SU DESCRIPCION
+            $idRol  = Rol::where('descripcion', $tokenDecode->rol)->pluck('id')->first();
+            $rolPorUsuario->id_rol = $idRol; //id 2 = ADMINISTRADOR DE FRACCIONAMIENTO
             $rolPorUsuario->save();
-        
             $mensaje->icon = "success";
             $mensaje->title = "Su cuenta se ha creado con exito";
+            $mensaje->body = $idRol;
 
 
 
