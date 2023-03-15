@@ -19,7 +19,7 @@ class ConfiguracionDePagosFilter extends ApiFilter
     protected $columnMap = [
         'tipoPago' => 'tipo_pago',
         'fechaInicial' => 'fecha_inicial',
-        'fraccionamientoId' => 'fraccionamiento_id',
+        'fraccionamientoId' => 'id_fraccionamiento',
     ];
 
     protected $operatorMap = [
