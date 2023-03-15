@@ -63,5 +63,9 @@ class DatabaseSeeder extends Seeder
         $this->call(
             TipoVehiculoSeeder::class
         );
+
+        $this->call(
+            RolesDeUsuarioSeeder::class        
+        );      
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('rol', function (Blueprint $table) {
             $table->id();
             $table->string('descripcion')->unique();
-            $table->char('estatus' ,1);
+            $table->boolean('estatus')->default(true);
             $table->timestamps();
         });
     }

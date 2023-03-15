@@ -13,6 +13,53 @@ use Illuminate\Support\Facades\Validator;
 class ConfirmarCorreoController extends Controller
 {
 
+    //! ESTA FUNCION NOS PERMITE OBTENER TODOS LOS REGISTROS
+    //! QUE ESTEN PENDIENTES EN LA TABLE CONFIRM CORREOS Y OBTIEBE 
+    //! LOS DATOS DE LOS USUARIOS EN EL TOKEN Y EN BASE A 
+    //! ROL Y FRACCIONAMIENTO RETORNA UN LISTADO POR 
+    //! FRACCIONAMIENTO
+    public function getRegistrosPendientes(Request $request){
+        //OBTENEMOS EL ID DEL FRACCIONAMIENTO 
+        //PARA EL FILTRADO DE DATOS 
+
+        $registros = confirmar_correo::where('estado','<>','')
+        ->get();
+
+        $registros = $registros
+        ->map(function ($registro){
+           
+            $token = $registro->token;
+            $aut = new JWTController();
+            /*
+            try{
+                 //DECODIFICAMOS EL TOKEN PARA OBTENER LOS DATOS
+                 $tokenDecode = $aut->decodeTokenActivarCuenta("9999999" . $token);
+                 //OBTENEMOS LOS DATOS NECESARIOS
+                 $nombreFraccionamiento = $tokenDecode->nombre_fraccionamiento;
+                 $nombreUsuario = $tokenDecode->nombre;
+                 $apellidosUsuario =$tokenDecode->apellidos;
+                 $correoUsuario =$tokenDecode->correo;
+                 //MODIFICAMOS EL OBJETO REGISTRO
+                 //LE AGREGAMOS ATRIBUTOS
+ 
+                 $registro->nombre = $nombreUsuario;
+                 $registro->apellidos =$apellidosUsuario;
+                 $registro->correo =$correoUsuario;
+                 $registro->fraccionamiento = $nombreFraccionamiento;
+
+                return $registro;
+
+
+            }catch(\Exception $e){
+
+            }*/
+            $registro->token1 = $token;
+            return $registro;
+        });
+
+        return $registros;
+    }
+
     public function checkTokenRegistroFraccionamiento(Request $request)
     {
         $mensaje = new mensaje();
@@ -75,13 +122,27 @@ class ConfirmarCorreoController extends Controller
     {
         $mensaje = new mensaje();
 
-        $validation = Validator::make($request->all(), [
-            'correo' => 'required|email|unique:usuarios,correo',
-            'nombre' => 'required|max:40',
-            'apellidos' => 'required|max:40',
-            'nombre_fraccionamiento' => 'required|max:40|unique:fraccionamientos,nombre',
-            'codigo_postal' => 'required|numeric|digits:5|unique:fraccionamientos,codigo_postal'
-        ]);
+        //! VERIFICAMO SI ROL ES IGUAL A ADMINISTRADOR DE FRACCIONAMIENTO
+        //! VALIDAMOS LA PARTE DE FRACCIONAMIENTO
+        $arrayValidations = null;
+        if($request->rol == 'ADMIN FRACCIONAMIENTO'){
+            $arrayValidations = [
+                'correo' => 'required|email|unique:usuarios,correo',
+                'nombre' => 'required|max:40',
+                'apellidos' => 'required|max:40',
+                'nombre_fraccionamiento' => 'required|max:40|unique:fraccionamientos,nombre',
+                'codigo_postal' => 'required|numeric|digits:5|unique:fraccionamientos,codigo_postal'    
+            ];
+        }else{
+            $arrayValidations = [
+                'correo' => 'required|email|unique:usuarios,correo',
+                'nombre' => 'required|max:40',
+                'apellidos' => 'required|max:40',
+                'nombre_fraccionamiento' => 'required',
+                'codigo_postal' => 'required'    
+            ];
+        }
+        $validation = Validator::make($request->all(), $arrayValidations);
 
         if ($validation->fails()) {
             $mensaje->body = $validation->errors();
