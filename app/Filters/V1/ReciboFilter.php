@@ -8,8 +8,7 @@ class ReciboFilter extends ApiFilter
 {
     protected $safeParams = [
         'id' => ['eq'],
-        'propietarioId' => ['eq'],
-        'inquilinoId' => ['eq'],
+        'propiedadId' => ['eq'],
         'fechaPago' => ['eq', 'lt', 'lte', 'gt', 'gte'],
         'fechaVencimiento' => ['eq', 'lt', 'lte', 'gt', 'gte'],
         'estatus' => ['eq', 'ne'],
@@ -17,8 +16,7 @@ class ReciboFilter extends ApiFilter
     ];
 
     protected $columnMap = [
-        'propietarioId' => 'propietario_id',
-        'inquilinoId' => 'inquilino_id',
+        'propiedadId' => 'propiedad_id',
         'fechaPago' => 'fecha_pago',
         'fechaVencimiento' => 'fecha_vencimiento',
         'fraccionamientoId' => 'fraccionamiento_id',
