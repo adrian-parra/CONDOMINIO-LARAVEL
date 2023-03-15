@@ -17,11 +17,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_fraccionamiento');
             $table->foreign('id_fraccionamiento')->references('id')->on('fraccionamientos');
-            $table->string('descripcion',100);
+            $table->string('descripcion', 100);
             $table->enum('tipo_pago', ['ORDINARIO', 'EXTRAORDINARIO']);
             $table->double('monto');
             $table->date('fecha_inicial');
-            $table->enum('periodo',['UNICO','SEMANAL','MENSUAL','ANUAL']);
+            $table->enum('periodo', ['UNICO', 'SEMANAL', 'MENSUAL', 'ANUAL']);
             $table->integer('dias_max_pago');
             $table->integer('dias_max_descuento');
             $table->double('porcentaje_penalizacion');

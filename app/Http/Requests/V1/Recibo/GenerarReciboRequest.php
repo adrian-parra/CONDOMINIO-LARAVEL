@@ -50,8 +50,9 @@ class GenerarReciboRequest extends FormRequest
 
         return [
             'configuracionId' => ['required', 'integer', Rule::in($configuraciones)],
-            'plazoPorGenerar' => ['required', 'integer'],
-            'iniciarDesde' => ['sometimes', 'date']
+            'plazoPorGenerar' => ['sometimes', 'integer'],
+            'iniciarDesde' => ['sometimes', 'date'],
+            'year' => ['sometimes', 'date_format:Y']
         ];
     }
 }
