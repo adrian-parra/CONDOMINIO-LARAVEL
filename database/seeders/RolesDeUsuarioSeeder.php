@@ -18,7 +18,11 @@ class RolesDeUsuarioSeeder extends Seeder
         //
         $roles = [
             ['descripcion'=>'ADMIN GENERAL'] ,
-            ['descripcion'=>'ADMIN FRACCIONAMIENTO']
+            ['descripcion'=>'ADMIN FRACCIONAMIENTO'],
+            ['descripcion'=>'ADMIN SECUNDARIO'],
+            ['descripcion'=>'PROPIETARIO PROPIEDAD'],
+            ['descripcion'=>'INQUILINO PROPIEDAD'],
+
         ];
 
         DB::table('rol')->insert($roles);

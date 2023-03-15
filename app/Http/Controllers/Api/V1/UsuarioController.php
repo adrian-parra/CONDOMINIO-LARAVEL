@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Filters\V1\RolFilter;
+use App\Filters\V1\UsuarioFilter;
 use App\Http\Controllers\Api\Controller;
 use App\Models\confirmar_correo;
 use App\Models\fraccionamiento;
@@ -26,13 +28,46 @@ class UsuarioController extends Controller
         //
         $mensaje = new mensaje();
 
+        $filter = new UsuarioFilter();
+
+        $filterItems = $filter->transform($request);
+
+        $users = usuario::where($filterItems);
+
         $mensaje->title = "";
         $mensaje->icon = "success";
-        $users = usuario::where('id_fraccionamiento', $request->id_fraccionamiento)->with('roles')->get();
-        $mensaje->body = $users;
+        //$users = usuario::where('id_fraccionamiento', $request->id_fraccionamiento)->with('roles')->get();
+        
+        $mensaje->body = $users->with('roles')->get();
 
         return response()->json($mensaje, 200);
     }
+
+    /**
+     * ! OBTIENE TODOS LOS ROLES PARA USUARIOS
+     */
+
+     public function getRoles(Request $request){
+        $mensaje = new mensaje();
+        
+        $filter = new RolFilter();
+
+        $filterItems = $filter->transform($request);
+
+        $roles = Rol::where($filterItems);
+
+        //$roles = Rol::filter($request, RolFilter::class)->get();
+        //$roles = Rol::query()->filter($request, RolFilter::class)->get();
+        //$roles = Rol::query()->filter($request, RolFilter::class)->get();
+      /*
+        $roles = Rol::filterRoles($request)->get();*/
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+    
+        $mensaje->body = $roles->get();
+
+        return response()->json($mensaje, 200);
+     }
 
     public function iniciarSesion(Request $request)
     {
@@ -226,7 +261,7 @@ class UsuarioController extends Controller
             return response()->json($mensaje, 401);
         } catch (\Exception $e) {
             $mensaje->icon = "error";
-            $mensaje->title = "Esta peticion no fue autorizada";
+            $mensaje->title = "Esta peticion no fue autorizada ,".$e->getMessage();
             $mensaje->body = $e->getMessage();
             return response()->json($mensaje, 401);
         }
