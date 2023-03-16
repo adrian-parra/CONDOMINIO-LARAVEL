@@ -36,10 +36,10 @@ return $request->user();
  */
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'middleware' => 'jwt.auth'], function () {
     // Protected routes
-   
 
-       
-        Route::get('vehiculo/estados-de-mexico', [VehiculoController::class, 'getEstadosMexico'])
+
+
+    Route::get('vehiculo/estados-de-mexico', [VehiculoController::class, 'getEstadosMexico'])
         ->middleware('role:ADMIN GENERAL,ADMIN FRACCIONAMIENTO');
 });
 
@@ -53,7 +53,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('propietarios', PropietarioController::class);
     Route::apiResource('propiedades', PropiedadController::class);
     Route::apiResource('productos', ProductoController::class);
-    
+
     Route::get('vehiculo/tipos-de-vehiculos', [VehiculoController::class, 'getTiposVehiculos']);
     Route::apiResource('configurar-pagos', ConfigurarPagosController::class);
     Route::get('/private-files/{foldertype}/{foldername}/{filename}', [ObtenerArchivo::class, 'getFile']);
@@ -77,10 +77,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
         'balances/generales',
         [PropiedadController::class, 'setBalancesGenerales']
     );
+
+    Route::get('usuario/roles', [UsuarioController::class, 'getRoles']);
+    Route::apiResource('usuarios', UsuarioController::class);
+    Route::get('usuario/registros-pendientes' ,[ConfirmarCorreoController::class ,'getRegistrosPendientes']);
+    Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
+    Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
+    Route::post("usuario/registro", [UsuarioController::class, 'store']);
+    Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
 });
-
-Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
-Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
-Route::post("usuario/registro", [UsuarioController::class, 'store']);
-Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
-
