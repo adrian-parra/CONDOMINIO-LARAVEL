@@ -73,9 +73,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
         'generarRecibos',
         [ReciboController::class, 'generar_recibos']
     );
-    Route::get(
+    Route::post(
         'balances/generales',
-        [PropiedadController::class, 'setBalancesGenerales']
+        [PropiedadController::class, 'set_balances_generales']
     );
 
     Route::delete(

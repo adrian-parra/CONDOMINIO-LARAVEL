@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Propiedad extends Model
 {
@@ -29,38 +30,87 @@ class Propiedad extends Model
 
     //Funcion que actualiza el balance de la propiedad al realizar el pago de
     //algún recibo
-    public function updateBalance($monto)
+    public function updateBalance($monto, $status)
     {
-        $this->balance += $monto;
+        if ($status == 'PAGADO') {
+            $this->balance += $monto;
+        } elseif ($status == 'VENCIDO') {
+            $this->balance -= $monto;
+        }
         $this->save();
     }
 
+    //Funcion que actualiza los balances generales de todas las propiedades.
     public static function setGeneralBalances()
     {
-        // TODO: verificar el group by fraccionamiento.
+        $recibos = Recibo::join('propiedads', 'recibos.propiedad_id', '=', 'propiedads.id')
+            ->whereIn('recibos.estatus', ['PAGADO', 'VENCIDO'])
+            ->groupBy('propiedads.id', 'recibos.estatus')
+            ->selectRaw('propiedads.id, SUM(recibos.monto) AS sumatoria, recibos.estatus')
+            ->get();
 
-        Recibo::join('propiedads', 'recibos.propiedad_id', '=', 'propiedads.id')
-            ->where('recibos.estatus', '=', 'VENCIDO')
-            ->groupBy('propiedads.id')
-            ->selectRaw('propiedads.id, SUM(recibos.monto) AS sumatoria')
-            ->get()
-            ->each(function ($select) {
-                $propiedad = Propiedad::find($select->id);
-                if ($select->sumatoria) {
-                    $propiedad->balance = $select->sumatoria;
-                } else {
-                    $propiedad->balance = 0;
-                }
+        $last_id = 0;
+        $balance = 0;
+
+        foreach ($recibos as $recibo) {
+
+            $id = $recibo->id;
+
+            //Comprobar si se esta sumando otro recibo para guardar el balance obtenido.
+            if ($last_id != $id) {
+                $propiedad = Propiedad::find($id);
+
+                $propiedad->balance = $balance;
                 $propiedad->save();
-            });
+
+                $balance = 0;
+            }
+
+            if ($recibo->estatus == 'PAGADO') {
+                $balance += $recibo->sumatoria;
+            } elseif ($recibo->estatus == 'VENCIDO') {
+                $balance -= $recibo->sumatoria;
+            }
+
+            $last_id = $id;
+        }
     }
 
-    public static function setFraccionamientoBalances()
+    public static function setFraccionamientoBalances($fraccionamientoId)
     {
         // TODO: hacer la sumatoria de la propiedad con la tabla recibos
 
-        //SUMATORIA DE TODOS LOS ESTATUS POR PAGAR Y VENCIDOS
 
+        $recibos = Recibo::join('propiedads', 'recibos.propiedad_id', '=', 'propiedads.id')
+            ->whereIn('recibos.estatus', ['PAGADO', 'VENCIDO'])
+            ->where('propiedads.fraccionamiento_id', '=', $fraccionamientoId)
+            ->groupBy('propiedads.id', 'recibos.estatus')
+            ->selectRaw('propiedads.id, SUM(recibos.monto) AS sumatoria, recibos.estatus')
+            ->get();
 
+        $last_id = 0;
+        $balance = 0;
+
+        foreach ($recibos as $recibo) {
+
+            $id = $recibo->id;
+
+            if ($last_id != $id) {
+                $propiedad = Propiedad::find($id);
+
+                $propiedad->balance = $balance;
+                $propiedad->save();
+
+                $balance = 0;
+            }
+
+            if ($recibo->estatus == 'PAGADO') {
+                $balance += $recibo->sumatoria;
+            } elseif ($recibo->estatus == 'VENCIDO') {
+                $balance -= $recibo->sumatoria;
+            }
+
+            $last_id = $id;
+        }
     }
 }

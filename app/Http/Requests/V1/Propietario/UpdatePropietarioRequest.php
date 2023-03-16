@@ -56,7 +56,7 @@ class UpdatePropietarioRequest extends FormRequest
                 'celular' => ['required', 'max:20'],
                 'celularAlt' => ['required', 'max:20'],
                 'telefonoFijo' => ['required', 'max:20'],
-                'archivoIdentificacion' => ['required', 'file'],
+                'archivoIdentificacion' => ['sometimes', 'file'],
                 'isInquilino' => ['required', 'boolean'],
                 'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
                 'claveInterfon' => ['required', 'max:20'],
