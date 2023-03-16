@@ -77,13 +77,18 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
         'balances/generales',
         [PropiedadController::class, 'setBalancesGenerales']
     );
+
     Route::delete(
         'propiedades/borrarRelacionPropietario/{id}',
         [PropiedadController::class, 'delete_relacion_propietario']
     );
     
+      Route::get('usuario/roles', [UsuarioController::class, 'getRoles']);
+    Route::apiResource('usuarios', UsuarioController::class);
+    Route::get('usuario/registros-pendientes' ,[ConfirmarCorreoController::class ,'getRegistrosPendientes']);
     Route::post('usuario/confirmar-registro', [ConfirmarCorreoController::class, 'confirmarRegistroFraccionamiento']);
     Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
     Route::post("usuario/registro", [UsuarioController::class, 'store']);
     Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+
 });
