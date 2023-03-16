@@ -27,28 +27,17 @@ class Propiedad extends Model
         return $this->belongsTo(Propietario::class);
     }
 
-    public static function setBalancesById($propiedad_id, $fraccionamiento_id)
+    //Funcion que actualiza el balance de la propiedad al realizar el pago de
+    //algún recibo
+    public function updateBalance($monto)
     {
-        $propiedad = Propiedad::find($propiedad_id);
-
-        if (is_null($propiedad)) {
-            return false;
-        }
-
-        if (is_null($fraccionamiento_id)) {
-            return false;
-        }
-
-        // TODO: hacer la sumatoria de la propiedad con la tabla recibos
-
-        //SUMATORIA DE TODOS LOS ESTATUS POR PAGAR Y VENCIDOS
-
-
+        $this->balance += $monto;
+        $this->save();
     }
 
     public static function setGeneralBalances()
     {
-        // TODO: hacer la sumatoria de la propiedad con la tabla recibos
+        // TODO: verificar el group by fraccionamiento.
 
         Recibo::join('propiedads', 'recibos.propiedad_id', '=', 'propiedads.id')
             ->where('recibos.estatus', '=', 'VENCIDO')
@@ -57,7 +46,11 @@ class Propiedad extends Model
             ->get()
             ->each(function ($select) {
                 $propiedad = Propiedad::find($select->id);
-                $propiedad->balance = $select->sumatoria;
+                if ($select->sumatoria) {
+                    $propiedad->balance = $select->sumatoria;
+                } else {
+                    $propiedad->balance = 0;
+                }
                 $propiedad->save();
             });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Filters\V1\ConfiguracionDePagosFilter;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\ConfigurarPagos\StoreConfigurarPagosRequest;
 use App\Http\Requests\v1\ConfigurarPagos\UpdateConfigurarPagosRequest;
@@ -20,21 +21,19 @@ class ConfigurarPagosController extends Controller
     {
         //
         $mensaje = new mensaje();
+        $filter = new ConfiguracionDePagosFilter();
+
         //VERIFICAR SI TIPO_PAGO ES IGUAL A (ALL)
         //SI ES ASI RETORNAR PAGOS ORDINARIO Y EXTRAORDINARIOS
-        $ConfigurarPagos = null;
-        if($request->tipo_pago == "ALL"){
-            $ConfigurarPagos = ConfigurarPagos::where('id_fraccionamiento',$request->id_fraccionamiento)->get();
-        }else{
-            $ConfigurarPagos = ConfigurarPagos::where('tipo_pago', $request->tipo_pago)
-            ->where('id_fraccionamiento',$request->id_fraccionamiento)->get();
-        }
-        
-      
-        $mensaje->title = "Configuracion de pagos obtenidos";
+
+        $filterItems = $filter->transform($request);
+
+        $configurarPagos = ConfigurarPagos::where($filterItems);
+
+        $mensaje->title = "";
         $mensaje->icon = "success";
-        $mensaje->body = $ConfigurarPagos;
-        
+        $mensaje->body = $configurarPagos->orderByDesc('id')->get();
+
         return response()->json($mensaje, 200);
     }
 
@@ -93,20 +92,18 @@ class ConfigurarPagosController extends Controller
     {
         //
         $mensaje = new mensaje();
-        try{
-            
+        try {
+
             $configurarPagos = $configurarPagos::find(request()->configurar_pago);
             $mensaje->title = "Configuracion de pago obtenida";
             $mensaje->icon = "success";
             $mensaje->body = $configurarPagos;
             return response()->json($mensaje, 200);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $mensaje->title = "Esta peticion no se pudo completar";
             $mensaje->icon = "error";
             return response()->json($mensaje, 422);
-            
         }
-       
     }
 
     /**
@@ -132,33 +129,31 @@ class ConfigurarPagosController extends Controller
     {
 
 
-        try{
-        $mensaje = new mensaje();
-        //$configurarPagos = ConfigurarPagos::find($request->configurar_pago);
-        $configurarPagos = $configurarPagos::find($request->configurar_pago);
+        try {
+            $mensaje = new mensaje();
+            //$configurarPagos = ConfigurarPagos::find($request->configurar_pago);
+            $configurarPagos = $configurarPagos::find($request->configurar_pago);
 
-        //$configurarPagos->id_fraccionamiento = $request->id_fraccionamiento;
-        $configurarPagos->descripcion = $request->descripcion;
-        $configurarPagos->tipo_pago = $request->tipo_pago;
-        $configurarPagos->monto = $request->monto;
-        $configurarPagos->fecha_inicial = $request->fecha_inicial;
-        $configurarPagos->periodo = $request->periodo;
-        $configurarPagos->dias_max_pago = $request->dias_max_pago;
-        $configurarPagos->dias_max_descuento = $request->dias_max_descuento;
-        $configurarPagos->porcentaje_penalizacion = $request->porcentaje_penalizacion;
-        $configurarPagos->porcentaje_descuento = $request->porcentaje_descuento;
-        $configurarPagos->estatus = 1;
-        $configurarPagos->update();
-        $mensaje->title = "Configuracion de pago actualizado";
-        $mensaje->icon = "success";
-        return response()->json($mensaje, 422);
-    } catch (\Exception $e) {
-        $mensaje->title = "error";
-        $mensaje->icon = $e->getMessage();
-        return response()->json($mensaje, 422);
-    }
-
-
+            //$configurarPagos->id_fraccionamiento = $request->id_fraccionamiento;
+            $configurarPagos->descripcion = $request->descripcion;
+            $configurarPagos->tipo_pago = $request->tipo_pago;
+            $configurarPagos->monto = $request->monto;
+            $configurarPagos->fecha_inicial = $request->fecha_inicial;
+            $configurarPagos->periodo = $request->periodo;
+            $configurarPagos->dias_max_pago = $request->dias_max_pago;
+            $configurarPagos->dias_max_descuento = $request->dias_max_descuento;
+            $configurarPagos->porcentaje_penalizacion = $request->porcentaje_penalizacion;
+            $configurarPagos->porcentaje_descuento = $request->porcentaje_descuento;
+            $configurarPagos->estatus = 1;
+            $configurarPagos->update();
+            $mensaje->title = "Configuracion de pago actualizado";
+            $mensaje->icon = "success";
+            return response()->json($mensaje, 422);
+        } catch (\Exception $e) {
+            $mensaje->title = "error";
+            $mensaje->icon = $e->getMessage();
+            return response()->json($mensaje, 422);
+        }
     }
 
     /**

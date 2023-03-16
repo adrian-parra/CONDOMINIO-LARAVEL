@@ -61,7 +61,14 @@ class ReciboController extends Controller
     {
         $configuracion = ConfigurarPagos::find($request->configuracionId);
 
-        $mensaje = $configuracion->crearRecibos($request->plazoPorGenerar, $request->inciarDesde);
+        if($request->year){
+            $mensaje = $configuracion->crearRecibosAnual($request->year);
+        }
+        
+        if($request->plazoPorGenerar){
+            $mensaje = $configuracion->crearRecibos($request->plazoPorGenerar, $request->inciarDesde);
+        }
+
 
         if ($mensaje->icon == "error") {
             return response()->json($mensaje, 400);

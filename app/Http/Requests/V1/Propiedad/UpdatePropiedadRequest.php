@@ -63,7 +63,7 @@ class UpdatePropiedadRequest extends FormRequest
                 'balance' => ['required', 'numeric'],
                 'estatusId' => ['required', Rule::in([0, 1, 2, 3])],
                 'propietarioId' => ['required', 'numeric', Rule::in($propietario)],
-                'inquilinoId' => ['required', 'numeric', Rule::in($inquilino)],
+                'inquilinoId' => ['sometimes', 'numeric', Rule::in($inquilino)],
                 'fraccionamientoId' => ['required', 'numeric', Rule::in($fracc)],
             ];
         } else if ($method == 'PATCH') {

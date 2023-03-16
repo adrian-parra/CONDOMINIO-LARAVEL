@@ -7,6 +7,7 @@ use App\Filters\ApiFilter;
 class PropiedadFilter extends ApiFilter
 {
     protected $safeParams = [
+        'id' => ['eq', 'ne'],
         'tipoPropiedadId' => ['eq', 'ne'],
         'claveCatastral' =>  ['eq', 'lk'],
         'superficie' => ['eq', 'lt', 'lte', 'gt', 'gte'],
