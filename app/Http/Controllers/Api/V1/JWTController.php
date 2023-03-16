@@ -56,6 +56,22 @@ class JWTController extends Controller
         return $jwtDecode;
     }
 
+    public function decodeTokenRegistrosPendientes($token)
+    {
+        $tkn = substr($token, 7, strlen($token));
+        JWT::$leeway = 6000000000000000; // $leeway in seconds
+        $jwtDecode = JWT::decode($tkn, new key($this->secretKeyConfimCuenta, 'HS256'));
+
+        // Verificar manualmente si el token ha expirado
+    if (isset($jwtDecode->exp) && time() > $jwtDecode->exp) {
+        // El token ha expirado, devuelve una respuesta de error
+        return $jwtDecode;
+    }else{
+
+    }
+        return $jwtDecode;
+    }
+
     /**
      * ! AQUI TERMINA LOS METODOS PARA EL PROCESO DE REGISTRO DE USUARIO
      */
