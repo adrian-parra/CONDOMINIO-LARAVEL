@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Controller;
 use App\Mail\confirmarRegistroFraccionamiento;
 use App\Models\confirmar_correo;
 use App\Models\mensaje;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -22,7 +24,16 @@ class ConfirmarCorreoController extends Controller
         //OBTENEMOS EL ID DEL FRACCIONAMIENTO 
         //PARA EL FILTRADO DE DATOS 
 
-        $registros = confirmar_correo::where('estado','<>','')
+        $menaje = new mensaje();
+       
+        
+
+        //OBTENERMOS EL NOMBRE DEL FRACCIONAMIENTO ENVIADO POR PARAMETRO
+        try{
+
+        
+        $nombreFraccionamiento = $request->fraccionamiento;
+        $registros = confirmar_correo::where('estado','ENVIADO')
         ->get();
 
         $registros = $registros
@@ -30,34 +41,52 @@ class ConfirmarCorreoController extends Controller
            
             $token = $registro->token;
             $aut = new JWTController();
-            /*
-            try{
+            
                  //DECODIFICAMOS EL TOKEN PARA OBTENER LOS DATOS
-                 $tokenDecode = $aut->decodeTokenActivarCuenta("9999999" . $token);
+                $tokenDecode = $aut->decodeTokenRegistrosPendientes("9999999" . $token);
+
                  //OBTENEMOS LOS DATOS NECESARIOS
                  $nombreFraccionamiento = $tokenDecode->nombre_fraccionamiento;
                  $nombreUsuario = $tokenDecode->nombre;
                  $apellidosUsuario =$tokenDecode->apellidos;
-                 $correoUsuario =$tokenDecode->correo;
+                 $rolUsuario =$tokenDecode->rol;
+                 $tokenExpired = $tokenDecode->exp;
+
+                 //!VERIFICAMOS SI TOKEN EXPIRED
+                 if (isset($tokenExpired) && time() > $tokenExpired) {
+                    $registro->expired = true;
+                }else{
+                    $registro->expired = false;
+                }
+
+                $registro->exp = $tokenDecode->exp;
+                $registro->iat =$tokenDecode->iat;
+
+                 //$correoUsuario =$tokenDecode->correo;
                  //MODIFICAMOS EL OBJETO REGISTRO
                  //LE AGREGAMOS ATRIBUTOS
- 
                  $registro->nombre = $nombreUsuario;
                  $registro->apellidos =$apellidosUsuario;
-                 $registro->correo =$correoUsuario;
                  $registro->fraccionamiento = $nombreFraccionamiento;
+                 $registro->rol = $rolUsuario;
+                 //LE ELIMINAMOS ATRIBUTOS
+                 //$registro->forget()->token;
 
                 return $registro;
-
-
-            }catch(\Exception $e){
-
-            }*/
-            $registro->token1 = $token;
-            return $registro;
+        });
+        $registros = $registros->reject(function ($item, $key) use ($nombreFraccionamiento) {
+            return ($item->fraccionamiento != $nombreFraccionamiento || $item->rol == 'ADMIN FRACCIONAMIENTO'); 
         });
 
-        return $registros;
+    }catch(\Exception $e){
+        $menaje->icon = "error";
+        $menaje->title = $e->getMessage();
+        return response()->json($menaje,500);
+    }
+        $menaje->icon = "success";
+        $menaje->title = "";
+        $menaje->body = $registros;
+        return response()->json($menaje,200);
     }
 
     public function checkTokenRegistroFraccionamiento(Request $request)
