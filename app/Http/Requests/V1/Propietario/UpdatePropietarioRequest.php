@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UpdatePropietarioRequest extends FormRequest
@@ -46,35 +47,37 @@ class UpdatePropietarioRequest extends FormRequest
     {
         $method = $this->getMethod();
 
-        $fracc = fraccionamiento::pluck('id')->toArray();
+        $propietario = $this->route('propietario');
+
+        $id = $propietario->id;
 
         if ($method == 'PUT') {
             return [
                 'nombre' => ['required', 'max:100'],
                 'apellidos' => ['required', 'max:100'],
-                'correo' => ['required', 'max:40'],
-                'celular' => ['required', 'max:20'],
-                'celularAlt' => ['required', 'max:20'],
-                'telefonoFijo' => ['required', 'max:20'],
+                'correo' => ['required', 'max:40', Rule::unique('propietarios', 'correo')->ignore($id)],
+                'celular' => ['required', 'max:20', Rule::unique('propietarios', 'celular')->ignore($id)],
+                'celularAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'celular')->ignore($id)],
+                'telefonoFijo' => ['required', 'max:20', Rule::unique('propietarios', 'telefono_fijo')->ignore($id)],
                 'archivoIdentificacion' => ['sometimes', 'file'],
                 'isInquilino' => ['required', 'boolean'],
-                'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
-                'claveInterfon' => ['required', 'max:20'],
-                'claveInterfonAlt' => ['required', 'max:20']
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
+                'claveInterfon' => ['required', 'max:20', Rule::unique('propietarios', 'clave_interfon')->ignore($id), Rule::unique('propietarios', 'clave_interfon_alt')->ignore($id)],
+                'claveInterfonAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'clave_interfon'), Rule::unique('propietarios', 'clave_interfon_alt')]
             ];
         } else if ($method == 'PATCH') {
             return [
-                'nombre' => ['sometimes', 'required', 'max:100'],
-                'apellidos' => ['sometimes', 'required', 'max:100'],
-                'correo' => ['sometimes', 'required', 'max:40'],
-                'celular' => ['sometimes', 'required', 'max:20'],
-                'celularAlt' => ['sometimes', 'required', 'max:20'],
-                'telefonoFijo' => ['sometimes', 'required', 'max:20'],
-                'archivoIdentificacion' => ['sometimes', 'required', 'file'],
-                'isInquilino' => ['sometimes', 'required', 'boolean'],
-                'fraccionamientoId' => ['sometimes', 'required', 'integer', Rule::in($fracc)],
-                'claveInterfon' => ['sometimes', 'required', 'max:20'],
-                'claveInterfonAlt' => ['sometimes', 'required', 'max:20']
+                'nombre' => ['sometimes', 'max:100'],
+                'apellidos' => ['sometimes', 'max:100'],
+                'correo' => ['sometimes', 'max:40', Rule::unique('propietarios', 'correo')->ignore($id)],
+                'celular' => ['sometimes', 'max:20', Rule::unique('propietarios', 'celular')->ignore($id)],
+                'celularAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'celular')->ignore($id)],
+                'telefonoFijo' => ['sometimes', 'max:20', Rule::unique('propietarios', 'telefono_fijo')->ignore($id)],
+                'archivoIdentificacion' => ['sometimes', 'file'],
+                'isInquilino' => ['sometimes', 'boolean'],
+                'fraccionamientoId' => ['sometimes', 'integer', 'exists:fraccionamientos,id'],
+                'claveInterfon' => ['sometimes', 'max:20', Rule::unique('propietarios', 'clave_interfon')->ignore($id), Rule::unique('propietarios', 'clave_interfon_alt')->ignore($id)],
+                'claveInterfonAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'clave_interfon'), Rule::unique('propietarios', 'clave_interfon_alt')]
             ];
         }
     }

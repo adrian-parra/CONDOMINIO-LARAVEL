@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('proveedors', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 100);
-            $table->string('rfc', 13);
+            $table->string('rfc', 13)->unique();
             $table->string('nombre_contacto', 80);
             $table->string('correo_contacto', 40);
             $table->string('notas', 200);

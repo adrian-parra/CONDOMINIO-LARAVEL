@@ -48,12 +48,12 @@ class StoreProveedorRequest extends FormRequest
 
         return [
             'nombre' => ['required', 'max:100'],
-            'rfc' => ['required', 'max:13'],
+            'rfc' => ['required', 'max:13', Rule::unique('proveedors', 'rfc')],
             'nombreContacto' => ['required', 'max:80'],
             'correoContacto' => ['required', 'email', 'max:40'],
             'notas' => ['required', 'max:200'],
             'metodoDePagoId' => ['required', 'integer', Rule::in([0, 1])],
-            'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
+            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
         ];
     }
 

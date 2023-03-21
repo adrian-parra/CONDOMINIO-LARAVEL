@@ -57,8 +57,8 @@ class UpdateEgresoRequest extends FormRequest
                 'estatusEgresoId' => ['required', Rule::in([0, 1, 2, 3, 4, 5, 6, 7])],
                 'montoTotal' => ['required', 'numeric'],
                 'archivoComprobante' => ['required', 'file'],
-                'tipoEgreso' => ['required', 'integer', Rule::in($tipoEgreso)],
-                'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)]
+                'tipoEgreso' => ['required', 'integer', 'exists:tipo_de_egresos,id'],
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id']
             ];
         }
 
@@ -68,8 +68,8 @@ class UpdateEgresoRequest extends FormRequest
             'estatusEgresoId' => ['sometimes', 'required', Rule::in([0, 1, 2, 3, 4, 5, 6, 7])],
             'montoTotal' => ['sometimes', 'required', 'numeric'],
             'archivoComprobante' => ['sometimes', 'required', 'file'],
-            'tipoEgreso' => ['sometimes', 'required', 'integer', Rule::in($tipoEgreso)],
-            'fraccionamientoId' => ['sometimes', 'required', 'integer', Rule::in($fracc)]
+            'tipoEgreso' => ['sometimes', 'required', 'integer', 'exists:tipo_de_egresos,id'],
+            'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id']
         ];
     }
 

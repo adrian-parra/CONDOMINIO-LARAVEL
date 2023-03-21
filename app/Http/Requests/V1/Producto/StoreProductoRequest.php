@@ -45,14 +45,11 @@ class StoreProductoRequest extends FormRequest
      */
     public function rules()
     {
-        $fracc = fraccionamiento::pluck('id')->toArray();
-        $proveedores = Proveedor::pluck('id')->toArray();
-
         return [
             'descripcion' => ['required', 'max:100'],
-            'identificadorInterno' => ['required', 'max:20'],
-            'proveedorId' => ['required', 'integer', Rule::in($proveedores)],
-            'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
+            'identificadorInterno' => ['required', 'max:20', Rule::unique('productos', 'identificador_interno')],
+            'proveedorId' => ['required', 'integer', 'exists:proveedors,id'],
+            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
         ];
     }
 

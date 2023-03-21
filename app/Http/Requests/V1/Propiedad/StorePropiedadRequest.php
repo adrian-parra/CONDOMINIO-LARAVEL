@@ -45,23 +45,18 @@ class StorePropiedadRequest extends FormRequest
      */
     public function rules()
     {
-
-        $fracc = fraccionamiento::pluck('id')->toArray();
-        $propietario = Propietario::where('is_inquilino', false)->pluck('id')->toArray();
-
-        $inquilino = Propietario::where('is_inquilino', true)->pluck('id')->toArray();
-
         return [
             'tipoPropiedadId' => ['required', 'integer', Rule::in([0, 1, 2, 3])],
-            'archivoPredial' => ['required', 'file'],
-            'claveCatastral' =>  ['required', 'max:40'],
+            'archivoPredial' => ['sometimes', 'file'],
+            'claveCatastral' =>  ['required', 'max:40', Rule::unique('propiedads', 'clave_catastral')],
             'descripcion' => ['required'],
             'superficie' => ['required', 'numeric'],
             'balance' => ['sometimes', 'numeric'],
-            'estatusId' => ['required', Rule::in([0, 1, 2, 3])],
-            'propietarioId' => ['required', 'integer', Rule::in($propietario)],
-            'inquilinoId' => ['sometimes', 'integer', Rule::in($inquilino)],
-            'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
+            'estatus' => ['sometimes', 'boolean'],
+            'lote' => ['required', 'max:5'],
+            'propietarioId' => ['required', 'integer', 'exists:propietarios,id'],
+            'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'clave_catastral')],
+            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
         ];
     }
 

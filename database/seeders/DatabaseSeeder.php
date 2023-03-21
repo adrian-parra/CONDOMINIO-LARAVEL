@@ -28,13 +28,13 @@ class DatabaseSeeder extends Seeder
             FraccionamientoSeeder::class,
         );
 
-        $this->call(
-            PropietarioSeeder::class
-        );
+        // $this->call(
+        //     PropietarioSeeder::class
+        // );
 
-        $this->call(
-            PropiedadSeeder::class
-        );
+        // $this->call(
+        //     PropiedadSeeder::class
+        // );
 
         $this->call(
             ProveedorSeeder::class

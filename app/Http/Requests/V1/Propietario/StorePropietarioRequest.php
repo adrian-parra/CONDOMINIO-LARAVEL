@@ -45,20 +45,18 @@ class StorePropietarioRequest extends FormRequest
     public function rules()
     {
 
-        $fracc = fraccionamiento::pluck('id')->toArray();
-
         return [
             'nombre' => ['required', 'max:100'],
             'apellidos' => ['required', 'max:100'],
-            'correo' => ['required', 'max:40'],
-            'celular' => ['required', 'max:20'],
-            'celularAlt' => ['required', 'max:20'],
-            'telefonoFijo' => ['required', 'max:20'],
-            'archivoIdentificacion' => ['required', 'file'],
+            'correo' => ['required', 'max:40', Rule::unique('propietarios', 'correo')],
+            'celular' => ['required', 'max:20', Rule::unique('propietarios', 'celular')],
+            'celularAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'celular')],
+            'telefonoFijo' => ['required', 'max:20', Rule::unique('propietarios', 'telefono_fijo')],
+            'archivoIdentificacion' => ['sometimes', 'file'],
             'isInquilino' => ['required', 'boolean'],
-            'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
-            'claveInterfon' => ['required', 'max:20'],
-            'claveInterfonAlt' => ['required', 'max:20']
+            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
+            'claveInterfon' => ['required', 'max:20', Rule::unique('propietarios', 'clave_interfon'), Rule::unique('propietarios', 'clave_interfon_alt')],
+            'claveInterfonAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'clave_interfon'), Rule::unique('propietarios', 'clave_interfon_alt')]
         ];
     }
 

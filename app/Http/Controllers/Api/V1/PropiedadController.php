@@ -31,7 +31,7 @@ class PropiedadController extends Controller
 
         $mensaje = new mensaje();
 
-        $mensaje->title = "Propiedades conseguidas exitosamente";
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = new PropiedadCollection(
             $propiedades
@@ -109,10 +109,8 @@ class PropiedadController extends Controller
 
         // Obtener el archivo cargado del request
         $file = $request->file('archivoPredial');
-        Log::debug($propiedad);
 
         $data = $request->all();
-        Log::info($data);
 
         // Verificar si se cargó un archivo
         if ($file) {
@@ -124,7 +122,6 @@ class PropiedadController extends Controller
         $mensaje = new mensaje();
 
         $propiedad->update($data);
-        Log::info($propiedad);
 
         $mensaje->title = "Propiedad actualizada exitosamente";
         $mensaje->icon = "success";

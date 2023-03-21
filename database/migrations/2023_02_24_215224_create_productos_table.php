@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
             $table->string('descripcion', 100);
-            $table->string('identificador_interno', 20);
+            $table->string('identificador_interno', 20)->unique();
             $table->unsignedBigInteger('proveedor_id');
             $table->unsignedBigInteger('fraccionamiento_id');
             $table->timestamps();

@@ -9,6 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UpdateProductoRequest extends FormRequest
@@ -46,24 +47,24 @@ class UpdateProductoRequest extends FormRequest
     public function rules()
     {
         $method = $this->method();
+        $producto = $this->route('producto');
 
-        $fracc = fraccionamiento::pluck('id')->toArray();
-        $proveedores = Proveedor::pluck('id')->toArray();
+        $id = $producto->id;
 
         if ($method == 'PUT') {
             return [
                 'descripcion' => ['required', 'max:100'],
-                'identificadorInterno' => ['required', 'max:20'],
-                'proveedorId' => ['required', 'integer', Rule::in($proveedores)],
-                'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
+                'identificadorInterno' => ['required', 'max:20', Rule::unique('productos', 'identificador_interno')->ignore($id)],
+                'proveedorId' => ['required', 'integer', 'exists:proveedors,id'],
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
             ];
         }
 
         return [
             'descripcion' => ['sometimes', 'required', 'max:100'],
-            'identificadorInterno' => ['sometimes', 'required', 'max:20'],
-            'proveedorId' => ['sometimes', 'required', 'integer', Rule::in($proveedores)],
-            'fraccionamientoId' => ['sometimes', 'required', 'integer', Rule::in($fracc)],
+            'identificadorInterno' => ['sometimes', 'required', 'max:20', Rule::unique('productos', 'identificador_interno')->ignore($id)],
+            'proveedorId' => ['sometimes', 'required', 'integer', 'exists:proveedors,id'],
+            'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id'],
         ];
     }
 

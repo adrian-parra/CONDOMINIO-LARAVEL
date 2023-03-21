@@ -58,9 +58,9 @@ class UpdateDetalleEgresoRequest extends FormRequest
 
         if ($method == 'PUT') {
             return [
-                'egresoId' => ['required', 'integer', Rule::in($egreso)],
-                'productoId' => ['required', 'integer', Rule::in($producto)],
-                'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
+                'egresoId' => ['required', 'integer', 'exists:egresos,id'],
+                'productoId' => ['required', 'integer', 'exists:productos,id'],
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
                 'descripcion' => ['required', 'max:100'],
                 'cantidad' => ['required', 'integer'],
                 'precioUnitario' => ['required', 'numeric']
@@ -68,9 +68,9 @@ class UpdateDetalleEgresoRequest extends FormRequest
         }
 
         return [
-            'egresoId' => ['required', 'integer', Rule::in($egreso)],
-            'productoId' => ['required', 'integer', Rule::in($producto)],
-            'fraccionamientoId' => ['sometimes', 'required', 'integer', Rule::in($fracc)],
+            'egresoId' => ['required', 'integer', 'exists:egresos,id'],
+            'productoId' => ['required', 'integer', 'exists:productos,id'],
+            'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id'],
             'descripcion' => ['sometimes', 'required', 'max:100'],
             'cantidad' => ['sometimes', 'required', 'integer'],
             'precioUnitario' => ['sometimes', 'required', 'numeric']

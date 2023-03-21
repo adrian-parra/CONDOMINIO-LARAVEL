@@ -10,6 +10,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UpdatePropiedadRequest extends FormRequest
@@ -48,36 +49,35 @@ class UpdatePropiedadRequest extends FormRequest
     {
         $method = $this->getMethod();
 
-        $fracc = fraccionamiento::pluck('id')->toArray();
-        $propietario = Propietario::where('is_inquilino', false)->pluck('id')->toArray();
-
-        $inquilino = Propietario::where('is_inquilino', true)->pluck('id')->toArray();
+        $id = $this->route('propiedade');
 
         if ($method == 'PUT') {
             return [
-                'tipoPropiedadId' => ['required', 'numeric', Rule::in([0, 1, 2, 3])],
+                'tipoPropiedadId' => ['required', 'integer', Rule::in([0, 1, 2, 3])],
                 'archivoPredial' => ['sometimes', 'file'],
-                'claveCatastral' =>  ['required', 'max:40'],
+                'claveCatastral' =>  ['required', 'max:40', Rule::unique('propiedads', 'clave_catastral')->ignore($id)],
                 'descripcion' => ['required'],
                 'superficie' => ['required', 'numeric'],
-                'balance' => ['required', 'numeric'],
-                'estatusId' => ['required', Rule::in([0, 1, 2, 3])],
-                'propietarioId' => ['required', 'numeric', Rule::in($propietario)],
-                'inquilinoId' => ['sometimes', 'numeric', Rule::in($inquilino)],
-                'fraccionamientoId' => ['required', 'numeric', Rule::in($fracc)],
+                'balance' => ['sometimes', 'numeric'],
+                'estatus' => ['sometimes', 'boolean'],
+                'lote' => ['required', 'max:5'],
+                'propietarioId' => ['required', 'integer', 'exists:propietarios,id'],
+                'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'clave_catastral')->ignore($id)],
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
             ];
         } else if ($method == 'PATCH') {
             return [
-                'tipoPropiedadId' => ['sometimes', 'required', 'numeric', Rule::in([0, 1, 2, 3])],
-                'archivoPredial' => ['sometimes', 'required', 'file'],
-                'claveCatastral' =>  ['sometimes', 'required', 'max:40'],
+                'tipoPropiedadId' => ['sometimes', 'integer', Rule::in([0, 1, 2, 3])],
+                'archivoPredial' => ['sometimes', 'file'],
+                'claveCatastral' =>  ['sometimes', 'max:40', Rule::unique('propiedads', 'clave_catastral')->ignore($id)],
                 'descripcion' => ['sometimes'],
-                'superficie' => ['sometimes', 'required', 'numeric'],
-                'balance' => ['sometimes', 'required', 'numeric'],
-                'estatusId' => ['sometimes', 'required', Rule::in([0, 1, 2, 3])],
-                'propietarioId' => ['sometimes', 'required', 'numeric', Rule::in($propietario)],
-                'inquilinoId' => ['sometimes', 'required', 'numeric', Rule::in($inquilino)],
-                'fraccionamientoId' => ['sometimes', 'required', 'numeric', Rule::in($fracc)],
+                'superficie' => ['sometimes', 'numeric'],
+                'balance' => ['sometimes', 'numeric'],
+                'estatus' => ['sometimes', 'boolean'],
+                'lote' => ['sometimes', 'max:5'],
+                'propietarioId' => ['sometimes', 'integer', 'exists:propietarios,id'],
+                'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'clave_catastral')->ignore($id)],
+                'fraccionamientoId' => ['sometimes', 'integer', 'exists:fraccionamientos,id'],
             ];
         }
     }
@@ -88,7 +88,6 @@ class UpdatePropiedadRequest extends FormRequest
 
         $dataToMerge['tipo_propiedad_id'] = $this->tipoPropiedadId ?? null;
         $dataToMerge['clave_catastral'] = $this->claveCatastral ?? null;
-        $dataToMerge['estatus_id'] = $this->estatusId ?? null;
         $dataToMerge['propietario_id'] = $this->propietarioId ?? null;
         $dataToMerge['inquilino_id'] = $this->inquilinoId ?? null;
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;

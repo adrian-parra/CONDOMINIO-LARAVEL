@@ -14,6 +14,7 @@ class PropiedadFilter extends ApiFilter
         'balance' => ['eq', 'lt', 'lte', 'gt', 'gte'],
         'estatusId' => ['eq', 'ne'],
         'propietarioId' => ['eq'],
+        'lote' => ['eq'],
         'inquilinoId' => ['eq'],
         'fraccionamientoId' => ['eq'],
     ];

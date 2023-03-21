@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UpdateProveedorRequest extends FormRequest
@@ -46,28 +47,28 @@ class UpdateProveedorRequest extends FormRequest
     {
         $method = $this->method();
 
-        $fracc = fraccionamiento::pluck('id')->toArray();
+        $id = $this->route('proveedore');
 
         if ($method == 'PUT') {
             return [
                 'nombre' => ['required', 'max:100'],
-                'rfc' => ['required', 'max:13'],
+                'rfc' => ['required', 'max:13', Rule::unique('proveedors', 'rfc')->ignore($id)],
                 'nombreContacto' => ['required', 'max:80'],
                 'correoContacto' => ['required', 'max:40'],
                 'notas' => ['required', 'max:200'],
                 'metodoDePagoId' => ['required', 'integer', Rule::in([0, 1])],
-                'fraccionamientoId' => ['required', 'integer', Rule::in($fracc)],
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
             ];
         }
 
         return [
             'nombre' => ['sometimes', 'required', 'max:100'],
-            'rfc' => ['sometimes', 'required', 'max:13'],
+            'rfc' => ['sometimes', 'required', 'max:13', Rule::unique('proveedors', 'rfc')->ignore($id)],
             'nombreContacto' => ['sometimes', 'required', 'max:80'],
             'correoContacto' => ['sometimes', 'required', 'max:40'],
             'notas' => ['sometimes', 'required', 'max:200'],
             'metodoDePagoId' => ['sometimes', 'required', 'integer', Rule::in([0, 1])],
-            'fraccionamientoId' => ['sometimes', 'required', 'integer', Rule::in($fracc)],
+            'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id'],
         ];
     }
 

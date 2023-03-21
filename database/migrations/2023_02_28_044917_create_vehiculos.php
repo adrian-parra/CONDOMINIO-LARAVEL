@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('marca');
             $table->string('path_tarjeta_circulacion')->nullable()->comment("RUTA DEL ARCHIVO DE TARGETA DE CIRCULACION");
             $table->string('color');
-            $table->string('placas');
+            $table->string('placas')->unique();
             $table->boolean('estatus')->default(true);
 
             $table->timestamps();

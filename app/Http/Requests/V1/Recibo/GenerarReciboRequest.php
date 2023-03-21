@@ -44,12 +44,8 @@ class GenerarReciboRequest extends FormRequest
      */
     public function rules()
     {
-        $configuraciones = ConfigurarPagos::pluck('id')->toArray();
-
-        //TODO: PUEDE LLEGAR A ELEGIR QUE FECHA INICIAR LA FACTUARCIÓN
-
         return [
-            'configuracionId' => ['required', 'integer', Rule::in($configuraciones)],
+            'configuracionId' => ['required', 'integer', 'exists:configurar_pagos,id'],
             'plazoPorGenerar' => ['sometimes', 'integer'],
             'iniciarDesde' => ['sometimes', 'date'],
             'year' => ['sometimes', 'date_format:Y']
