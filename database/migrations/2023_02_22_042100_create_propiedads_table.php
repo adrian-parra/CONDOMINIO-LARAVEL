@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('tipo_propiedad_id')->nullable();
             $table->string('clave_catastral', 40)->unique();
-            $table->string('predial_url');
+            $table->string('predial_url')->nullable();
             $table->string('descripcion');
             $table->float('superficie');
             $table->float('balance')->default(0);
@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('lote', 5);
 
             $table->timestamps();
+
+            $table->unique(['fraccionamiento_id', 'lote']);
 
             $table->foreign('propietario_id')->references('id')
                 ->on('propietarios')->onDelete('set null');

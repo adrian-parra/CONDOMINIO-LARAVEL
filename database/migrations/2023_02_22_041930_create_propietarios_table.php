@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('celular', 20)->unique();
             $table->string('celular_alt', 20)->nullable();
             $table->string('telefono_fijo', 20)->unique();
-            $table->string('identificacion_url');
+            $table->string('identificacion_url')->nullable();
             $table->boolean('is_inquilino');
 
             $table->unsignedBigInteger('fraccionamiento_id');

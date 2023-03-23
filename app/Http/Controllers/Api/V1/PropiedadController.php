@@ -54,19 +54,13 @@ class PropiedadController extends Controller
         // Obtener el archivo cargado del request
         $file = $request->file('archivoPredial');
 
-        // Verificar si se cargó un archivo
-        if (!$file) {
-            $mensaje->title = "No se ha cargado un archivo";
-            $mensaje->icon = "error";
-
-            return response()->json($mensaje, 422);
-        }
-
-        $almacen = new AlmacenarArchivo($file, 'private/predial');
-
         $data = $request->all();
 
-        $data['predial_url'] = $almacen->storeFile();
+        if ($file) {
+            $almacen = new AlmacenarArchivo($file, 'private/predial');
+
+            $data['predial_url'] = $almacen->storeFile();
+        }
 
         $propiedad  = Propiedad::create($data);
 

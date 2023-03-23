@@ -21,6 +21,7 @@ class Propiedad extends Model
         'propietario_id',
         'inquilino_id',
         'fraccionamiento_id',
+        'lote'
     ];
 
     public function propietario()

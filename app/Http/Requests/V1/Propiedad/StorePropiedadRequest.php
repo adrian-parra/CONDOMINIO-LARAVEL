@@ -5,6 +5,7 @@ namespace App\Http\Requests\V1\Propiedad;
 use App\Models\fraccionamiento;
 use App\Models\mensaje;
 use App\Models\Propietario;
+use App\Rules\UniqueTogether;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -45,6 +46,9 @@ class StorePropiedadRequest extends FormRequest
      */
     public function rules()
     {
+
+        $uniqueTogether = new UniqueTogether('propiedads', ['fraccionamiento_id', 'lote']);
+
         return [
             'tipoPropiedadId' => ['required', 'integer', Rule::in([0, 1, 2, 3])],
             'archivoPredial' => ['sometimes', 'file'],
@@ -53,10 +57,10 @@ class StorePropiedadRequest extends FormRequest
             'superficie' => ['required', 'numeric'],
             'balance' => ['sometimes', 'numeric'],
             'estatus' => ['sometimes', 'boolean'],
-            'lote' => ['required', 'max:5'],
+            'lote' => ['required', 'max:5', new UniqueTogether('propiedads', ['fraccionamiento_id', 'lote'])],
             'propietarioId' => ['required', 'integer', 'exists:propietarios,id'],
-            'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'clave_catastral')],
-            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
+            'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'inquilino_id')],
+            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id', new UniqueTogether('propiedads', ['fraccionamiento_id', 'lote'])],
         ];
     }
 
@@ -65,7 +69,6 @@ class StorePropiedadRequest extends FormRequest
         $this->merge([
             'tipo_propiedad_id' => $this->tipoPropiedadId,
             'clave_catastral' => $this->claveCatastral,
-            'estatus_id' => $this->estatusId,
             'propietario_id' => $this->propietarioId,
             'inquilino_id' => $this->inquilinoId,
             'fraccionamiento_id' => $this->fraccionamientoId,
