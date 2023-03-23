@@ -29,6 +29,11 @@ class Propiedad extends Model
         return $this->belongsTo(Propietario::class);
     }
 
+    public function rfdi()
+    {
+        return $this->hasMany(Rfdi::class);
+    }
+
     //Funcion que actualiza el balance de la propiedad al realizar el pago de
     //algún recibo
     public function updateBalance($monto, $status)

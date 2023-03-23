@@ -52,8 +52,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     // Debug Routes
     Route::apiResource('proveedores', ProveedorController::class);
     Route::apiResource('propietarios', PropietarioController::class);
-    Route::apiResource('propiedades', PropiedadController::class);
     Route::apiResource('productos', ProductoController::class);
+
+    //PROPIEDADES
+    Route::get('propiedades/rfdi', [PropiedadController::class, 'getRfdis']);
+    Route::post('propiedades/rfdi', [PropiedadController::class, 'postRfdi']);
+    Route::put('propiedades/rfdi/{id}', [PropiedadController::class, 'putRfdi']);
+    Route::apiResource('propiedades', PropiedadController::class);
 
     Route::get('vehiculo/tipos-de-vehiculos', [VehiculoController::class, 'getTiposVehiculos']);
     Route::apiResource('configurar-pagos', ConfigurarPagosController::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Propiedad;
 
+use App\Http\Resources\V1\Propiedad\Rfdi\RfdiResource;
 use App\Http\Resources\V1\Propietario\PropietarioResource;
 use App\Models\Propietario;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -44,6 +45,7 @@ class PropiedadResource extends JsonResource
             'propietario' => new PropietarioResource($propietario),
             'inquilino' => new PropietarioResource($inquilino),
             'fraccionamientoId' => $this->fraccionamiento_id,
+            'rfdis' => RfdiResource::collection($this->whenLoaded('rfdi')),
         ];
     }
 }
