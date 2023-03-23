@@ -3,14 +3,20 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Filters\V1\PropiedadFilter;
+use App\Filters\V1\RfdiFilter;
 use App\Http\Controllers\Api\Controller;
+use App\Http\Requests\V1\Propiedad\Rfdi\StoreRfdiRequest;
+use App\Http\Requests\V1\Propiedad\Rfdi\UpdateRfdiRequest;
 use App\Http\Requests\V1\Propiedad\SetBalancesPropiedad;
 use App\Http\Requests\V1\Propiedad\StorePropiedadRequest;
 use App\Http\Requests\V1\Propiedad\UpdatePropiedadRequest;
 use App\Http\Resources\V1\Propiedad\PropiedadCollection;
 use App\Http\Resources\V1\Propiedad\PropiedadResource;
+use App\Http\Resources\V1\Propiedad\Rfdi\RfdiCollection;
+use App\Http\Resources\V1\Propiedad\Rfdi\RfdiResource;
 use App\Models\mensaje;
 use App\Models\Propiedad;
+use App\Models\Rfdi;
 use App\Utils\AlmacenarArchivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -28,6 +34,12 @@ class PropiedadController extends Controller
         $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
 
         $propiedades = Propiedad::where($filterItems);
+
+        $incluirRfdis = $request->query('incluirRfdis');
+
+        if($incluirRfdis){
+            $propiedades = $propiedades->with('rfdi');
+        }
 
         $mensaje = new mensaje();
 
@@ -82,6 +94,12 @@ class PropiedadController extends Controller
         $propiedad = Propiedad::find($id);
 
         $mensaje = new mensaje();
+
+        $incluirRfdis = request()->query('incluirRfdis');
+
+        if($incluirRfdis){
+            $propiedad = $propiedad->loadMissing('rfdi');
+        }
 
         $mensaje->title = "Propiedad conseguida exitosamente";
         $mensaje->icon = "success";
@@ -160,6 +178,57 @@ class PropiedadController extends Controller
         $mensaje = new mensaje();
 
         $mensaje->title = "Balances Actualizados Correctamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 200);
+    }
+
+    public function getRfdis(Request $request)
+    {
+        $filter = new RfdiFilter();
+        $filterItems = $filter->transform($request);
+
+        $rfdi = Rfdi::where($filterItems);
+
+        $mensaje = new mensaje();
+
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+        $mensaje->body = new RfdiCollection(
+            $rfdi
+                ->orderByDesc('created_at')
+                ->get()
+        );
+
+        return response()->json($mensaje, 200);
+    }
+
+    public function postRfdi(StoreRfdiRequest $request)
+    {
+        $mensaje = new mensaje();
+
+        $data = $request->all();
+
+        $rfdi  = Rfdi::create($data);
+
+        $mensaje->title = "Rfdi registrada exitosamente";
+        $mensaje->icon = "success";
+        $mensaje->body = new RfdiResource($rfdi);
+
+        return response()->json($mensaje, 201);
+    }
+
+    public function putRfdi(UpdateRfdiRequest $request, $id)
+    {
+        $mensaje = new mensaje();
+
+        $rfdi = Rfdi::where('rfdi', $id)->first();
+
+        $data = $request->all();
+
+        $rfdi->update($data);
+
+        $mensaje->title = "Rfdi actualizada exitosamente";
         $mensaje->icon = "success";
 
         return response()->json($mensaje, 200);
