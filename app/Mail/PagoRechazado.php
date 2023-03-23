@@ -9,10 +9,9 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class confirmarRegistroFraccionamiento extends Mailable
+class PagoRechazado extends Mailable
 {
     use Queueable, SerializesModels;
-
     public $data = [];
 
     /**
@@ -22,14 +21,14 @@ class confirmarRegistroFraccionamiento extends Mailable
      */
     public function __construct($data)
     {
-        //
         $this->data = $data;
     }
+
     public function build()
     {
         return $this->from('condominio@aquipide.com', "LOAL");
-        //->subject($this->data['user']);
     }
+
     /**
      * Get the message envelope.
      *
@@ -38,7 +37,7 @@ class confirmarRegistroFraccionamiento extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'LOAL: Confirmar registro de fraccionamiento',
+            subject: 'LOAL: Pago Rechazado',
         );
     }
 
@@ -50,7 +49,7 @@ class confirmarRegistroFraccionamiento extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mails.confirmar_registro_fraccionamiento'
+            view: 'mails.pagos.pago_rechazado',
         );
     }
 

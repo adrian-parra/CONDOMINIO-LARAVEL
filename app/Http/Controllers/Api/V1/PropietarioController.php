@@ -63,19 +63,13 @@ class PropietarioController extends Controller
         // Obtener el archivo cargado del request
         $file = $request->file('archivoIdentificacion');
 
-        // Verificar si se cargó un archivo
-        if (!$file) {
-            $mensaje->title = "No se ha cargado un archivo";
-            $mensaje->icon = "error";
-
-            return response()->json($mensaje, 400);
-        }
-
-        $almacen = new AlmacenarArchivo($file, 'private/identificacion');
-
         $data = $request->all();
 
-        $data['identificacion_url'] = $almacen->storeFile();
+        if ($file) {
+            $almacen = new AlmacenarArchivo($file, 'private/identificacion');
+
+            $data['identificacion_url'] = $almacen->storeFile();
+        }
 
         $mensaje->title = "Propietario registrado exitosamente";
         $mensaje->icon = "success";

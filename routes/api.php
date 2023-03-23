@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\ProductoController;
 use App\Http\Controllers\Api\V1\PropiedadController;
 use App\Http\Controllers\Api\V1\ProveedorController;
 use App\Http\Controllers\Api\V1\ReciboController;
+use App\Http\Controllers\Api\V1\RecibosComprobanteController;
 use App\Http\Controllers\Api\V1\TipoDeEgresoController;
 use App\Http\Controllers\Api\V1\UsuarioController;
 use App\Http\Controllers\Api\V1\VehiculoController;
@@ -73,6 +74,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
         'generarRecibos',
         [ReciboController::class, 'generar_recibos']
     );
+
+    Route::apiResource('pagos', RecibosComprobanteController::class);
+
     Route::post(
         'balances/generales',
         [PropiedadController::class, 'set_balances_generales']

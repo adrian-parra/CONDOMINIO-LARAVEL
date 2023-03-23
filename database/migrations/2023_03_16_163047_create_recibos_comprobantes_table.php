@@ -13,19 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recibos', function (Blueprint $table) {
+        Schema::create('recibos_comprobantes', function (Blueprint $table) {
             $table->id();
+            $table->decimal('monto');
+            $table->string('comprobante_url');
+            $table->enum('estatus', ['PENDIENTE', 'FINALIZADO', 'RECHAZADO'])->default('PENDIENTE');
+            $table->string('razon_rechazo', 200)->nullable();
+            $table->enum('tipo_pago', ['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA']);
             $table->unsignedBigInteger('fraccionamiento_id');
             $table->unsignedBigInteger('propiedad_id');
-            $table->unsignedBigInteger('configuracion_id');
-            $table->date('fecha_pago')->nullable()->default(null);
-            $table->date('fecha_vencimiento');
-            $table->decimal('monto');
-            $table->decimal('monto_pagado')->default(0);
-            $table->unsignedDecimal('monto_penalizacion')->nullable()->default(null);
-            $table->unsignedDecimal('monto_descuento')->nullable()->default(null);
-            $table->enum("estatus", ["PAGADO", "VENCIDO", "POR_PAGAR"]);
-            $table->timestamps();
+            $table->unsignedBigInteger('recibo_id');
 
             $table->foreign('fraccionamiento_id')
                 ->references('id')
@@ -35,9 +32,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('propiedads');
 
-            $table->foreign('configuracion_id')
-                ->references('id')
-                ->on('configurar_pagos');
+            $table->timestamps();
         });
     }
 
@@ -48,6 +43,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recibos');
+        Schema::dropIfExists('recibos_comprobantes');
     }
 };

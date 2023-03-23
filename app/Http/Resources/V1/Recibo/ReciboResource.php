@@ -22,7 +22,7 @@ class ReciboResource extends JsonResource
             'id' => $this->id,
             'fechaPago' => $this->fecha_pago,
             'fechaVencimiento' => $this->fecha_vencimiento,
-            'monto' => $this->monto,
+            'monto' => $this->monto - $this->monto_pagado,
             'montoPenalizacion' => $this->monto_penalizacion,
             'montoDescuento' => $this->monto_descuento,
             'estatus' => $this->estatus,

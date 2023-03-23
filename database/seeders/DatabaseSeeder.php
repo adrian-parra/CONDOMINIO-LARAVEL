@@ -36,25 +36,25 @@ class DatabaseSeeder extends Seeder
         //     PropiedadSeeder::class
         // );
 
-        $this->call(
-            ProveedorSeeder::class
-        );
+        // $this->call(
+        //     ProveedorSeeder::class
+        // );
 
-        $this->call(
-            ProductoSeeder::class
-        );
+        // $this->call(
+        //     ProductoSeeder::class
+        // );
 
-        $this->call(
-            TipoDeEgresoSeeder::class
-        );
+        // $this->call(
+        //     TipoDeEgresoSeeder::class
+        // );
 
-        $this->call(
-            EgresoSeeder::class
-        );
+        // $this->call(
+        //     EgresoSeeder::class
+        // );
 
-        $this->call(
-            DetalleEgresoSeeder::class
-        );
+        // $this->call(
+        //     DetalleEgresoSeeder::class
+        // );
 
         $this->call(
             EstadosSeeder::class

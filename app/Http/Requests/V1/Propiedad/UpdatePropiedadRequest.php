@@ -6,6 +6,7 @@ use App\Models\fraccionamiento;
 use App\Models\mensaje;
 use App\Models\Propiedad;
 use App\Models\Propietario;
+use App\Rules\UniqueTogether;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -51,6 +52,8 @@ class UpdatePropiedadRequest extends FormRequest
 
         $id = $this->route('propiedade');
 
+        $uniqueTogether = new UniqueTogether('propiedads', ['fraccionamiento_id', 'lote'], $id);
+
         if ($method == 'PUT') {
             return [
                 'tipoPropiedadId' => ['required', 'integer', Rule::in([0, 1, 2, 3])],
@@ -60,10 +63,10 @@ class UpdatePropiedadRequest extends FormRequest
                 'superficie' => ['required', 'numeric'],
                 'balance' => ['sometimes', 'numeric'],
                 'estatus' => ['sometimes', 'boolean'],
-                'lote' => ['required', 'max:5'],
+                'lote' => ['required', 'max:5', $uniqueTogether],
                 'propietarioId' => ['required', 'integer', 'exists:propietarios,id'],
-                'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'clave_catastral')->ignore($id)],
-                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
+                'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'inquilino_id')->ignore($id)],
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id', $uniqueTogether],
             ];
         } else if ($method == 'PATCH') {
             return [
@@ -74,10 +77,8 @@ class UpdatePropiedadRequest extends FormRequest
                 'superficie' => ['sometimes', 'numeric'],
                 'balance' => ['sometimes', 'numeric'],
                 'estatus' => ['sometimes', 'boolean'],
-                'lote' => ['sometimes', 'max:5'],
                 'propietarioId' => ['sometimes', 'integer', 'exists:propietarios,id'],
                 'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'clave_catastral')->ignore($id)],
-                'fraccionamientoId' => ['sometimes', 'integer', 'exists:fraccionamientos,id'],
             ];
         }
     }
