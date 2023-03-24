@@ -16,7 +16,7 @@ class Rfdi extends Model
         'fraccionamiento_id'
     ];
 
-    protected $primaryKey = 'rfdi';
+    // protected $primaryKey = 'rfdi';
 
     public function propiedad()
     {

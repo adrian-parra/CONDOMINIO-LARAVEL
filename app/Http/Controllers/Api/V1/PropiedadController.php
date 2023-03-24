@@ -215,7 +215,10 @@ class PropiedadController extends Controller
 
         $data = $request->all();
 
-        $rfdi->update($data);
+        $rfdi->propiedad_id = $data["propiedad_id"];
+        $rfdi->tipo = $data["tipo"];
+
+        $rfdi->save();
 
         $mensaje->title = "Rfdi actualizada exitosamente";
         $mensaje->icon = "success";
