@@ -118,10 +118,7 @@ class RecibosComprobanteController extends Controller
 
             $recibo = Recibo::findOrFail($pago->recibo_id);
 
-            $recibo->comprobarPago($pago);
-
-            //Se actualiza el balance de la propiedad
-            $propiedad->updateBalance($recibo->monto, $recibo->estatus);
+            $recibo->comprobarPago($pago->monto);
         }
 
         //En caso de ser rechazado

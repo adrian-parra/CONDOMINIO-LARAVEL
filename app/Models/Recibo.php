@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Recibo extends Model
 {
@@ -20,31 +21,57 @@ class Recibo extends Model
         'estatus'
     ];
 
-
-    public function comprobarPago($pago)
+    //this = recibo
+    public function comprobarPago($cantidad_pagada)
     {
-        if ($pago->monto < $this->monto) {
-            $this->monto_pagado = $pago->monto;
+        //Se inicializa la variable que contendra el total que se debe
+        //pagar en el recibo
+        $monto_a_pagar = $this->getMontoAPagar();
+
+        //Primero comprubea si la cantidad pagada es mayor que monto
+        //Sino solo se agrega la cantidad pagada a monto_pagado y se
+        //regresa
+        if ($cantidad_pagada < $monto_a_pagar) {
+            $this->monto_pagado = $cantidad_pagada;
             $this->save();
             return;
         }
 
-        $fecha_actual = date('Y-m-d');
+        // $fecha_actual = date('Y-m-d');
+        $fecha_actual = $this->fecha_vencimiento;
 
-        if ($pago->monto < $this->monto) {
-            $siguiente_recibo = Recibo::where('fecha_vencimiento', '>', $fecha_actual)->first();
+        //compara si la cantidad a pagar es menor que la cantidad pagada
+        //para asi seguir con el siguiente recibo
+        if ($monto_a_pagar < $cantidad_pagada) {
+            $siguiente_recibo = Recibo::where('fecha_vencimiento', '>', $fecha_actual)
+                ->where('propiedad_id', $this->propiedad_id)
+                ->where('configuracion_id', $this->configuracion_id)
+                ->first();
 
+            //Se reduce el pago del recibo que ya se confirmo
+            $cantidad_pagada = $cantidad_pagada - $monto_a_pagar;
+
+            //Si no hay siguiente recibo procede a guardar
+            //el saldo que sobra en la cacilla balance a favor.
             if (!$siguiente_recibo) {
-                //que hago wee
+                $propiedad = Propiedad::find($this->propiedad_id);
+                $propiedad->balance_favor = $cantidad_pagada;
+                $propiedad->save();
+            } else {
+                //Se hace recursividad.
+                $siguiente_recibo->comprobarPago($cantidad_pagada);
             }
-
-            $siguiente_recibo->monto_pagado = $pago->monto - $this->monto;
-            $siguiente_recibo->save();
         }
 
         //Se establece el recibo seleccionado como pagado.
         $this->estatus = 'PAGADO';
-        $this->fecha_pago = $fecha_actual;
+        $this->fecha_pago = date('Y-m-d');
+        $this->monto_pagado = $this->monto;
         $this->save();
+    }
+
+    public function getMontoAPagar()
+    {
+        return $this->monto - $this->monto_pagado;
     }
 }
