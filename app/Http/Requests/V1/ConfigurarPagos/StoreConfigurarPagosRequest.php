@@ -45,6 +45,21 @@ class StoreConfigurarPagosRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->tipo_pago == "EXTRAORDINARIO") {
+            if ($this->periodo != 'UNICO') {
+                $mensaje = new mensaje();
+                $mensaje->title = "Tipo Pago Error";
+                $mensaje->icon = "error";
+                $mensaje->body = "Pago Extraoridinario no puede tener periodo diferente de UNICO";
+
+                throw new HttpResponseException(
+                    new JsonResponse(
+                        $mensaje,
+                        422
+                    )
+                );
+            }
+        }
 
         return [
             //

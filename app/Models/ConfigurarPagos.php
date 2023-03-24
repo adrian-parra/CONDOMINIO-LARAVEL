@@ -11,8 +11,22 @@ class ConfigurarPagos extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'id_fraccionamiento',
+        'descripcion',
+        'tipo_pago',
+        'monto',
+        'fecha_inicial',
+        'periodo',
+        'dias_max_pago',
+        'dias_max_descuento',
+        'porcentaje_penalizacion',
+        'porcentaje_descuento',
+        'estatus',
+    ];
+
     protected $PERIODOS = [
-        "UNICO" => '1 days',
+        "UNICO" => '0 days',
         "SEMANAL" => '7 days',
         "MENSUAL" => '1 month',
         "ANUAL" => '1 year',
@@ -57,13 +71,33 @@ class ConfigurarPagos extends Model
         for ($i = 0; $i < $cantidad; $i++) {
             $fecha_pago = date('Y-m-d', strtotime($fecha_actual . ' +' . $cantidadPeriodo));
             foreach ($propiedades as $propiedad) {
+                $monto_pagado = 0;
+                $recibo_pagado = false;
+
+                if ($propiedad->balance_favor > 0) {
+                    $monto_favor = $propiedad->balance_favor;
+
+                    if ($monto_favor >= $this->monto) {
+                        $monto_pagado = $this->monto;
+                        $propiedad->balance_favor = $monto_favor - $this->monto;
+                        $recibo_pagado = true;
+                    } else if ($monto_favor < $this->monto) {
+                        $monto_pagado = $monto_favor;
+                        $propiedad->balance_favor = 0;
+                    }
+
+                    $propiedad->save();
+                }
+
                 $recibo = [
                     'fraccionamiento_id' => $propiedad->fraccionamiento_id,
                     'propiedad_id' => $propiedad->id,
                     'configuracion_id' => $this->id,
                     'fecha_vencimiento' => $fecha_pago,
                     'monto' => $this->monto,
-                    'estatus' => 'POR_PAGAR'
+                    'monto_pagado' => $monto_pagado,
+                    'estatus' => $recibo_pagado ? 'PAGADO' : 'POR_PAGAR',
+                    'fecha_pago' => $recibo_pagado ? date('Y-m-d') : null
                 ];
 
                 $recibos[] = $recibo;

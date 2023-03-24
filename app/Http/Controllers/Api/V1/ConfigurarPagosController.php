@@ -9,6 +9,7 @@ use App\Http\Requests\v1\ConfigurarPagos\UpdateConfigurarPagosRequest;
 use App\Models\ConfigurarPagos;
 use App\Models\mensaje;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ConfigurarPagosController extends Controller
 {
@@ -58,23 +59,17 @@ class ConfigurarPagosController extends Controller
         //
         try {
             $mensaje = new mensaje();
-            $configurarPagos = new ConfigurarPagos();
-            $configurarPagos->id_fraccionamiento = $request->id_fraccionamiento;
-            $configurarPagos->descripcion = $request->descripcion;
-            $configurarPagos->tipo_pago = $request->tipo_pago;
-            $configurarPagos->monto = $request->monto;
-            $configurarPagos->fecha_inicial = $request->fecha_inicial;
-            $configurarPagos->periodo = $request->periodo;
-            $configurarPagos->dias_max_pago = $request->dias_max_pago;
-            $configurarPagos->dias_max_descuento = $request->dias_max_descuento;
-            $configurarPagos->porcentaje_penalizacion = $request->porcentaje_penalizacion;
-            $configurarPagos->porcentaje_descuento = $request->porcentaje_descuento;
-            $configurarPagos->estatus = 1;
-            $configurarPagos->save();
+
+            $configurarPagos = ConfigurarPagos::create($request->all());
+
+            if ($configurarPagos->tipo_pago == "EXTRAORDINARIO") {
+                $configurarPagos->crearRecibos(1, $configurarPagos->fecha_inicial);
+            }
 
             $mensaje->title = "Configuracion de pago almacenado";
             $mensaje->icon = "success";
-            return response()->json($mensaje, 422);
+
+            return response()->json($mensaje, 201);
         } catch (\Exception $e) {
             $mensaje->title = "error";
             $mensaje->icon = $e->getMessage();

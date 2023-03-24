@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('dias_max_descuento');
             $table->double('porcentaje_penalizacion');
             $table->double('porcentaje_descuento');
-            $table->boolean('estatus');
+            $table->boolean('estatus')->default(1);
             $table->timestamps();
         });
     }

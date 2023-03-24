@@ -82,9 +82,7 @@ class Propiedad extends Model
                 $balance = 0;
             }
 
-            if ($recibo->estatus == 'PAGADO') {
-                $balance += $recibo->sumatoria;
-            } elseif ($recibo->estatus == 'VENCIDO') {
+            if ($recibo->estatus == 'VENCIDO') {
                 $balance -= $recibo->sumatoria;
             }
 
@@ -120,13 +118,16 @@ class Propiedad extends Model
                 $balance = 0;
             }
 
-            if ($recibo->estatus == 'PAGADO') {
-                $balance += $recibo->sumatoria;
-            } elseif ($recibo->estatus == 'VENCIDO') {
+            if ($recibo->estatus == 'VENCIDO') {
                 $balance -= $recibo->sumatoria;
             }
 
             $last_id = $id;
         }
+
+        $propiedad = Propiedad::find($last_id);
+
+        $propiedad->balance = $balance;
+        $propiedad->save();
     }
 }
