@@ -13,22 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('propietarios', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre', 100);
-            $table->string('apellidos', 100);
-            $table->string('correo', 40)->unique();
-            $table->string('celular', 20)->unique();
-            $table->string('celular_alt', 20)->nullable();
-            $table->string('telefono_fijo', 20)->unique();
-            $table->string('identificacion_url')->nullable();
-            $table->boolean('is_inquilino');
-
+        Schema::create('clave_interfons', function (Blueprint $table) {
+            $table->string('numero_interfon', 20);
+            $table->unsignedBigInteger('propiedad_id');
             $table->unsignedBigInteger('fraccionamiento_id');
+
+            $table->timestamps();
+
+            $table->primary(['fraccionamiento_id', 'propiedad_id', 'numero_interfon']);
+
+            $table->unique(['fraccionamiento_id', 'numero_interfon']);
+
             $table->foreign('fraccionamiento_id')->references('id')
                 ->on('fraccionamientos')->onDelete('cascade');
 
-            $table->timestamps();
+            $table->foreign('propiedad_id')->references('id')
+                ->on('propiedads')->onDelete('cascade');
         });
     }
 
@@ -39,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('propietarios');
+        Schema::dropIfExists('clave_interfons');
     }
 };

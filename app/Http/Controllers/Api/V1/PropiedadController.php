@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Filters\V1\PropiedadFilter;
 use App\Filters\V1\RfdiFilter;
 use App\Http\Controllers\Api\Controller;
+use App\Http\Requests\V1\Propiedad\Interfon\StoreClaveInterfonRequest;
+use App\Http\Requests\V1\Propiedad\Interfon\UpdateClaveInterfonRequest;
 use App\Http\Requests\V1\Propiedad\Rfdi\StoreRfdiRequest;
 use App\Http\Requests\V1\Propiedad\Rfdi\UpdateRfdiRequest;
 use App\Http\Requests\V1\Propiedad\SetBalancesPropiedad;
@@ -14,6 +16,7 @@ use App\Http\Resources\V1\Propiedad\PropiedadCollection;
 use App\Http\Resources\V1\Propiedad\PropiedadResource;
 use App\Http\Resources\V1\Propiedad\Rfdi\RfdiCollection;
 use App\Http\Resources\V1\Propiedad\Rfdi\RfdiResource;
+use App\Models\ClaveInterfon;
 use App\Models\mensaje;
 use App\Models\Propiedad;
 use App\Models\Rfdi;
@@ -34,12 +37,6 @@ class PropiedadController extends Controller
         $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
 
         $propiedades = Propiedad::where($filterItems);
-
-        $incluirRfdis = $request->query('incluirRfdis');
-
-        if($incluirRfdis){
-            $propiedades = $propiedades->with('rfdi');
-        }
 
         $mensaje = new mensaje();
 
@@ -94,12 +91,6 @@ class PropiedadController extends Controller
         $propiedad = Propiedad::find($id);
 
         $mensaje = new mensaje();
-
-        $incluirRfdis = request()->query('incluirRfdis');
-
-        if($incluirRfdis){
-            $propiedad = $propiedad->loadMissing('rfdi');
-        }
 
         $mensaje->title = "Propiedad conseguida exitosamente";
         $mensaje->icon = "success";
@@ -229,6 +220,36 @@ class PropiedadController extends Controller
         $rfdi->update($data);
 
         $mensaje->title = "Rfdi actualizada exitosamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 200);
+    }
+
+    public function postInterfon(StoreClaveInterfonRequest $request)
+    {
+        $mensaje = new mensaje();
+
+        $data = $request->all();
+
+        ClaveInterfon::create($data);
+
+        $mensaje->title = "Interfon registrado exitosamente";
+        $mensaje->icon = "success";
+
+        return response()->json($mensaje, 201);
+    }
+
+    public function putInterfon(UpdateClaveInterfonRequest $request, $id)
+    {
+        $mensaje = new mensaje();
+
+        $interfon = ClaveInterfon::where('numero_interfon', $id)->first();
+
+        $data = $request->all();
+
+        $interfon->update($data);
+
+        $mensaje->title = "Interfon actualizado exitosamente";
         $mensaje->icon = "success";
 
         return response()->json($mensaje, 200);

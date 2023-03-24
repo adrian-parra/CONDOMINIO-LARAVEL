@@ -19,8 +19,6 @@ class Propietario extends Model
         'identificacion_url',
         'is_inquilino',
         'fraccionamiento_id',
-        'clave_interfon',
-        'clave_interfon_alt'
     ];
 
     public function propiedad()

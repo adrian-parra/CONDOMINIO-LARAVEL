@@ -54,10 +54,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('propietarios', PropietarioController::class);
     Route::apiResource('productos', ProductoController::class);
 
-    //PROPIEDADES
+    // RFDI
     Route::get('propiedades/rfdi', [PropiedadController::class, 'getRfdis']);
     Route::post('propiedades/rfdi', [PropiedadController::class, 'postRfdi']);
     Route::put('propiedades/rfdi/{id}', [PropiedadController::class, 'putRfdi']);
+    // NUMERO INTERFONES
+    Route::post('propiedades/interfon', [PropiedadController::class, 'postInterfon']);
+    Route::put('propiedades/interfon/{id}', [PropiedadController::class, 'putInterfon']);
+    // PROPIEDADES
     Route::apiResource('propiedades', PropiedadController::class);
 
     Route::get('vehiculo/tipos-de-vehiculos', [VehiculoController::class, 'getTiposVehiculos']);
@@ -65,10 +69,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::get('/private-files/{foldertype}/{foldername}/{filename}', [ObtenerArchivo::class, 'getFile']);
     Route::apiResource('egresos', EgresoController::class);
     Route::apiResource('tipoEgresos', TipoDeEgresoController::class);
+
     Route::post(
         'detalleEgresos',
         [DetalleEgresoController::class, 'store']
     );
+
     Route::match(
         ['PUT', 'DELETE', 'PATCH'],
         'detalleEgresos/{id_egreso}/{id_producto}',

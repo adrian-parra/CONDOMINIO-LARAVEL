@@ -24,6 +24,11 @@ class Propiedad extends Model
         'lote'
     ];
 
+    protected $with = [
+        'claveInterfon',
+        'rfdi'
+    ];
+
     public function propietario()
     {
         return $this->belongsTo(Propietario::class);
@@ -32,6 +37,11 @@ class Propiedad extends Model
     public function rfdi()
     {
         return $this->hasMany(Rfdi::class);
+    }
+
+    public function claveInterfon()
+    {
+        return $this->hasMany(ClaveInterfon::class);
     }
 
     //Funcion que actualiza el balance de la propiedad al realizar el pago de

@@ -62,8 +62,6 @@ class UpdatePropietarioRequest extends FormRequest
                 'archivoIdentificacion' => ['sometimes', 'file'],
                 'isInquilino' => ['required', 'boolean'],
                 'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
-                'claveInterfon' => ['required', 'max:20', Rule::unique('propietarios', 'clave_interfon')->ignore($id), Rule::unique('propietarios', 'clave_interfon_alt')->ignore($id)],
-                'claveInterfonAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'clave_interfon'), Rule::unique('propietarios', 'clave_interfon_alt')]
             ];
         } else if ($method == 'PATCH') {
             return [
@@ -76,8 +74,6 @@ class UpdatePropietarioRequest extends FormRequest
                 'archivoIdentificacion' => ['sometimes', 'file'],
                 'isInquilino' => ['sometimes', 'boolean'],
                 'fraccionamientoId' => ['sometimes', 'integer', 'exists:fraccionamientos,id'],
-                'claveInterfon' => ['sometimes', 'max:20', Rule::unique('propietarios', 'clave_interfon')->ignore($id), Rule::unique('propietarios', 'clave_interfon_alt')->ignore($id)],
-                'claveInterfonAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'clave_interfon'), Rule::unique('propietarios', 'clave_interfon_alt')]
             ];
         }
     }
@@ -91,8 +87,6 @@ class UpdatePropietarioRequest extends FormRequest
         $dataToMerge['identificacion_url'] = $this->identificacionUrl ?? null;
         $dataToMerge['is_inquilino'] = $this->isInquilino ?? null;
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;
-        $dataToMerge['clave_interfon'] = $this->claveInterfon ?? null;
-        $dataToMerge['clave_interfon_alt'] = $this->claveInterfonAlt ?? null;
 
         $dataToMerge = array_filter($dataToMerge, function ($value) {
             return $value !== null;

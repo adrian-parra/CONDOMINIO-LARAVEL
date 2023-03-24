@@ -47,8 +47,6 @@ class StorePropiedadRequest extends FormRequest
     public function rules()
     {
 
-        $uniqueTogether = new UniqueTogether('propiedads', ['fraccionamiento_id', 'lote']);
-
         return [
             'tipoPropiedadId' => ['required', 'integer', Rule::in([0, 1, 2, 3])],
             'archivoPredial' => ['sometimes', 'file'],
