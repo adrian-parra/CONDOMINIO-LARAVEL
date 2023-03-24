@@ -52,10 +52,6 @@ class UpdateDetalleEgresoRequest extends FormRequest
             return [];
         }
 
-        $fracc = fraccionamiento::pluck('id')->toArray();
-        $egreso = Egreso::pluck('id')->toArray();
-        $producto = Producto::pluck('id')->toArray();
-
         if ($method == 'PUT') {
             return [
                 'egresoId' => ['required', 'integer', 'exists:egresos,id'],
@@ -65,16 +61,16 @@ class UpdateDetalleEgresoRequest extends FormRequest
                 'cantidad' => ['required', 'integer'],
                 'precioUnitario' => ['required', 'numeric']
             ];
+        } else if ($method == 'PATCH') {
+            return [
+                'egresoId' => ['sometimes', 'integer', 'exists:egresos,id'],
+                'productoId' => ['sometimes', 'integer', 'exists:productos,id'],
+                'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id'],
+                'descripcion' => ['sometimes', 'required', 'max:100'],
+                'cantidad' => ['sometimes', 'required', 'integer'],
+                'precioUnitario' => ['sometimes', 'required', 'numeric']
+            ];
         }
-
-        return [
-            'egresoId' => ['required', 'integer', 'exists:egresos,id'],
-            'productoId' => ['required', 'integer', 'exists:productos,id'],
-            'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id'],
-            'descripcion' => ['sometimes', 'required', 'max:100'],
-            'cantidad' => ['sometimes', 'required', 'integer'],
-            'precioUnitario' => ['sometimes', 'required', 'numeric']
-        ];
     }
 
     protected function prepareForValidation()
