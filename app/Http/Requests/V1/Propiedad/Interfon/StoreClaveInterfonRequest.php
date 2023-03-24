@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Requests\V1\Propietario;
+namespace App\Http\Requests\V1\Propiedad\Interfon;
 
-use App\Models\fraccionamiento;
 use App\Models\mensaje;
+use App\Rules\UniqueTogether;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\Rule;
 
-class StorePropietarioRequest extends FormRequest
+class StoreClaveInterfonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -44,28 +43,28 @@ class StorePropietarioRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
-            'nombre' => ['required', 'max:100'],
-            'apellidos' => ['required', 'max:100'],
-            'correo' => ['required', 'max:40', Rule::unique('propietarios', 'correo')],
-            'celular' => ['required', 'max:20', Rule::unique('propietarios', 'celular')],
-            'celularAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'celular')],
-            'telefonoFijo' => ['required', 'max:20', Rule::unique('propietarios', 'telefono_fijo')],
-            'archivoIdentificacion' => ['sometimes', 'file'],
-            'isInquilino' => ['required', 'boolean'],
-            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
+            'numeroInterfon' => [
+                'required',
+                'string',
+                'max:20',
+                new UniqueTogether('clave_interfons', ['numero_interfon', 'fraccionamiento_id'])
+            ],
+            'propiedadId' => ['required', 'exists:propiedads,id'],
+            'fraccionamientoId' => [
+                'required',
+                'exists:fraccionamientos,id',
+                new UniqueTogether('clave_interfons', ['numero_interfon', 'fraccionamiento_id'])
+            ],
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'celular_alt' => $this->celularAlt,
-            'telefono_fijo' => $this->telefonoFijo,
-            'identificacion_url' => $this->identificacionUrl,
-            'is_inquilino' => $this->isInquilino,
+            'numero_interfon' => $this->numeroInterfon,
             'fraccionamiento_id' => $this->fraccionamientoId,
+            'propiedad_id' => $this->propiedadId,
         ]);
     }
 }

@@ -28,8 +28,6 @@ class PropietarioResource extends JsonResource
             'identificacionUrl' => $this->identificacion_url,
             'isInquilino' => $this->is_inquilino,
             'fraccionamientoId' => $this->fraccionamiento_id,
-            'claveInterfon' => $this->clave_interfon,
-            'claveInterfonAlt' => $this->clave_interfon_alt,
             'propiedad' => PropiedadPropietarioResource::collection($this->whenLoaded('propiedad')),
             'vehiculos' => VehiculoResource::collection($this->whenLoaded('vehiculos')),
         ];

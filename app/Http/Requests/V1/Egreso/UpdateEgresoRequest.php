@@ -47,9 +47,6 @@ class UpdateEgresoRequest extends FormRequest
     {
         $method = $this->getMethod();
 
-        $fracc = fraccionamiento::pluck('id')->toArray();
-        $tipoEgreso = TipoDeEgreso::pluck('id')->toArray();
-
         if ($method == 'PUT') {
             return [
                 'descripcion' => ['required', 'max:100'],

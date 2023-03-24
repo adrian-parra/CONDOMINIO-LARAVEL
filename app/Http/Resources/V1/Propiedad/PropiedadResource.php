@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources\V1\Propiedad;
 
+use App\Http\Resources\V1\Propiedad\Interfon\ClaveInterfonResource;
 use App\Http\Resources\V1\Propiedad\Rfdi\RfdiResource;
+use App\Http\Resources\V1\Propiedad\Rfdi\RfdiResourcePropiedad;
 use App\Http\Resources\V1\Propietario\PropietarioResource;
 use App\Models\Propietario;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -43,9 +45,10 @@ class PropiedadResource extends JsonResource
             'estatus' => $this->estatus,
             'lote' => $this->lote,
             'propietario' => new PropietarioResource($propietario),
+            'interfones' => ClaveInterfonResource::collection($this->whenLoaded('claveInterfon')),
+            'rfdis' => RfdiResourcePropiedad::collection($this->whenLoaded('rfdi')),
             'inquilino' => new PropietarioResource($inquilino),
             'fraccionamientoId' => $this->fraccionamiento_id,
-            'rfdis' => RfdiResource::collection($this->whenLoaded('rfdi')),
         ];
     }
 }
