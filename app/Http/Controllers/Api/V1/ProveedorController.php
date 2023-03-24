@@ -89,11 +89,11 @@ class ProveedorController extends Controller
      * @param  \App\Models\Proveedor  $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProveedorRequest $request, Proveedor $proveedor)
+    public function update(UpdateProveedorRequest $request, $id)
     {
         $mensaje = new mensaje();
 
-        // $proveedor = Proveedor::find($id);
+        $proveedor = Proveedor::find($id);
 
         if (!$proveedor) {
             $mensaje->title = "Proveedor no encontrado";
