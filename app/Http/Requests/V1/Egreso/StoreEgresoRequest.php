@@ -65,7 +65,7 @@ class StoreEgresoRequest extends FormRequest
             'is_verified' => $this->isVerified,
             'estatus_egreso_id' => $this->estatusEgresoId,
             'monto_total' => $this->montoTotal,
-            'tipo_egreso' => $this->tipoEgreso,
+            'tipo_egreso_id' => $this->tipoEgreso,
             'fraccionamiento_id' => $this->fraccionamientoId,
             'comprobante_url' => $this->archivoComprobante,
         ]);

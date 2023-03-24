@@ -9,6 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UpdateEgresoRequest extends FormRequest
@@ -46,7 +47,7 @@ class UpdateEgresoRequest extends FormRequest
     public function rules()
     {
         $method = $this->getMethod();
-
+        Log::debug($this->tipoEgreso);
         if ($method == 'PUT') {
             return [
                 'descripcion' => ['required', 'max:100'],
@@ -77,7 +78,7 @@ class UpdateEgresoRequest extends FormRequest
         $dataToMerge['is_verified'] = $this->isVerified ?? null;
         $dataToMerge['estatus_egreso_id'] = $this->estatusEgresoId ?? null;
         $dataToMerge['monto_total'] = $this->montoTotal ?? null;
-        $dataToMerge['tipo_egreso'] = $this->tipoEgreso ?? null;
+        $dataToMerge['tipo_egreso_id'] = $this->tipoEgreso ?? null;
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;
 
         $dataToMerge = array_filter($dataToMerge, function ($value) {

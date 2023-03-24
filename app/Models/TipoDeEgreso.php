@@ -12,5 +12,6 @@ class TipoDeEgreso extends Model
     protected $fillable = [
         'descripcion',
         'status',
+        'fraccionamiento_id',
     ];
 }

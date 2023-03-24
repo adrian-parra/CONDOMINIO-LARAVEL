@@ -44,7 +44,15 @@ class StoreTipoDeEgresoRequest extends FormRequest
     {
         return [
             'descripcion' => ['required', 'max:100'],
-            'status' => ['required', 'boolean']
+            'status' => ['required', 'boolean'],
+            'fraccionamientoId' => ['required', 'exists:fraccionamientos,id'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'fraccionamiento_id' => $this->fraccionamientoId,
+        ]);
     }
 }
