@@ -14,13 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rfdis', function (Blueprint $table) {
-            $table->string('rfdi', 20);
+            $table->string('rfdi', 20)->primary();
             $table->enum('tipo', ['PEATONAL', 'AUTOMOVIL']);
             $table->unsignedBigInteger('fraccionamiento_id');
             $table->unsignedBigInteger('propiedad_id');
             $table->timestamps();
 
-            $table->primary('rfdi');
             $table->unique(['rfdi', 'fraccionamiento_id']);
 
             $table->foreign('fraccionamiento_id')
