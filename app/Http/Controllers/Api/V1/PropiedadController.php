@@ -134,8 +134,6 @@ class PropiedadController extends Controller
 
     public function delete_relacion_propietario(Request $request, $id)
     {
-        Log::debug($id);
-
         $propiedad = Propiedad::find($id);
 
         $mensaje = new mensaje();

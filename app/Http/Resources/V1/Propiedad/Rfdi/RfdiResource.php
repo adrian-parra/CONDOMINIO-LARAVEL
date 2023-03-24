@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Propiedad\Rfdi;
 
+use App\Http\Resources\V1\Propiedad\PropiedadReciboResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RfdiResource extends JsonResource
@@ -19,7 +20,7 @@ class RfdiResource extends JsonResource
         return [
             'rfdi' => $this->rfdi,
             'tipo' => $this->tipo,
-            'propiedadId' => $this->propiedad_id,
+            'propiedadId' => new PropiedadReciboResource($this->propiedad_id),
             'fraccionamientoId' => $this->fraccionamiento_id
         ];
     }

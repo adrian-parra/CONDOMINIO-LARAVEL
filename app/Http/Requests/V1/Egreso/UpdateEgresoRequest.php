@@ -47,7 +47,7 @@ class UpdateEgresoRequest extends FormRequest
     public function rules()
     {
         $method = $this->getMethod();
-        Log::debug($this->tipoEgreso);
+
         if ($method == 'PUT') {
             return [
                 'descripcion' => ['required', 'max:100'],

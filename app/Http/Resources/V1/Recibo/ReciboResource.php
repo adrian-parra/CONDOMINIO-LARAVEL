@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Recibo;
 
+use App\Http\Resources\V1\Propiedad\PropiedadReciboResource;
 use App\Http\Resources\V1\Propiedad\PropiedadResource;
 use App\Models\Propiedad;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -26,7 +27,7 @@ class ReciboResource extends JsonResource
             'montoPenalizacion' => $this->monto_penalizacion,
             'montoDescuento' => $this->monto_descuento,
             'estatus' => $this->estatus,
-            'propiedad' => new PropiedadResource($propiedad),
+            'propiedad' => new PropiedadReciboResource($propiedad),
             'fraccionamientoId' => $this->fraccionamiento_id,
         ];
     }

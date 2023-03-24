@@ -47,7 +47,6 @@ class StoreRecibosComprobanteRequest extends FormRequest
             'monto' => ['required', 'numeric'],
             'archivoComprobante' => ['required', 'file'],
             'tipoPago' => ['required', Rule::in(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA'])],
-            'razonRechazo' => ['required', 'max:200'],
             'reciboId' => ['required', 'exists:recibos,id'],
             'propiedadId' => ['required', 'exists:propiedads,id'],
             'fraccionamientoId' => ['required', 'exists:fraccionamientos,id'],
