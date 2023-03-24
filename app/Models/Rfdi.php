@@ -16,6 +16,8 @@ class Rfdi extends Model
         'fraccionamiento_id'
     ];
 
+    protected $primaryKey = 'rfdi';
+
     public function propiedad()
     {
         return $this->belongsTo(Propiedad::class);
