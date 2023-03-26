@@ -73,8 +73,9 @@ class UpdateRecibosComprobanteRequest extends FormRequest
         $dataToMerge['tipo_pago'] = $this->tipoPago ?? null;
         $dataToMerge['recibo_id'] = $this->reciboId ?? null;
         $dataToMerge['propiedad_id'] = $this->propiedadId ?? null;
+        $dataToMerge['razon_rechazo'] = $this->razonRechazo ?? null;
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;
-
+        
         $dataToMerge = array_filter($dataToMerge, function ($value) {
             return $value !== null;
         });

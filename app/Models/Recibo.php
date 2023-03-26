@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+
+use App\Utils\Meses;
+
 
 class Recibo extends Model
 {
@@ -73,5 +77,17 @@ class Recibo extends Model
     public function getMontoAPagar()
     {
         return $this->monto - $this->monto_pagado;
+    }
+
+    public function getMesPago($string = 0)
+    {
+        $date = new DateTime($this->fecha_pago);
+        $mes = intval($date->format('m'));
+
+        if ($string == 1) {
+            return Meses::obtenerMesString($mes);
+        }
+
+        return $mes;
     }
 }

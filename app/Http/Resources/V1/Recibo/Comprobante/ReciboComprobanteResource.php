@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Recibo\Comprobante;
 
+use App\Models\Recibo;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReciboComprobanteResource extends JsonResource
@@ -14,10 +15,13 @@ class ReciboComprobanteResource extends JsonResource
      */
     public function toArray($request)
     {
+        $recibo = Recibo::find($this->recibo_id);
+
         return [
             'id' => $this->id,
             'monto' => $this->monto,
             'comprobanteUrl' => $this->comprobante_url,
+            'mes' => $recibo->getMesPago(1),
             'estatus' => $this->estatus,
             'tipoPago' => $this->tipo_pago,
             'razonRechazo' => $this->razon_rechazo,
