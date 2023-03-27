@@ -55,10 +55,16 @@ class StorePropiedadRequest extends FormRequest
             'superficie' => ['required', 'numeric'],
             'balance' => ['sometimes', 'numeric'],
             'estatus' => ['sometimes', 'boolean'],
-            'lote' => ['required', 'max:5', new UniqueTogether('propiedads', ['fraccionamiento_id', 'lote'])],
+            'lote' => [
+                'required', 'max:5', new UniqueTogether(
+                    'propiedads',
+                    ['fraccionamiento_id', 'lote'],
+                    'El lote introducido ya fue tomado'
+                ),
+            ],
             'propietarioId' => ['required', 'integer', 'exists:propietarios,id'],
             'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'inquilino_id')],
-            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id', new UniqueTogether('propiedads', ['fraccionamiento_id', 'lote'])],
+            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id']
         ];
     }
 

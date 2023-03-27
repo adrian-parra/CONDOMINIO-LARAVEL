@@ -11,12 +11,14 @@ class UniqueTogether implements Rule
     protected $table;
     protected $columns;
     protected $excludeId;
+    protected $mensaje;
 
-    public function __construct($table, array $columns, $excludeId = null)
+    public function __construct($table, array $columns, $mensaje, $excludeId = null)
     {
         $this->table = $table;
         $this->columns = $columns;
         $this->excludeId = $excludeId;
+        $this->mensaje = $mensaje;
     }
 
     protected $columns_json = [
@@ -47,6 +49,6 @@ class UniqueTogether implements Rule
 
     public function message()
     {
-        return 'La combinacion de  ' . implode(', ', $this->columns) . ' ya fue tomada.';
+        return $this->mensaje;
     }
 }

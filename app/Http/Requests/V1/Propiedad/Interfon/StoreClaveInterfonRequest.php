@@ -48,13 +48,16 @@ class StoreClaveInterfonRequest extends FormRequest
                 'required',
                 'string',
                 'max:20',
-                new UniqueTogether('clave_interfons', ['numero_interfon', 'fraccionamiento_id'])
+                new UniqueTogether(
+                    'clave_interfons',
+                    ['numero_interfon', 'fraccionamiento_id'],
+                    'La Clave Interfon introducida ya fue tomada'
+                )
             ],
             'propiedadId' => ['required', 'exists:propiedads,id'],
             'fraccionamientoId' => [
                 'required',
                 'exists:fraccionamientos,id',
-                new UniqueTogether('clave_interfons', ['numero_interfon', 'fraccionamiento_id'])
             ],
         ];
     }

@@ -56,10 +56,8 @@ class UpdateClaveInterfonRequest extends FormRequest
                     'max:20',
                     new UniqueTogether(
                         'clave_interfons',
-                        [
-                            'numero_interfon',
-                            'fraccionamiento_id'
-                        ],
+                        ['numero_interfon', 'fraccionamiento_id'],
+                        'La Clave Interfon introducida ya fue tomada',
                         $id
                     )
                 ],
@@ -67,14 +65,6 @@ class UpdateClaveInterfonRequest extends FormRequest
                 'fraccionamiento_id' => [
                     'required',
                     'exists:fraccionamiento,id',
-                    new UniqueTogether(
-                        'clave_interfons',
-                        [
-                            'numero_interfon',
-                            'fraccionamiento_id'
-                        ],
-                        $id
-                    )
                 ],
             ];
         } else if ($method == 'PATCH') {
