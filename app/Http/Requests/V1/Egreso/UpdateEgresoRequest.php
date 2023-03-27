@@ -83,6 +83,8 @@ class UpdateEgresoRequest extends FormRequest
         $dataToMerge['estatus_egreso_id'] = $this->estatusEgresoId ?? null;
         $dataToMerge['monto_total'] = $this->montoTotal ?? null;
         $dataToMerge['tipo_egreso_id'] = $this->tipoEgreso ?? null;
+        $dataToMerge['tipo_pago'] = $this->tipoPago ?? null;
+        $dataToMerge['fecha_pago'] = $this->fechaPago ?? null;
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;
 
         $dataToMerge = array_filter($dataToMerge, function ($value) {
