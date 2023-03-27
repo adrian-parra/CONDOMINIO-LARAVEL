@@ -44,10 +44,12 @@ class StoreRfdiRequest extends FormRequest
      */
     public function rules()
     {
-        $uniqueTogether = new UniqueTogether('rfdis', ['fraccionamiento_id', 'rfdi']);
-
         return [
-            'rfdi' => ['required', 'string', 'max:20', $uniqueTogether],
+            'rfdi' => ['required', 'string', 'max:20', new UniqueTogether(
+                'rfdis',
+                ['fraccionamiento_id', 'rfdi'],
+                'El rfdi introducido ya fue tomado'
+            )],
             'tipo' => ['required', Rule::in(['PEATONAL', 'AUTOMOVIL'])],
             'propiedadId' => ['required', 'numeric', 'exists:propiedads,id'],
             'fraccionamientoId' => ['required', 'numeric', 'exists:fraccionamientos,id'],

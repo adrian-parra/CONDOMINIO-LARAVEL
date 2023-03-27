@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\V1\Propiedad\Rfdi;
 
-use App\Rules\UniqueTogether;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

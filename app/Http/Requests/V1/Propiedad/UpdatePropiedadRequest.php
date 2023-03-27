@@ -52,7 +52,6 @@ class UpdatePropiedadRequest extends FormRequest
 
         $id = $this->route('propiedade');
 
-        $uniqueTogether = new UniqueTogether('propiedads', ['fraccionamiento_id', 'lote'], $id);
 
         if ($method == 'PUT') {
             return [
@@ -63,10 +62,15 @@ class UpdatePropiedadRequest extends FormRequest
                 'superficie' => ['required', 'numeric'],
                 'balance' => ['sometimes', 'numeric'],
                 'estatus' => ['sometimes', 'boolean'],
-                'lote' => ['required', 'max:5', $uniqueTogether],
+                'lote' => ['required', 'max:5', new UniqueTogether(
+                    'propiedads',
+                    ['fraccionamiento_id', 'lote'],
+                    'El lote introducido ya fue tomado',
+                    $id
+                )],
                 'propietarioId' => ['required', 'integer', 'exists:propietarios,id'],
                 'inquilinoId' => ['sometimes', 'integer', 'exists:propietarios,id', Rule::unique('propiedads', 'inquilino_id')->ignore($id)],
-                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id', $uniqueTogether],
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
             ];
         } else if ($method == 'PATCH') {
             return [
