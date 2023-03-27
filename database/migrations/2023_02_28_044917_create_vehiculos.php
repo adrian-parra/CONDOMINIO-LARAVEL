@@ -20,10 +20,11 @@ return new class extends Migration
             $table->unsignedBigInteger('id_estado')->comment('ESTADO DE MEXICO EMISOR DE LAS PLACAS');
             $table->unsignedBigInteger('id_tipo_vehiculo');
             $table->unsignedBigInteger('propietario_id')->nullable();
-            $table->string('marca');
-            $table->string('path_tarjeta_circulacion')->nullable()->comment("RUTA DEL ARCHIVO DE TARGETA DE CIRCULACION");
+            $table->string('marca' ,20);
+            $table->string('submarca',20);
+            $table->string('path_tarjeta_circulacion')->unique()->nullable()->comment("RUTA DEL ARCHIVO DE TARGETA DE CIRCULACION");
             $table->string('color');
-            $table->string('placas')->unique();
+            $table->string('placas',30)->unique();
             $table->boolean('estatus')->default(true);
 
             $table->timestamps();
