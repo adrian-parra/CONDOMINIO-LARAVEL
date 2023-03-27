@@ -245,15 +245,27 @@ class PropiedadController extends Controller
         return response()->json($mensaje, 201);
     }
 
-    public function putInterfon(UpdateClaveInterfonRequest $request, $id)
+    public function putInterfon(UpdateClaveInterfonRequest $request, $interfonId)
     {
         $mensaje = new mensaje();
 
-        $interfon = ClaveInterfon::where('numero_interfon', $id)->first();
+        $interfon = ClaveInterfon::where('numero_interfon', $interfonId)
+            ->first();
+
+        if (!$interfon) {
+            $mensaje->title = "Interfon no encontrado";
+            $mensaje->icon = "error";
+            return response()->json($mensaje, 400);
+        }
 
         $data = $request->all();
 
-        $interfon->update($data);
+        unset($data['numeroInterfon']);
+        unset($data['propiedadId']);
+        unset($data['fraccionamientoId']);
+
+        $interfon->where('numero_interfon', $interfonId)
+            ->update($data);
 
         $mensaje->title = "Interfon actualizado exitosamente";
         $mensaje->icon = "success";

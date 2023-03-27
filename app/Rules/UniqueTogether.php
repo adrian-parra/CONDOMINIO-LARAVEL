@@ -12,13 +12,15 @@ class UniqueTogether implements Rule
     protected $columns;
     protected $excludeId;
     protected $mensaje;
+    protected $excludeName;
 
-    public function __construct($table, array $columns, $mensaje, $excludeId = null)
+    public function __construct($table, array $columns, $mensaje, $excludeId = null, $excludeName = 'id')
     {
         $this->table = $table;
         $this->columns = $columns;
         $this->excludeId = $excludeId;
         $this->mensaje = $mensaje;
+        $this->excludeName = $excludeName;
     }
 
     protected $columns_json = [
@@ -41,7 +43,7 @@ class UniqueTogether implements Rule
         });
 
         if ($this->excludeId) {
-            $query->where('id', '!=', $this->excludeId);
+            $query->where($this->excludeName, '!=', $this->excludeId);
         }
 
         return $query->count() === 0;

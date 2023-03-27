@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class UpdateClaveInterfonRequest extends FormRequest
 {
@@ -58,13 +59,14 @@ class UpdateClaveInterfonRequest extends FormRequest
                         'clave_interfons',
                         ['numero_interfon', 'fraccionamiento_id'],
                         'La Clave Interfon introducida ya fue tomada',
-                        $id
+                        $id,
+                        'numero_interfon'
                     )
                 ],
                 'propiedad_id' => ['required', 'exists:propiedads,id'],
                 'fraccionamiento_id' => [
                     'required',
-                    'exists:fraccionamiento,id',
+                    'exists:fraccionamientos,id',
                 ],
             ];
         } else if ($method == 'PATCH') {

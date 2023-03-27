@@ -60,7 +60,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::put('propiedades/rfdi/{id}', [PropiedadController::class, 'putRfdi']);
     // NUMERO INTERFONES
     Route::post('propiedades/interfon', [PropiedadController::class, 'postInterfon']);
-    Route::put('propiedades/interfon/{id}', [PropiedadController::class, 'putInterfon']);
+    Route::put('propiedades/interfon/{interfon}', [PropiedadController::class, 'putInterfon']);
     // PROPIEDADES
     Route::apiResource('propiedades', PropiedadController::class);
 
