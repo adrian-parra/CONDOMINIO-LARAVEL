@@ -112,12 +112,12 @@ class RecibosComprobanteController extends Controller
 
         $estatus = $data["estatus"];
 
-        if ($estatus != 'PENDIENTE') {
-            $mensaje->title = "Este pago ya no puede ser modificado ya que su estatus no lo permite";
-            $mensaje->icon = "error";
+        // if ($pago->estatus != 'PENDIENTE') {
+        //     $mensaje->title = "Este pago ya no puede ser modificado ya que su estatus no lo permite";
+        //     $mensaje->icon = "error";
 
-            return response()->json($mensaje, 400);
-        }
+        //     return response()->json($mensaje, 400);
+        // }
 
         $propiedad = Propiedad::findOrFail($pago->propiedad_id);
 
@@ -125,7 +125,7 @@ class RecibosComprobanteController extends Controller
 
             $recibo = Recibo::findOrFail($pago->recibo_id);
 
-            $recibo->comprobarPago($pago->monto);
+            $recibo->comprobarPago($pago->monto, $pago);
         }
 
         //En caso de ser rechazado

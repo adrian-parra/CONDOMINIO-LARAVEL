@@ -15,7 +15,7 @@ class ReciboComprobanteResource extends JsonResource
      */
     public function toArray($request)
     {
-        $recibo = Recibo::find($this->recibo_id);
+        $recibo = Recibo::findOrFail($this->recibo_id);
 
         return [
             'id' => $this->id,
