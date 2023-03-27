@@ -47,6 +47,7 @@ class JwtMiddleware
         return response()->json($mensaje, 401);
     } catch (\Firebase\JWT\ExpiredException $e) {
         $mensaje->title = "El token ha caducado";
+        $mensaje->status = "999"; // ! ESTE ESTATUS SIRVE PARA INFORMAR AL FRONT QUE SU SESION HA EXPÍRADO
         $mensaje->icon = "error";
         return response()->json($mensaje, 401);
     }catch(\Exception $e){
