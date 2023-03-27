@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\V1\Egreso;
 
-use App\Models\fraccionamiento;
 use App\Models\mensaje;
-use App\Models\TipoDeEgreso;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -45,15 +43,13 @@ class StoreEgresoRequest extends FormRequest
     public function rules()
     {
 
-        $fracc = fraccionamiento::pluck('id')->toArray();
-        $tipoEgreso = TipoDeEgreso::pluck('id')->toArray();
-
         return [
             'descripcion' => ['required', 'max:100'],
             'isVerified' => ['required', 'boolean'],
-            'estatusEgresoId' => ['required', Rule::in([0, 1, 2, 3, 4, 5, 6, 7])],
             'montoTotal' => ['required', 'numeric'],
             'archivoComprobante' => ['required', 'file'],
+            'tipoPago' => ['required', Rule::in(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA'])],
+            'fechaPago' => ['required', 'date'],
             'tipoEgreso' => ['required', 'integer', 'exists:tipo_de_egresos,id'],
             'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id']
         ];
@@ -63,11 +59,12 @@ class StoreEgresoRequest extends FormRequest
     {
         $this->merge([
             'is_verified' => $this->isVerified,
-            'estatus_egreso_id' => $this->estatusEgresoId,
             'monto_total' => $this->montoTotal,
             'tipo_egreso_id' => $this->tipoEgreso,
             'fraccionamiento_id' => $this->fraccionamientoId,
             'comprobante_url' => $this->archivoComprobante,
+            'fecha_pago' => $this->fechaPago,
+            'tipo_pago' => $this->tipoPago,
         ]);
     }
 }

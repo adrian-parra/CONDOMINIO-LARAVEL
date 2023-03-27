@@ -18,9 +18,11 @@ return new class extends Migration
 
             $table->string('descripcion', 100);
             $table->boolean('is_verified');
-            $table->unsignedInteger('estatus_egreso_id');
+            $table->unsignedInteger('estatus_egreso_id')->default(0);
             $table->unsignedFloat('monto_total');
             $table->string('comprobante_url');
+            $table->enum('tipo_pago', ['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA']);
+            $table->date('fecha_pago');
             $table->unsignedBigInteger('tipo_egreso_id')->nullable();
             $table->unsignedBigInteger('fraccionamiento_id');
 

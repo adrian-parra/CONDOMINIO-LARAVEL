@@ -52,23 +52,27 @@ class UpdateEgresoRequest extends FormRequest
             return [
                 'descripcion' => ['required', 'max:100'],
                 'isVerified' => ['required', 'boolean'],
-                'estatusEgresoId' => ['required', Rule::in([0, 1, 2, 3, 4, 5, 6, 7])],
+                'estatusEgresoId' => ['required', Rule::in([0, 1, 2])],
                 'montoTotal' => ['required', 'numeric'],
                 'archivoComprobante' => ['required', 'file'],
+                'tipoPago' => ['required', Rule::in(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA'])],
+                'fechaPago' => ['required', 'date'],
                 'tipoEgreso' => ['required', 'integer', 'exists:tipo_de_egresos,id'],
                 'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id']
             ];
+        } else if ($method == 'PATCH') {
+            return [
+                'descripcion' => ['sometimes', 'required', 'max:100'],
+                'isVerified' => ['sometimes', 'required', 'boolean'],
+                'estatusEgresoId' => ['sometimes', 'required', Rule::in([0, 1, 2])],
+                'montoTotal' => ['sometimes', 'required', 'numeric'],
+                'archivoComprobante' => ['sometimes', 'required', 'file'],
+                'tipoPago' => ['sometimes', Rule::in(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA'])],
+                'fechaPago' => ['sometimes', 'date'],
+                'tipoEgreso' => ['sometimes', 'required', 'integer', 'exists:tipo_de_egresos,id'],
+                'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id']
+            ];
         }
-
-        return [
-            'descripcion' => ['sometimes', 'required', 'max:100'],
-            'isVerified' => ['sometimes', 'required', 'boolean'],
-            'estatusEgresoId' => ['sometimes', 'required', Rule::in([0, 1, 2, 3, 4, 5, 6, 7])],
-            'montoTotal' => ['sometimes', 'required', 'numeric'],
-            'archivoComprobante' => ['sometimes', 'required', 'file'],
-            'tipoEgreso' => ['sometimes', 'required', 'integer', 'exists:tipo_de_egresos,id'],
-            'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id']
-        ];
     }
 
     protected function prepareForValidation()

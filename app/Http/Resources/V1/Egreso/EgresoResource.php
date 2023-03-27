@@ -6,6 +6,7 @@ use App\Http\Resources\V1\Egreso\Detalle\DetalleEgresoCollection;
 use App\Http\Resources\V1\Egreso\Detalle\DetalleEgresoResource;
 use App\Models\TipoDeEgreso;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class EgresoResource extends JsonResource
 {
@@ -21,18 +22,13 @@ class EgresoResource extends JsonResource
 
         $tipoEstatusEgreso = [
             'APROBADO',
-            'PENDIENTE APROVACION',
-            'ACTIVO',
-            'EDITADO',
-            'ELIMINADO',
-            'PAGADO',
-            'COBRADO',
-            'RECHAZADO',
+            'PENDIENTE',
+            'CANCELADO'
         ];
 
         $objEstatusEgreso = [
-            'id' => $this->estatus_egreso_id,
-            'descripcion' => $tipoEstatusEgreso[$this->estatus_egreso_id]
+            'id' => $this->estatus_egreso_id ? $this->estatus_egreso_id : 0,
+            'descripcion' => $this->estatus_egreso_id ? $tipoEstatusEgreso[$this->estatus_egreso_id] : $tipoEstatusEgreso[0]
         ];
 
         return [

@@ -56,7 +56,6 @@ class UpdateProveedorRequest extends FormRequest
                 'nombreContacto' => ['required', 'max:80'],
                 'correoContacto' => ['required', 'max:40'],
                 'notas' => ['required', 'max:200'],
-                'metodoDePagoId' => ['required', 'integer', Rule::in([0, 1])],
                 'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
             ];
         }
@@ -67,7 +66,6 @@ class UpdateProveedorRequest extends FormRequest
             'nombreContacto' => ['sometimes', 'required', 'max:80'],
             'correoContacto' => ['sometimes', 'required', 'max:40'],
             'notas' => ['sometimes', 'required', 'max:200'],
-            'metodoDePagoId' => ['sometimes', 'required', 'integer', Rule::in([0, 1])],
             'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id'],
         ];
     }

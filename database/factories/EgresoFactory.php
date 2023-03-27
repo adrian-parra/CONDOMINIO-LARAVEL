@@ -26,7 +26,9 @@ class EgresoFactory extends Factory
             'is_verified' => $this->faker->boolean(30),
             'monto_total' => $this->faker->randomFloat(2, 1000, 100000),
             'comprobante_url' => $this->faker->filePath(),
-            'estatus_egreso_id' => $this->faker->randomElement([0, 1, 2, 3, 4, 5, 6, 7]),
+            'estatus_egreso_id' => $this->faker->randomElement([0, 1, 2]),
+            'fecha_pago' => $this->faker->date(),
+            'tipo_pago' => $this->faker->randomElement(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA']),
             'tipo_egreso_id' => $this->faker->randomElement($tipo_de_egreso),
             'fraccionamiento_id' => $this->faker->randomElement($fracc),
         ];

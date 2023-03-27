@@ -16,7 +16,9 @@ class Egreso extends Model
         'estatus_egreso_id',
         'monto_total',
         'comprobante_url',
-        'fraccionamiento_id'
+        'fraccionamiento_id',
+        'fecha_pago',
+        'tipo_pago'
     ];
 
     public function detalleEgreso()
