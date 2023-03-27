@@ -22,6 +22,7 @@ class RfdiResource extends JsonResource
         return [
             'rfdi' => $this->rfdi,
             'tipo' => $this->tipo,
+            'estatus' => $this->estatus,
             'propiedadId' => new PropiedadReciboResource($propiedad),
             'fraccionamientoId' => $this->fraccionamiento_id
         ];

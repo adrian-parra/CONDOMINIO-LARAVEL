@@ -213,12 +213,17 @@ class PropiedadController extends Controller
 
         $rfdi = Rfdi::where('rfdi', $id)->first();
 
+        if (!$rfdi) {
+            $mensaje->title = "Rfdi no encontrado";
+            $mensaje->icon = "error";
+            return response()->json($mensaje, 400);
+        }
+
         $data = $request->all();
 
-        $rfdi->propiedad_id = $data["propiedad_id"];
-        $rfdi->tipo = $data["tipo"];
+        unset($data['propiedadId']);
 
-        $rfdi->save();
+        $rfdi->where('rfdi', $id)->update($data);
 
         $mensaje->title = "Rfdi actualizada exitosamente";
         $mensaje->icon = "success";

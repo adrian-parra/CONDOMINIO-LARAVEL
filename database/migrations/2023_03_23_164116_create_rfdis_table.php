@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('rfdis', function (Blueprint $table) {
             $table->string('rfdi', 20)->primary();
             $table->enum('tipo', ['PEATONAL', 'AUTOMOVIL']);
+            $table->enum('estatus', ['ACTIVO', 'INACTIVO', 'CANCELADA'])->default('ACTIVO');
             $table->unsignedBigInteger('fraccionamiento_id');
             $table->unsignedBigInteger('propiedad_id');
             $table->timestamps();

@@ -12,6 +12,7 @@ class Rfdi extends Model
     protected $fillable = [
         'rfdi',
         'tipo',
+        'estatus',
         'propiedad_id',
         'fraccionamiento_id'
     ];
