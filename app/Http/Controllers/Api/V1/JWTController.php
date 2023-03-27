@@ -83,7 +83,7 @@ class JWTController extends Controller
             'userId' => $id,
             'correo' => $correo,
             'iat' => time(),
-            'exp' => time() + 60 * 60
+            'exp' => time() + 60 * 120 //60 * 60 1 hora
         ];
 
         $jwt = JWT::encode($payload, $this->secretKey, 'HS256');

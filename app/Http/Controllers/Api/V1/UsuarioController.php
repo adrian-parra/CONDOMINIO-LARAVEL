@@ -143,6 +143,7 @@ class UsuarioController extends Controller
                 "token" => $token,
                 "rol" => $roles,
                 'id_fraccionamiento' => $user->id_fraccionamiento,
+                'correo'=>$user->correo,
                 'nombre_fraccionamiento' => $fraccionamiento->nombre,
                 'codigo_postal_fraccionamiento' => $fraccionamiento->codigo_postal
             ];
