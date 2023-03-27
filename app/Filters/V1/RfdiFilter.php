@@ -10,6 +10,7 @@ class RfdiFilter extends ApiFilter
         'rfdi' => ['eq'],
         'fraccionamientoId' => ['eq'],
         'propiedadId' => ['eq'],
+        'estatus' => ['eq', 'ne'],
     ];
 
     protected $columnMap = [
@@ -19,5 +20,6 @@ class RfdiFilter extends ApiFilter
 
     protected $operatorMap = [
         'eq' => '=',
+        'ne' => '!=',
     ];
 }

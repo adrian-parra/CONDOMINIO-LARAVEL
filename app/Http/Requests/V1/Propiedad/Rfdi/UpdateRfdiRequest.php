@@ -30,14 +30,17 @@ class UpdateRfdiRequest extends FormRequest
         if ($method == 'PUT') {
             return [
                 'tipo' => ['required', Rule::in(['PEATONAL', 'AUTOMOVIL'])],
+                'estatus' => ['sometimes', Rule::in(['ACTIVO', 'INACTIVO', 'CANCELADA'])],
                 'propiedadId' => ['required', 'numeric', 'exists:propiedads,id'],
             ];
-        } else if ($method == 'PATCH') {
-            return [
-                'tipo' => ['sometimes', Rule::in(['PEATONAL', 'AUTOMOVIL'])],
-                'propiedadId' => ['sometimes', 'numeric', 'exists:propiedads,id'],
-            ];
-        }
+        } 
+        // else if ($method == 'PATCH') {
+        //     return [
+        //         'tipo' => ['sometimes', Rule::in(['PEATONAL', 'AUTOMOVIL'])],
+        //         'estatus' => ['sometimes', Rule::in(['ACTIVO', 'INACTIVO', 'CANCELADA'])],
+        //         'propiedadId' => ['sometimes', 'numeric', 'exists:propiedads,id'],
+        //     ];
+        // }
     }
 
     protected function prepareForValidation()
