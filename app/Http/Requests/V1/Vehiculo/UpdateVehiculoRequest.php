@@ -49,6 +49,7 @@ class UpdateVehiculoRequest extends FormRequest
             'id_tipo_vehiculo' => 'required',
             'id_estado' => 'required',
             'marca' => 'required',
+            'submarca'=> 'required',
             'color' => 'required',
             'placas' => 'required',
             //'propietario_id' => 'required',

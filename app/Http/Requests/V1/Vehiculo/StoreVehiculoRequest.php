@@ -52,6 +52,7 @@ class StoreVehiculoRequest extends FormRequest
             'id_estado' => 'required',
             'propietario_id' => 'required',
             'marca' => 'required',
+            'submarca'=>'required',
             'color' => 'required',
             'placas' => 'required',
             'tarjeta_circulacion' => 'sometimes',

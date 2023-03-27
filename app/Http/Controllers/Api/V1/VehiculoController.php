@@ -98,6 +98,7 @@ class VehiculoController extends Controller
         $vehiculo->id_estado = $request->id_estado;
         $vehiculo->propietario_id = $request->propietario_id;
         $vehiculo->marca = $request->marca;
+        $vehiculo->submarca = $request->submarca;
         $vehiculo->color = $request->color;
         $vehiculo->placas = $request->placas;
         $vehiculo->estatus = true;
@@ -175,6 +176,7 @@ class VehiculoController extends Controller
         $vehiculo->id_tipo_vehiculo = $request->id_tipo_vehiculo;
         $vehiculo->id_estado = $request->id_estado;
         $vehiculo->marca = $request->marca;
+        $vehiculo->submarca = $request->submarca;
         $vehiculo->color = $request->color;
         //$vehiculo->propietario_id = $request->propietario_id;
         $vehiculo->placas = $request->placas;
