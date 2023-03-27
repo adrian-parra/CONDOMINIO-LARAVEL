@@ -25,7 +25,6 @@ class ProveedorFactory extends Factory
             'nombre_contacto' => $this->faker->name(),
             'correo_contacto' => $this->faker->email(),
             'notas' => $this->faker->text(200),
-            'metodo_de_pago_id' => $this->faker->randomElement([0, 1]),
             'fraccionamiento_id' => $this->faker->randomElement($fracc),
         ];
     }

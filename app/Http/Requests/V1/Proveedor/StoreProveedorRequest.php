@@ -44,7 +44,6 @@ class StoreProveedorRequest extends FormRequest
      */
     public function rules()
     {
-        $fracc = fraccionamiento::pluck('id')->toArray();
 
         return [
             'nombre' => ['required', 'max:100'],
@@ -52,7 +51,6 @@ class StoreProveedorRequest extends FormRequest
             'nombreContacto' => ['required', 'max:80'],
             'correoContacto' => ['required', 'email', 'max:40'],
             'notas' => ['required', 'max:200'],
-            'metodoDePagoId' => ['required', 'integer', Rule::in([0, 1])],
             'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
         ];
     }

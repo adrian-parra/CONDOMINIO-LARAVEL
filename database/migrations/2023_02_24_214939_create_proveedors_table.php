@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('nombre_contacto', 80);
             $table->string('correo_contacto', 40);
             $table->string('notas', 200);
-            $table->unsignedInteger('metodo_de_pago_id');
             $table->unsignedBigInteger('fraccionamiento_id');
 
             $table->foreign('fraccionamiento_id')->references('id')

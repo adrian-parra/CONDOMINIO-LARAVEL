@@ -52,9 +52,9 @@ class DatabaseSeeder extends Seeder
             EgresoSeeder::class
         );
 
-        // $this->call(
-        //     DetalleEgresoSeeder::class
-        // );
+        $this->call(
+            DetalleEgresoSeeder::class
+        );
 
         $this->call(
             EstadosSeeder::class
