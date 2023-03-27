@@ -38,6 +38,8 @@ class EgresoResource extends JsonResource
             'estatusEgreso' => $objEstatusEgreso,
             'montoTotal' => $this->monto_total,
             'comprobanteUrl' => $this->comprobante_url,
+            'tipoPago' => $this->tipo_pago,
+            'fechaPago' => $this->fecha_pago,
             'tipoEgreso' => new TipoEgresoResource($tipo_egreso),
             'fraccionamientoId' => $this->fraccionamiento_id,
             'detalleEgreso' => DetalleEgresoResource::collection(
