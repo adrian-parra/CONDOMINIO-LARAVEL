@@ -92,7 +92,7 @@ class PropiedadController extends Controller
 
         $mensaje = new mensaje();
 
-        $mensaje->title = "Propiedad conseguida exitosamente";
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = new PropiedadResource($propiedad);
 
