@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Propietario;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PropietarioSeeder extends Seeder
+class HistoricoBalanceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +14,6 @@ class PropietarioSeeder extends Seeder
      */
     public function run()
     {
-        Propietario::factory()
-            ->hasPropiedad(1)
-            ->create();
+        //
     }
 }

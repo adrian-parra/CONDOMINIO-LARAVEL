@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         // $schedule->job(new ActualizarMontosJob)->dailyAt('6:00');
-        $schedule->job(new ActualizarMontosJob)->everyMinute();
+        // $schedule->job(new ActualizarMontosJob)->everyMinute();
     }
 
     /**

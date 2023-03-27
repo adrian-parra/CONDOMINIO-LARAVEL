@@ -28,9 +28,7 @@ class PropietarioFactory extends Factory
             'telefono_fijo' => $this->faker->phoneNumber(),
             'identificacion_url' => $this->faker->filePath(),
             'is_inquilino' => $this->faker->boolean(),
-            'fraccionamiento_id' => $this->faker->randomElement($fracc),
-            'clave_interfon' => $this->faker->randomAscii(),
-            'clave_interfon_alt' => $this->faker->randomAscii()
+            'fraccionamiento_id' => 1,
         ];
     }
 }
