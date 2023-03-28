@@ -51,7 +51,8 @@ class StoreEgresoRequest extends FormRequest
             'tipoPago' => ['required', Rule::in(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA'])],
             'fechaPago' => ['required', 'date'],
             'tipoEgreso' => ['required', 'integer', 'exists:tipo_de_egresos,id'],
-            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id']
+            'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
+            'proveedorId' => ['required', 'integer', 'exists:proveedors,id']
         ];
     }
 
@@ -62,6 +63,7 @@ class StoreEgresoRequest extends FormRequest
             'monto_total' => $this->montoTotal,
             'tipo_egreso_id' => $this->tipoEgreso,
             'fraccionamiento_id' => $this->fraccionamientoId,
+            'proveedor_id' => $this->proveedorId,
             'comprobante_url' => $this->archivoComprobante,
             'fecha_pago' => $this->fechaPago,
             'tipo_pago' => $this->tipoPago,

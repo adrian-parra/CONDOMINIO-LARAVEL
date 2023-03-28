@@ -58,7 +58,8 @@ class UpdateEgresoRequest extends FormRequest
                 'tipoPago' => ['required', Rule::in(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA'])],
                 'fechaPago' => ['required', 'date'],
                 'tipoEgreso' => ['required', 'integer', 'exists:tipo_de_egresos,id'],
-                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id']
+                'fraccionamientoId' => ['required', 'integer', 'exists:fraccionamientos,id'],
+                'proveedorId' => ['sometimes', 'integer', 'exists:proveedors,id']
             ];
         } else if ($method == 'PATCH') {
             return [
@@ -70,7 +71,8 @@ class UpdateEgresoRequest extends FormRequest
                 'tipoPago' => ['sometimes', Rule::in(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA'])],
                 'fechaPago' => ['sometimes', 'date'],
                 'tipoEgreso' => ['sometimes', 'required', 'integer', 'exists:tipo_de_egresos,id'],
-                'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id']
+                'fraccionamientoId' => ['sometimes', 'required', 'integer', 'exists:fraccionamientos,id'],
+                'proveedorId' => ['sometimes', 'integer', 'exists:proveedors,id']
             ];
         }
     }
@@ -86,6 +88,7 @@ class UpdateEgresoRequest extends FormRequest
         $dataToMerge['tipo_pago'] = $this->tipoPago ?? null;
         $dataToMerge['fecha_pago'] = $this->fechaPago ?? null;
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;
+        $dataToMerge['proveedor_id'] = $this->proveedorId ?? null;
 
         $dataToMerge = array_filter($dataToMerge, function ($value) {
             return $value !== null;

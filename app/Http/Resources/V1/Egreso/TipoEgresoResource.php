@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\V1\Egreso;
 
+use App\Http\Resources\V1\Proveedor\ProveedorResource;
+use App\Models\Proveedor;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TipoEgresoResource extends JsonResource
@@ -14,10 +16,12 @@ class TipoEgresoResource extends JsonResource
      */
     public function toArray($request)
     {
+        $proveedor = Proveedor::find($this->proveedor_id);
         return [
             'id' => $this->id,
             'descripcion' => $this->descripcion,
             'status' => $this->status,
+            'proveedorDefault' => new ProveedorResource($proveedor),
         ];
     }
 }

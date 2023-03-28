@@ -17,6 +17,7 @@ class Egreso extends Model
         'monto_total',
         'comprobante_url',
         'fraccionamiento_id',
+        'proveedor_id',
         'fecha_pago',
         'tipo_pago'
     ];

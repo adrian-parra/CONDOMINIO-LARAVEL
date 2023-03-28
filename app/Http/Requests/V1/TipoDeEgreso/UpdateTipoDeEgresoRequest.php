@@ -50,12 +50,14 @@ class UpdateTipoDeEgresoRequest extends FormRequest
                 'descripcion' => ['required', 'max:100'],
                 'status' => ['required', 'boolean'],
                 'fraccionamientoId' => ['required', 'exists:fraccionamientos,id'],
+                'proveedorId' => ['sometimes', 'exists:proveedors,id'],
             ];
         } else if ($method == 'PATCH') {
             return [
                 'descripcion' => ['sometimes', 'max:100'],
                 'status' => ['sometimes', 'boolean'],
                 'fraccionamientoId' => ['sometimes', 'exists:fraccionamientos,id'],
+                'proveedorId' => ['sometimes', 'exists:proveedors,id'],
             ];
         }
     }
@@ -65,6 +67,7 @@ class UpdateTipoDeEgresoRequest extends FormRequest
         $dataToMerge = [];
 
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;
+        $dataToMerge['proveedor_id'] = $this->proveedorId ?? null;
 
         $dataToMerge = array_filter($dataToMerge, function ($value) {
             return $value !== null;
