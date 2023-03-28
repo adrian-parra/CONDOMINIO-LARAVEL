@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\V1\Propiedad\Interfon;
 
+use App\Models\ClaveInterfon;
 use App\Models\mensaje;
 use App\Rules\UniqueTogether;
 use Illuminate\Contracts\Validation\Validator;
@@ -47,7 +48,10 @@ class UpdateClaveInterfonRequest extends FormRequest
     {
         $method = $this->getMethod();
 
-        $id = $this->route('id');
+        $id = $this->route('interfon');
+
+        $obj = ClaveInterfon::where('numero_interfon', $id)
+            ->first();
 
         if ($method == 'PUT') {
             return [
@@ -58,9 +62,21 @@ class UpdateClaveInterfonRequest extends FormRequest
                     new UniqueTogether(
                         'clave_interfons',
                         ['numero_interfon', 'fraccionamiento_id'],
-                        'La Clave Interfon introducida ya fue tomada',
+                        'El numero introducido ya fue tomado',
                         $id,
                         'numero_interfon'
+                    )
+                ],
+                'codigoInterfon' => [
+                    'required',
+                    'string',
+                    'max:5',
+                    new UniqueTogether(
+                        'clave_interfons',
+                        ['codigo_interfon', 'fraccionamiento_id'],
+                        'El codigo introducido ya fue tomado',
+                        $obj->codigo_interfon,
+                        'codigo_interfon'
                     )
                 ],
                 'propiedad_id' => ['required', 'exists:propiedads,id'],
@@ -89,6 +105,7 @@ class UpdateClaveInterfonRequest extends FormRequest
         $dataToMerge = [];
 
         $dataToMerge['numero_interfon'] = $this->numeroInterfon ?? null;
+        $dataToMerge['codigo_interfon'] = $this->codigoInterfon ?? null;
         $dataToMerge['fraccionamiento_id'] = $this->fraccionamientoId ?? null;
         $dataToMerge['propiedad_id'] = $this->propiedadId ?? null;
 

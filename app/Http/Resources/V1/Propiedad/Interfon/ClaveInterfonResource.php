@@ -15,7 +15,8 @@ class ClaveInterfonResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'numeroInterfon' => $this->numero_interfon
+            'numeroInterfon' => $this->numero_interfon,
+            'codigoInterfon' => $this->codigo_interfon
         ];
     }
 }

@@ -11,6 +11,7 @@ class ClaveInterfon extends Model
 
     protected $fillable = [
         'numero_interfon',
+        'codigo_interfon',
         'propiedad_id',
         'fraccionamiento_id'
     ];
