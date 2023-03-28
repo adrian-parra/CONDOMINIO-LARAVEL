@@ -75,7 +75,7 @@ class ProveedorController extends Controller
             return response()->json($mensaje, 404);
         }
 
-        $mensaje->title = "Proveedor conseguido exitosamente";
+        $mensaje->title = "";
         $mensaje->icon = "success";
         $mensaje->body = new ProveedorResource($proveedor);
 
