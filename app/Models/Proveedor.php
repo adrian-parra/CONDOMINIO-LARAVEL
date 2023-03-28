@@ -15,7 +15,6 @@ class Proveedor extends Model
         'nombre_contacto',
         'correo_contacto',
         'notas',
-        'metodo_de_pago_id',
         'fraccionamiento_id',
     ];
 }

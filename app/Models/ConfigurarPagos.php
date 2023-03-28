@@ -77,46 +77,18 @@ class ConfigurarPagos extends Model
 
         $propiedades = $propiedades->get();
 
-        for ($i = 0; $i < $cantidad; $i++) {
-            $fecha_pago = date('Y-m-d', strtotime($fecha_actual . ' +' . $cantidadPeriodo));
-            foreach ($propiedades as $propiedad) {
-                $monto_pagado = 0;
-                $recibo_pagado = false;
-
-                if ($propiedad->balance_favor > 0) {
-                    $monto_favor = $propiedad->balance_favor;
-
-                    if ($monto_favor >= $this->monto) {
-                        $monto_pagado = $this->monto;
-                        $propiedad->balance_favor = $monto_favor - $this->monto;
-                        $recibo_pagado = true;
-                    } else if ($monto_favor < $this->monto) {
-                        $monto_pagado = $monto_favor;
-                        $propiedad->balance_favor = 0;
-                    }
-
-                    $propiedad->save();
-                }
-
-                $recibo = [
-                    'fraccionamiento_id' => $propiedad->fraccionamiento_id,
-                    'propiedad_id' => $propiedad->id,
-                    'configuracion_id' => $this->id,
-                    'fecha_vencimiento' => $fecha_pago,
-                    'monto' => $this->monto,
-                    'monto_pagado' => $monto_pagado,
-                    'estatus' => $recibo_pagado ? 'PAGADO' : 'POR_PAGAR',
-                    'fecha_pago' => $recibo_pagado ? date('Y-m-d') : null
-                ];
-
-                $recibos[] = $recibo;
-            }
-            $fecha_actual = $fecha_pago;
-        }
+        $recibos = $this->generar($cantidad, $propiedades, $fecha_actual, $cantidadPeriodo);
 
         Recibo::insert($recibos);
 
-        $recibos = Recibo::latest()->limit(count($recibos))->where('monto_pagado', '>', 0)->get();
+        $fecha_actual = \Carbon\Carbon::parse($fecha_actual);
+
+
+        $recibos = Recibo::where('monto_pagado', '>', 0)
+            ->whereYear('fecha_vencimiento', $fecha_actual->year)
+            ->orderBy('id')
+            ->take(count($recibos))
+            ->get();
 
         $historicos = [];
 
@@ -125,7 +97,8 @@ class ConfigurarPagos extends Model
                 'monto' => $recibo->monto_pagado,
                 'tipo' => 'DECREMENTO',
                 'propiedad_id' => $recibo->propiedad_id,
-                'pago_id' => $recibo->id
+                'recibo_id' => $recibo->id,
+                'created_at' => date('Y-m-d')
             ];
         }
 
