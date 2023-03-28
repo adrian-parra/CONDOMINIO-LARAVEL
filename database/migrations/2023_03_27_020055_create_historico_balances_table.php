@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedFloat('monto');
             $table->enum('tipo', ['INCREMENTO', 'DECREMENTO']);
 
-            $table->unsignedBigInteger('propiedad_id');
+            $table->unsignedBigInteger('propiedad_id')->nullable();
             $table->unsignedBigInteger('pago_id')->nullable()->default(null);
             $table->unsignedBigInteger('recibo_id')->nullable()->default(null);
 

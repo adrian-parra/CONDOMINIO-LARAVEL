@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\fraccionamiento;
+use App\Models\Proveedor;
 use App\Models\TipoDeEgreso;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,6 +21,7 @@ class EgresoFactory extends Factory
     {
         $fracc = fraccionamiento::pluck('id')->toArray();
         $tipo_de_egreso = TipoDeEgreso::pluck('id')->toArray();
+        $proveedor = Proveedor::inRandomOrder()->first();
 
         return [
             'descripcion' => $this->faker->realText(100),
@@ -31,6 +33,7 @@ class EgresoFactory extends Factory
             'tipo_pago' => $this->faker->randomElement(['T/C', 'T/D', 'CHEQUE', 'EFECTIVO', 'TRANSFERENCIA']),
             'tipo_egreso_id' => $this->faker->randomElement($tipo_de_egreso),
             'fraccionamiento_id' => $this->faker->randomElement($fracc),
+            'proveedor_id' => $proveedor
         ];
     }
 }

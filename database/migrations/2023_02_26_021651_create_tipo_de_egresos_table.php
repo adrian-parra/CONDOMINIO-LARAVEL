@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign('fraccionamiento_id')->references('id')
                 ->on('fraccionamientos')->onDelete('cascade');
 
-            $table->foreign('proveedor_default')->references('id')
+            $table->foreign('proveedor_id')->references('id')
                 ->on('proveedors')->onDelete('set null');
         });
     }

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\fraccionamiento;
+use App\Models\Proveedor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,7 @@ class TipoDeEgresoFactory extends Factory
     public function definition()
     {
         $fraccionamiento = fraccionamiento::inRandomOrder()->first();
+        $proveedor = Proveedor::inRandomOrder()->first();
 
         return [
             'descripcion' => $this->faker->realText(100),
