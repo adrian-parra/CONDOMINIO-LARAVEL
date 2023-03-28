@@ -51,7 +51,17 @@ class StoreClaveInterfonRequest extends FormRequest
                 new UniqueTogether(
                     'clave_interfons',
                     ['numero_interfon', 'fraccionamiento_id'],
-                    'La Clave Interfon introducida ya fue tomada'
+                    'El numero introducido ya fue tomado',
+                )
+            ],
+            'codigoInterfon' => [
+                'required',
+                'string',
+                'max:5',
+                new UniqueTogether(
+                    'clave_interfons',
+                    ['codigo_interfon', 'fraccionamiento_id'],
+                    'El codigo introducido ya fue tomado'
                 )
             ],
             'propiedadId' => ['required', 'exists:propiedads,id'],
@@ -66,6 +76,7 @@ class StoreClaveInterfonRequest extends FormRequest
     {
         $this->merge([
             'numero_interfon' => $this->numeroInterfon,
+            'codigo_interfon' => $this->codigoInterfon,
             'fraccionamiento_id' => $this->fraccionamientoId,
             'propiedad_id' => $this->propiedadId,
         ]);

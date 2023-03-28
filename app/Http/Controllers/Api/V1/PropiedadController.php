@@ -263,6 +263,7 @@ class PropiedadController extends Controller
         unset($data['numeroInterfon']);
         unset($data['propiedadId']);
         unset($data['fraccionamientoId']);
+        unset($data['codigoInterfon']);
 
         $interfon->where('numero_interfon', $interfonId)
             ->update($data);

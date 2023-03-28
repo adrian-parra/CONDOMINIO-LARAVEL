@@ -14,8 +14,6 @@ class PropietarioFilter extends ApiFilter
         'celularAlt' => ['eq'],
         'telefonoFijo' => ['eq'],
         'fraccionamientoId' => ['eq'],
-        'claveInterfon' => ['eq'],
-        'claveInterfonAlt' => ['eq'],
         'isInquilino' => ['eq'],
     ];
 
@@ -23,8 +21,6 @@ class PropietarioFilter extends ApiFilter
         'celularAlt' => 'celular_alt',
         'telefonoFijo' => 'telefono_fijo',
         'fraccionamientoId' => 'fraccionamiento_id',
-        'claveInterfon' => 'clave_interfon',
-        'claveInterfonAlt' => 'clave_interfon_alt',
         'isInquilino' => 'is_inquilino',
     ];
 
