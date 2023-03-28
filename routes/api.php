@@ -88,6 +88,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
 
     Route::apiResource('pagos', RecibosComprobanteController::class);
 
+    Route::get(
+        'balances/historial',
+        [PropiedadController::class, 'get_historial_balances']
+    );
+
     Route::post(
         'balances/generales',
         [PropiedadController::class, 'set_balances_generales']

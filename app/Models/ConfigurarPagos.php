@@ -98,6 +98,7 @@ class ConfigurarPagos extends Model
                 'tipo' => 'DECREMENTO',
                 'propiedad_id' => $recibo->propiedad_id,
                 'recibo_id' => $recibo->id,
+                'fraccionamiento_id' => $recibo->fraccionamiento_id,
                 'created_at' => date('Y-m-d')
             ];
         }
@@ -193,6 +194,7 @@ class ConfigurarPagos extends Model
                 'tipo' => 'DECREMENTO',
                 'propiedad_id' => $recibo->propiedad_id,
                 'recibo_id' => $recibo->id,
+                'fraccionamiento_id' => $recibo->fraccionamiento_id,
                 'created_at' => date('Y-m-d')
             ];
         }
