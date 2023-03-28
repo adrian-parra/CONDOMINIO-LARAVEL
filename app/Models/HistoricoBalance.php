@@ -14,6 +14,7 @@ class HistoricoBalance extends Model
         'tipo',
         'propiedad_id',
         'pago_id',
-        'recibo_id'
+        'recibo_id',
+        'fraccionamiento_id'
     ];
 }

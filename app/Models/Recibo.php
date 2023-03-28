@@ -97,7 +97,9 @@ class Recibo extends Model
                     'monto' => $cantidad_pagada,
                     'tipo' => 'INCREMENTO',
                     'propiedad_id' => $this->propiedad_id,
-                    'pago_id' => $pago->id
+                    'fraccionamiento_id' => $this->fraccionamiento_id,
+                    'pago_id' => $pago->id,
+                    'created_at' => date('Y-m-d')
                 ]);
             } else {
                 //Se hace recursividad.

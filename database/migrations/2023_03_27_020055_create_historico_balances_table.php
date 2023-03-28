@@ -21,18 +21,24 @@ return new class extends Migration
             $table->unsignedBigInteger('propiedad_id')->nullable();
             $table->unsignedBigInteger('pago_id')->nullable()->default(null);
             $table->unsignedBigInteger('recibo_id')->nullable()->default(null);
+            $table->unsignedBigInteger('fraccionamiento_id');
 
             $table->timestamps();
 
             $table->foreign('propiedad_id')
                 ->references('id')
                 ->on('propiedads')
-                ->onDelete('cascade');
+                ->onDelete('set null');
 
             $table->foreign('pago_id')
                 ->references('id')
                 ->on('recibos_comprobantes')
-                ->onDelete('cascade');;
+                ->onDelete('set null');
+
+            $table->foreign('fraccionamiento_id')
+                ->references('id')
+                ->on('fraccionamientos')
+                ->onDelete('cascade');
 
             // $table->foreign('recibo_id')
             //     ->references('id')
