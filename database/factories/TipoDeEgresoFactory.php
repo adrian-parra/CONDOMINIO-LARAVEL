@@ -24,7 +24,8 @@ class TipoDeEgresoFactory extends Factory
         return [
             'descripcion' => $this->faker->realText(100),
             'status' => $this->faker->boolean(90),
-            'fraccionamiento_id' => $fraccionamiento
+            'fraccionamiento_id' => $fraccionamiento,
+            'proveedor_id' => $proveedor
         ];
     }
 }
