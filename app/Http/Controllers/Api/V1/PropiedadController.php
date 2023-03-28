@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Filters\V1\HistorialBalancesFilter;
 use App\Filters\V1\PropiedadFilter;
 use App\Filters\V1\RfdiFilter;
 use App\Http\Controllers\Api\Controller;
@@ -12,11 +13,13 @@ use App\Http\Requests\V1\Propiedad\Rfdi\UpdateRfdiRequest;
 use App\Http\Requests\V1\Propiedad\SetBalancesPropiedad;
 use App\Http\Requests\V1\Propiedad\StorePropiedadRequest;
 use App\Http\Requests\V1\Propiedad\UpdatePropiedadRequest;
+use App\Http\Resources\V1\Historial\Balance\HistorialBalanceCollection;
 use App\Http\Resources\V1\Propiedad\PropiedadCollection;
 use App\Http\Resources\V1\Propiedad\PropiedadResource;
 use App\Http\Resources\V1\Propiedad\Rfdi\RfdiCollection;
 use App\Http\Resources\V1\Propiedad\Rfdi\RfdiResource;
 use App\Models\ClaveInterfon;
+use App\Models\HistoricoBalance;
 use App\Models\mensaje;
 use App\Models\Propiedad;
 use App\Models\Rfdi;
@@ -168,6 +171,26 @@ class PropiedadController extends Controller
 
         $mensaje->title = "Balances Actualizados Correctamente";
         $mensaje->icon = "success";
+
+        return response()->json($mensaje, 200);
+    }
+
+    public function get_historial_balances(Request $request)
+    {
+        $filter = new HistorialBalancesFilter();
+        $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
+
+        $historial = HistoricoBalance::where($filterItems);
+
+        $mensaje = new mensaje();
+
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+        $mensaje->body = new HistorialBalanceCollection(
+            $historial
+                ->orderByDesc('created_at')
+                ->get()
+        );
 
         return response()->json($mensaje, 200);
     }
