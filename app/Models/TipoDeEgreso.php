@@ -13,5 +13,6 @@ class TipoDeEgreso extends Model
         'descripcion',
         'status',
         'fraccionamiento_id',
+        'proveedor_id'
     ];
 }

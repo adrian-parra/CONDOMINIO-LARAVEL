@@ -46,6 +46,7 @@ class StoreTipoDeEgresoRequest extends FormRequest
             'descripcion' => ['required', 'max:100'],
             'status' => ['required', 'boolean'],
             'fraccionamientoId' => ['required', 'exists:fraccionamientos,id'],
+            'proveedorDefault' => ['sometimes', 'exists:proveedors,id'],
         ];
     }
 
@@ -53,6 +54,7 @@ class StoreTipoDeEgresoRequest extends FormRequest
     {
         $this->merge([
             'fraccionamiento_id' => $this->fraccionamientoId,
+            'proveedor_id' => $this->proveedorId,
         ]);
     }
 }

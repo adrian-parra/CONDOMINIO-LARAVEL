@@ -18,10 +18,14 @@ return new class extends Migration
             $table->string('descripcion', 100);
             $table->boolean('status');
             $table->unsignedBigInteger('fraccionamiento_id');
+            $table->unsignedBigInteger('proveedor_id')->nullable()->default(null);
             $table->timestamps();
 
             $table->foreign('fraccionamiento_id')->references('id')
                 ->on('fraccionamientos')->onDelete('cascade');
+
+            $table->foreign('proveedor_default')->references('id')
+                ->on('proveedors')->onDelete('set null');
         });
     }
 

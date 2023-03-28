@@ -25,11 +25,15 @@ return new class extends Migration
             $table->date('fecha_pago');
             $table->unsignedBigInteger('tipo_egreso_id')->nullable();
             $table->unsignedBigInteger('fraccionamiento_id');
+            $table->unsignedBigInteger('proveedor_id')->nullable();
 
             $table->timestamps();
 
             $table->foreign('tipo_egreso_id')->references('id')
                 ->on('tipo_de_egresos')->onDelete('set null');
+
+            $table->foreign('proveedor_id')->references('id')
+                ->on('proveedors')->onDelete('set null');
 
             $table->foreign('fraccionamiento_id')->references('id')
                 ->on('fraccionamientos')->onDelete('cascade');
