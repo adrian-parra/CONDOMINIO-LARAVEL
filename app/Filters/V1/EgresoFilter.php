@@ -12,6 +12,7 @@ class EgresoFilter extends ApiFilter
         'montoTotal' => ['eq', 'lt', 'lte', 'gt', 'gte'],
         'tipoEgresoId' => ['eq'],
         'fraccionamientoId' => ['eq'],
+        'proveedorId' => ['eq'],
     ];
 
     //
@@ -21,6 +22,7 @@ class EgresoFilter extends ApiFilter
         'montoTotal' => 'monto_total',
         'tipoEgresoId' => 'tipo_egreso_id',
         'fraccionamientoId' => 'fraccionamiento_id',
+        'proveedorId' => 'proveedor_id',
     ];
 
     protected $operatorMap = [
