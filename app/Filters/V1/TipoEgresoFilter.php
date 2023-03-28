@@ -8,9 +8,11 @@ class TipoEgresoFilter extends ApiFilter
 {
     protected $safeParams = [
         'id' => ['eq'],
+        'fraccionamientoId' => ['eq'],
     ];
 
     protected $columnMap = [
+        'fraccionamientoId' => 'fraccionamiento_id'
     ];
 
     protected $operatorMap = [
