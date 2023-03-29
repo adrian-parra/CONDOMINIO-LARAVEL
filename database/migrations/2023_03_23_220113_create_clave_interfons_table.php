@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('clave_interfons', function (Blueprint $table) {
             $table->string('numero_interfon', 20);
             $table->string('codigo_interfon', 5);
+            $table->boolean('estatus')->default(1);
             $table->unsignedBigInteger('propiedad_id');
             $table->unsignedBigInteger('fraccionamiento_id');
 

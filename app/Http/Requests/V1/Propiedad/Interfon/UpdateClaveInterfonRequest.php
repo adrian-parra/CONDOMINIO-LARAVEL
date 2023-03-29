@@ -84,6 +84,10 @@ class UpdateClaveInterfonRequest extends FormRequest
                     'required',
                     'exists:fraccionamientos,id',
                 ],
+                'estatus' => [
+                    'required',
+                    'boolean'
+                ]
             ];
         } else if ($method == 'PATCH') {
             $mensaje = new mensaje();

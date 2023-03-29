@@ -16,7 +16,8 @@ class ClaveInterfonResource extends JsonResource
     {
         return [
             'numeroInterfon' => $this->numero_interfon,
-            'codigoInterfon' => $this->codigo_interfon
+            'codigoInterfon' => $this->codigo_interfon,
+            'estatus' => $this->estatus
         ];
     }
 }

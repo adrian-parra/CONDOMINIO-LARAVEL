@@ -105,6 +105,11 @@ class Recibo extends Model
                 //Se hace recursividad.
                 $siguiente_recibo->comprobarPago($cantidad_pagada, $pago, $excedente);
             }
+        }else{
+            $this->estatus = 'PAGADO';
+            $this->fecha_pago = date('Y-m-d');
+            $this->monto_pagado = $this->monto;
+            $this->save();
         }
     }
 

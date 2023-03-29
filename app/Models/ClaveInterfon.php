@@ -13,7 +13,8 @@ class ClaveInterfon extends Model
         'numero_interfon',
         'codigo_interfon',
         'propiedad_id',
-        'fraccionamiento_id'
+        'fraccionamiento_id',
+        'estatus'
     ];
 
     public function propiedad()
