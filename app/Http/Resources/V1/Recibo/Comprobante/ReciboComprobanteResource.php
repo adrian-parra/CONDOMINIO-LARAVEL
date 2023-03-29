@@ -2,8 +2,12 @@
 
 namespace App\Http\Resources\V1\Recibo\Comprobante;
 
+use App\Models\Propiedad;
 use App\Models\Recibo;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\V1\Propiedad\PropiedadResource;
+use App\Http\Resources\V1\Recibo\ReciboResource;
+
 
 class ReciboComprobanteResource extends JsonResource
 {
@@ -16,6 +20,7 @@ class ReciboComprobanteResource extends JsonResource
     public function toArray($request)
     {
         $recibo = Recibo::findOrFail($this->recibo_id);
+        $propiedad = Propiedad::find($this->propiedad_id);
 
         return [
             'id' => $this->id,
@@ -25,8 +30,8 @@ class ReciboComprobanteResource extends JsonResource
             'estatus' => $this->estatus,
             'tipoPago' => $this->tipo_pago,
             'razonRechazo' => $this->razon_rechazo,
-            'reciboId' => $this->recibo_id,
-            'propiedadId' => $this->propiedad_id,
+            'recibo' => new ReciboResource($recibo),
+            'propiedad' => new PropiedadResource($propiedad),
             'fraccionamientoId' => $this->fraccionamiento_id,
         ];
     }
