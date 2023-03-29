@@ -33,14 +33,23 @@ class RecibosComprobanteController extends Controller
 
         $recibos = RecibosComprobante::where($filterItems);
 
+        
+      
+
         $mensaje->title = "";
         $mensaje->icon = "success";
+
+        /**
+         *     ! LINEA DE CODIGO QUE FUNCIONA SIMILAR A LOS RESOURCE EN LARAVEL,
+         *     ! ME SERVIRA EN UN FUTURO...
+         */ // ? $mensaje->body = $recibos->with('propiedad.propietario ,propiedad.tipo')->get();
 
         $mensaje->body = new ReciboComprobanteCollection(
             $recibos
                 ->orderByDesc('id')
                 ->get()
         );
+    
 
         return response()->json($mensaje, 200);
     }
