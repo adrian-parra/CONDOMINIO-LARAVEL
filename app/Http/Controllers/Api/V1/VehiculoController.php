@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Filters\V1\VehiculoFilter;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Vehiculo\StoreVehiculoRequest;
 use App\Http\Requests\V1\Vehiculo\UpdateVehiculoRequest;
@@ -15,6 +16,20 @@ use Illuminate\Http\Request;
 
 class VehiculoController extends Controller
 {
+    public function filter(Request $request){
+        $mensaje = new mensaje();
+        $filter = new VehiculoFilter();
+
+        $filterItems = $filter->transform($request);
+
+        $vehiculo = Vehiculo::where($filterItems);
+
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+        $mensaje->body =  $vehiculo->orderByDesc('id')->get();
+
+        return response()->json($mensaje, 200);
+    }
     /**
      * Display a listing of the resource.
      *
