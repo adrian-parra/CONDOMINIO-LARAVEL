@@ -49,6 +49,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'm
 
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     Route::apiResource('vehiculos', VehiculoController::class);
+    Route::get('vehiculo/filters' ,[VehiculoController::class,'filter']);
     // Debug Routes
     Route::apiResource('proveedores', ProveedorController::class);
     Route::apiResource('propietarios', PropietarioController::class);
