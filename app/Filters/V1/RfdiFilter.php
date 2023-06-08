@@ -11,6 +11,7 @@ class RfdiFilter extends ApiFilter
         'fraccionamientoId' => ['eq'],
         'propiedadId' => ['eq'],
         'estatus' => ['eq', 'ne'],
+        'tipo' => ['eq']
     ];
 
     protected $columnMap = [
