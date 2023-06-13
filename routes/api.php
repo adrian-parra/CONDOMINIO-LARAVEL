@@ -62,6 +62,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     // NUMERO INTERFONES
     Route::post('propiedades/interfon', [PropiedadController::class, 'postInterfon']);
     Route::put('propiedades/interfon/{interfon}', [PropiedadController::class, 'putInterfon']);
+    // ESTADO DE CUENTA
+    Route::get('propiedades/{id}/cuenta/', [PropiedadController::class, 'getEstadoDeCuentaPorPropiedad']);
+    Route::get('propietario/{id}/cuenta/', [PropiedadController::class, 'getBalanceGeneral']);
     // PROPIEDADES
     Route::apiResource('propiedades', PropiedadController::class);
 

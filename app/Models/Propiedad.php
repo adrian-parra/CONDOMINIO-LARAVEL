@@ -130,4 +130,32 @@ class Propiedad extends Model
         $propiedad->balance = $balance;
         $propiedad->save();
     }
+
+    public function obtenerRecibos()
+    {
+        $recibos = Recibo::whereIn(
+            'estatus',
+            ['PAGADO', 'VENCIDO']
+        )->where('propiedad_id', $this->id)->get();
+
+        $balance = 0;
+
+        foreach ($recibos as $recibo) {
+            if ($recibo->estatus == 'PAGADO') {
+                $balance += $recibo->monto;
+            } else {
+                $balance -= $recibo->monto;
+            }
+        }
+
+        $recibos = Recibo::where(
+            'propiedad_id',
+            $this->id
+        )->where('estatus', '!=', 'PAGADO')->get();
+
+        // Log::debug($recibos);
+
+        $this->balance = $balance;
+        $this->recibos = $recibos;
+    }
 }
