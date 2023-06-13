@@ -33,9 +33,6 @@ class RecibosComprobanteController extends Controller
 
         $recibos = RecibosComprobante::where($filterItems);
 
-        
-      
-
         $mensaje->title = "";
         $mensaje->icon = "success";
 

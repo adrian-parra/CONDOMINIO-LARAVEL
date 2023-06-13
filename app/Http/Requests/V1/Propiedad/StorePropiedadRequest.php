@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\V1\Propiedad;
 
-use App\Models\fraccionamiento;
 use App\Models\mensaje;
-use App\Models\Propietario;
 use App\Rules\UniqueTogether;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;

@@ -14,6 +14,8 @@ use App\Http\Requests\V1\Propiedad\SetBalancesPropiedad;
 use App\Http\Requests\V1\Propiedad\StorePropiedadRequest;
 use App\Http\Requests\V1\Propiedad\UpdatePropiedadRequest;
 use App\Http\Resources\V1\Historial\Balance\HistorialBalanceCollection;
+use App\Http\Resources\V1\Propiedad\Estado\PropiedadEstadoCuentaResource;
+use App\Http\Resources\V1\Propiedad\Estado\PropietarioEstadoCuentaResource;
 use App\Http\Resources\V1\Propiedad\PropiedadCollection;
 use App\Http\Resources\V1\Propiedad\PropiedadResource;
 use App\Http\Resources\V1\Propiedad\Rfdi\RfdiCollection;
@@ -293,6 +295,44 @@ class PropiedadController extends Controller
 
         $mensaje->title = "Interfon actualizado exitosamente";
         $mensaje->icon = "success";
+
+        return response()->json($mensaje, 200);
+    }
+
+    public function getEstadoDeCuentaPorPropiedad(Request $request, $id)
+    {
+        $mensaje = new mensaje();
+
+        $propiedad = Propiedad::find($id);
+
+        $propiedad->obtenerRecibos();
+
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropiedadEstadoCuentaResource($propiedad);
+
+        return response()->json($mensaje, 200);
+    }
+
+    public function getBalanceGeneral(Request $request, $id)
+    {
+        $mensaje = new mensaje();
+
+        $propiedades = Propiedad::where('propietario_id', $id)->get();
+
+        // Log::debug($propiedades);
+
+        $propiedad = Propiedad::find($id);
+        $temp = new Propiedad();
+
+        foreach ($propiedades as $propiedad) {
+            $propiedad->obtenerRecibos();
+            $temp->balance += $propiedad->balance;
+        }
+
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+        $mensaje->body = new PropietarioEstadoCuentaResource($temp);
 
         return response()->json($mensaje, 200);
     }
