@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\ErrorHandler\Debug;
 
 class ConfigurarPagos extends Model
 {
@@ -114,7 +115,7 @@ class ConfigurarPagos extends Model
     // Funcion que crea recibos de la configuracion especificada segun el año
     // p.j. si viene una peticion que genere 2023 se generan todos los meses
     // suponiendo que el periodo de pago es mensual.
-    public function crearRecibosAnual($year)
+    public function crearRecibosAnual($year, $fechaInicio = null)
     {
 
         $mensaje = new mensaje();
@@ -142,19 +143,26 @@ class ConfigurarPagos extends Model
         $fecha_actual = date('Y-m-d');
 
         $propiedades = $propiedades->get();
-
-        if ($fecha_actual < $year . '-01-00') {
+        if ($fechaInicio) {
+            $fecha_actual = $fechaInicio;
+        } else if ($fecha_actual < $year . '-01-00') {
             $fecha_actual = $year . '-01-00';
             $fecha_actual = date('Y-m-d', strtotime(
                 $year . '-01-00' . ' +' . $this->dias_max_pago . ' days'
             ));
-            $fecha_actual = date('Y-m-d', strtotime($fecha_actual . ' -' . $cantidadPeriodo));
         }
 
         $startDate = \Carbon\Carbon::parse($fecha_actual);
         $endDate = \Carbon\Carbon::parse($year . '-12-31');
 
         if ($ultimoRecibo && $startDate < $ultimoRecibo->fecha_vencimiento) {
+            if ($fechaInicio) {
+                $mensaje->title = "Error al crear recibos";
+                $mensaje->icon = "error";
+                $mensaje->body = "Para generar en años donde existan registro, se requiere generar por mes";
+
+                return $mensaje;
+            }
             $mensaje->title = "Error al crear recibos";
             $mensaje->icon = "error";
             $mensaje->body = "Ya han sido generados los recibos para el año especificado";
@@ -167,7 +175,7 @@ class ConfigurarPagos extends Model
         if ($this->periodo == "SEMANAL") {
             $cantidad = $startDate->diffInWeeks($endDate);
         } else if ($this->periodo == "MENSUAL") {
-            $cantidad = $startDate->diffInMonths($endDate);
+            $cantidad = $startDate->diffInMonths($endDate) + 1;
         } else if ($this->periodo == "ANUAL") {
             $cantidad = $startDate->diffInYears($endDate);
             if ($cantidad == 0 && !$ultimoRecibo) {
@@ -212,9 +220,8 @@ class ConfigurarPagos extends Model
     {
         // Log::debug('=================================================');
         $recibos = [];
-
+        $fecha_pago = $fecha_actual;
         for ($i = 0; $i < $cantidad; $i++) {
-            $fecha_pago = date('Y-m-d', strtotime($fecha_actual . ' +' . $cantidadPeriodo));
             foreach ($propiedades as $propiedad) {
                 $monto_pagado = 0;
                 $recibo_pagado = false;
@@ -249,6 +256,7 @@ class ConfigurarPagos extends Model
                 $recibos[] = $recibo;
             }
             $fecha_actual = $fecha_pago;
+            $fecha_pago = date('Y-m-d', strtotime($fecha_actual . ' +' . $cantidadPeriodo));
         }
 
         return $recibos;

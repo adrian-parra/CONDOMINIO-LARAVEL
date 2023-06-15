@@ -62,9 +62,9 @@ class ReciboController extends Controller
         $configuracion = ConfigurarPagos::find($request->configuracionId);
 
         if($request->year){
-            $mensaje = $configuracion->crearRecibosAnual($request->year);
+            $mensaje = $configuracion->crearRecibosAnual($request->year, $request->iniciarDesde);
         }
-        
+
         if($request->plazoPorGenerar){
             $mensaje = $configuracion->crearRecibos($request->plazoPorGenerar, $request->inciarDesde);
         }
