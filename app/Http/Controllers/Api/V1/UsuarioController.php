@@ -5,19 +5,127 @@ namespace App\Http\Controllers\Api\V1;
 use App\Filters\V1\RolFilter;
 use App\Filters\V1\UsuarioFilter;
 use App\Http\Controllers\Api\Controller;
+use App\Mail\ForgotPassword;
 use App\Models\confirmar_correo;
 use App\Models\fraccionamiento;
 use App\Models\mensaje;
 use App\Models\Rol;
 use App\Models\RolPorUsuario;
 use App\Models\usuario;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 
 class UsuarioController extends Controller
 {
+    public function newPassword(Request $request)
+    {
+
+            $mensaje = new Mensaje();
+    
+            $User = usuario::find($request->idUser);
+            $User->password = Hash::make($request->password);
+            $User->save();
+            $mensaje->icon = "success";
+            $mensaje->title = "Su contraseña fue actualizada.";
+            $mensaje->status = 201;
+
+        return response()->json($mensaje ,201);
+    }
+    public function checkToken(Request $request)
+    {
+        $user = usuario::select('*')
+        ->where('token', '=', $request->token)
+        ->get();
+
+    $mensaje = new Mensaje();
+    if ($user->isEmpty()) {
+        $mensaje->icon = "error";
+        $mensaje->title = "No hay constancia de esa solicitud. Por favor haga una nueva solicitud de restablecimiento de contraseña.";
+        return response()->json($mensaje,422);
+    }
+
+    try {
+
+        $decoded = JWT::decode($request->token, new Key(env('JWT_SECRET_CONFIRM_CUENTA'), 'HS256'));
+        $mensaje->icon = "success";
+        $mensaje->title = "";
+        $mensaje->body = $user;
+        return response()->json($mensaje,201);
+    } catch (\Firebase\JWT\SignatureInvalidException $e) {
+        $mensaje->title = "Firma de token no válida";
+        $mensaje->icon = "error";
+        // Handle the error
+        return response()->json($mensaje, 401);
+    } catch (\Firebase\JWT\BeforeValidException $e) {
+        $mensaje->title = "Token aún no válido";
+        $mensaje->icon = "error";
+        return response()->json($mensaje, 401);
+    } catch (\Firebase\JWT\ExpiredException $e) {
+        $mensaje->title = "El enlace para restablecer la contraseña que utilizó tiene más de 30 minutos y ha expirado. Por favor, inicie un nuevo restablecimiento de contraseña.";
+        $mensaje->icon = "error";
+        return response()->json($mensaje, 401);
+    }catch(\Exception $e){
+        $mensaje->title = "El token no fue autorizado";
+        $mensaje->icon = "error";
+        return response()->json($mensaje, 401);        
+    }
+
+    }
+    public function forgotPassword(Request $request){
+        $userForEmail = usuario::select('*')
+        ->where('correo', '=', $request->correo)
+        ->get();
+
+        $mensaje = new Mensaje();
+        if ($userForEmail->isEmpty()) {
+            $mensaje->icon = "error";
+            $mensaje->title = "El usuario no fue encontrado";
+            $mensaje->status = 422;
+
+            return response()->json($mensaje,422);
+        }
+
+        $mensaje->icon = "success";
+            $mensaje->title = "Si ha suministrado un nombre de usuario correcto o dirección de correo electrónico única, se le debería haber enviado un correo electrónico.
+            Contiene instrucciones sencillas para confirmar y completar este cambio de contraseña. Si sigue teniendo problemas, por favor contacte con el administrador del sitio.";
+            $mensaje->status = 201;
+
+            $Auth = new JWTController();
+
+            $token = $Auth->generateTokenForgotPassword($userForEmail[0]->id,$userForEmail[0]->correo);
+
+            $mensaje->body = ["token" => $token];
+            $usuario = usuario::find($userForEmail[0]->id);
+            $usuario->token = $token;
+            $usuario->save();
+
+
+            $appUrl = env('APP_URL');
+            $puerto = "";
+            if ($appUrl == "http://localhost") {
+                $puerto = ":4200/";
+            }
+            //LINK ENCARGADO DE REDIRECCIONAR A UNA VISTA PARA REALIZAR CAMBIO DE PASSWORD
+            $linkRestablecerPassword = $appUrl . $puerto . 'registros/registro/recuperarPassword?token=' . $token;
+
+            //ENVIAR CORREO CON TOKEN PARA RESTABLECER LA PASSWORD
+
+            //CREAR DATA QUE SE ENVIARA POR CORREO
+            $data = [
+                'nombre' => $userForEmail[0]->nombre,
+                'token' => $linkRestablecerPassword
+            ];
+
+            Mail::to($userForEmail[0]->correo)->send(new ForgotPassword($data));
+
+            return response()->json($mensaje ,201);
+
+    }
     /**
      * Display a listing of the resource.
      *
