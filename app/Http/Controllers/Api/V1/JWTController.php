@@ -73,6 +73,28 @@ class JWTController extends Controller
     }
 
     /**
+     * ? GENERACION  DE TOKEN PARA RECUPERAR PASSSWORD
+     *  @param string $id
+     */
+    public function generateTokenForgotPassword($id ,$correo){
+        $actual = time();
+        $exp = $actual + (1800); //<-(1800) //30 minutos despues
+
+        $payload = array(
+            "iat" => $actual,
+            "nbl" => $exp,
+            "data" => [
+                "id" => $id,
+                "usuario" => $correo
+            ]
+        );
+        $jwt = JWT::encode($payload, $this->secretKeyConfimCuenta, "HS256");
+        
+        return $jwt;
+
+    }
+
+    /**
      * ! AQUI TERMINA LOS METODOS PARA EL PROCESO DE REGISTRO DE USUARIO
      */
     //

@@ -114,4 +114,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::post("usuario/confirmar-registro/check-token", [ConfirmarCorreoController::class, 'checkTokenRegistroFraccionamiento']);
     Route::post("usuario/registro", [UsuarioController::class, 'store']);
     Route::post("usuario/iniciar-sesion", [UsuarioController::class, 'iniciarSesion']);
+    Route::post('usuario/forgotPassword', [UsuarioController::class, 'forgotPassword']);
+    Route::post('usuario/forgotPassword/checkToken', [UsuarioController::class, 'checkToken']);
+    Route::put('usuario/forgotPassword/newPassword', [UsuarioController::class, 'newPassword']);
+
 });
