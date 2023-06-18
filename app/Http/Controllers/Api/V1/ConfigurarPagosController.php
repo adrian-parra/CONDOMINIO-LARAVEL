@@ -143,7 +143,7 @@ class ConfigurarPagosController extends Controller
             $configurarPagos->update();
             $mensaje->title = "Configuracion de pago actualizado";
             $mensaje->icon = "success";
-            return response()->json($mensaje, 422);
+            return response()->json($mensaje, 200);
         } catch (\Exception $e) {
             $mensaje->title = "error";
             $mensaje->icon = $e->getMessage();
