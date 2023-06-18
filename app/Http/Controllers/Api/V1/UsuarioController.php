@@ -6,6 +6,7 @@ use App\Filters\V1\RolFilter;
 use App\Filters\V1\UsuarioFilter;
 use App\Http\Controllers\Api\Controller;
 use App\Mail\ForgotPassword;
+use App\Models\CodigoPostal;
 use App\Models\confirmar_correo;
 use App\Models\fraccionamiento;
 use App\Models\mensaje;
@@ -22,6 +23,20 @@ use Illuminate\Support\Facades\Mail;
 
 class UsuarioController extends Controller
 {
+
+    public function getCodigosPostales(){
+        $mensaje = new mensaje();
+
+        $codigosPostales = CodigoPostal::get();
+
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+        //$users = usuario::where('id_fraccionamiento', $request->id_fraccionamiento)->with('roles')->get();
+        
+        $mensaje->body = $codigosPostales;
+
+        return response()->json($mensaje, 200);
+    }
     public function newPassword(Request $request)
     {
 
