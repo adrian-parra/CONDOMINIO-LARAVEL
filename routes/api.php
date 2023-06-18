@@ -120,4 +120,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
 
     Route::get('codigosPostalesMexico',[UsuarioController::class,'getCodigosPostales']);
 
+    Route::get('vehiculo/marcas' ,[VehiculoController::class,'getMarcasVehiculos']);
+
+    Route::get('vehiculo/submarca/{tabla}' ,[VehiculoController::class,'getSubmarcas']);
+
+
+
 });

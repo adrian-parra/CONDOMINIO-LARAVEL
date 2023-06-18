@@ -71,5 +71,9 @@ class DatabaseSeeder extends Seeder
         $this->call(
             CodigosPostalescsvSeeder::class
         );
+
+        $this->call(
+            MarcasSubmarcasVehiculosSeeder::class
+        );
     }
 }
