@@ -118,4 +118,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::post('usuario/forgotPassword/checkToken', [UsuarioController::class, 'checkToken']);
     Route::put('usuario/forgotPassword/newPassword', [UsuarioController::class, 'newPassword']);
 
+    Route::get('codigosPostalesMexico',[UsuarioController::class,'getCodigosPostales']);
+
 });
