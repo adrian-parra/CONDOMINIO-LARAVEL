@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\V1\Vehiculo\StoreVehiculoRequest;
 use App\Http\Requests\V1\Vehiculo\UpdateVehiculoRequest;
 use App\Models\EstadosDeMexico;
+use App\Models\MarcaVehiculo;
 use App\Models\mensaje;
 use App\Models\TipoVehiculo;
 use App\Models\Vehiculo;
@@ -14,8 +15,38 @@ use App\Utils\AlmacenarArchivo;
 use App\Utils\EliminarArchivo;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 class VehiculoController extends Controller
 {
+
+    public function getSubmarcas(Request $request){
+        $mensaje = new mensaje();
+
+        $nombreTabla = $request->tabla;
+
+        $resultados = DB::table($nombreTabla)->get();
+
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+        
+        $mensaje->body = $resultados;
+
+        return response()->json($mensaje, 200);
+    }
+
+    public function getMarcasVehiculos(){
+        $mensaje = new mensaje();
+
+        $marcasVehiculos = MarcaVehiculo::get();
+
+        $mensaje->title = "";
+        $mensaje->icon = "success";
+        
+        $mensaje->body = $marcasVehiculos;
+
+        return response()->json($mensaje, 200);
+    }
     public function filter(Request $request){
         $mensaje = new mensaje();
         $filter = new VehiculoFilter();
