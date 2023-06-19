@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\RecibosComprobanteController;
 use App\Http\Controllers\Api\V1\TipoDeEgresoController;
 use App\Http\Controllers\Api\V1\UsuarioController;
 use App\Http\Controllers\Api\V1\VehiculoController;
+use App\Http\Controllers\Api\V1\FraccionamientoController;
 use App\Utils\ObtenerArchivo;
 use Illuminate\Support\Facades\Route;
 
@@ -49,12 +50,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1', 'm
 
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     Route::apiResource('vehiculos', VehiculoController::class);
-    Route::get('vehiculo/filters' ,[VehiculoController::class,'filter']);
+    Route::get('vehiculo/filters', [VehiculoController::class, 'filter']);
     // Debug Routes
     Route::apiResource('proveedores', ProveedorController::class);
     Route::apiResource('propietarios', PropietarioController::class);
     Route::apiResource('productos', ProductoController::class);
-
+    //GASTOS
+    Route::get('fraccionamiento/{id}/estado', [FraccionamientoController::class, 'getInformes']);
     // RFDI
     Route::get('propiedades/rfdi', [PropiedadController::class, 'getRfdis']);
     Route::post('propiedades/rfdi', [PropiedadController::class, 'postRfdi']);
@@ -118,12 +120,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::post('usuario/forgotPassword/checkToken', [UsuarioController::class, 'checkToken']);
     Route::put('usuario/forgotPassword/newPassword', [UsuarioController::class, 'newPassword']);
 
-    Route::get('codigosPostalesMexico',[UsuarioController::class,'getCodigosPostales']);
+    Route::get('codigosPostalesMexico', [UsuarioController::class, 'getCodigosPostales']);
 
-    Route::get('vehiculo/marcas' ,[VehiculoController::class,'getMarcasVehiculos']);
+    Route::get('vehiculo/marcas', [VehiculoController::class, 'getMarcasVehiculos']);
 
-    Route::get('vehiculo/submarca/{tabla}' ,[VehiculoController::class,'getSubmarcas']);
-
-
-
+    Route::get('vehiculo/submarca/{tabla}', [VehiculoController::class, 'getSubmarcas']);
 });
