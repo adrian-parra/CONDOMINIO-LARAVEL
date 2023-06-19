@@ -48,7 +48,7 @@ class StorePropietarioRequest extends FormRequest
         return [
             'nombre' => ['required', 'max:100'],
             'apellidos' => ['required', 'max:100'],
-            'correo' => ['required', 'max:40', Rule::unique('propietarios', 'correo')],
+            'correo' => ['required', 'max:40', Rule::unique('propietarios', 'correo'),Rule::unique('usuarios', 'correo'),],
             'celular' => ['required', 'max:20', Rule::unique('propietarios', 'celular')],
             'celularAlt' => ['sometimes', 'max:20', Rule::unique('propietarios', 'celular')],
             'telefonoFijo' => ['required', 'max:20', Rule::unique('propietarios', 'telefono_fijo')],
