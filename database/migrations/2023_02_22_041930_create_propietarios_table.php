@@ -18,11 +18,13 @@ return new class extends Migration
             $table->string('nombre', 100);
             $table->string('apellidos', 100);
             $table->string('correo', 40)->unique();
-            $table->string('celular', 20)->unique();
+            $table->string('celular', 20);
             $table->string('celular_alt', 20)->nullable();
             $table->string('telefono_fijo', 20)->unique();
             $table->string('identificacion_url')->nullable();
             $table->boolean('is_inquilino');
+
+            $table->unique(['celular', 'fraccionamiento_id']);
 
             $table->unsignedBigInteger('fraccionamiento_id');
             $table->foreign('fraccionamiento_id')->references('id')
